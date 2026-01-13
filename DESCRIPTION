@@ -20,10 +20,13 @@ Depends:
   stringr (>= 1.6.0)
 Suggests:
   testthat (>= 3.0.0),
-  devtools (>= 2.4.5)
+  devtools (>= 2.4.5),
+  knitr,
+  rmarkdown
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Big-Life-Lab/model-parameters-pipeline
 BugReports: https://github.com/Big-Life-Lab/model-parameters-pipeline/issues
 RoxygenNote: 7.3.3
 Config/testthat/edition: 3
+VignetteBuilder: knitr
