@@ -1,0 +1,29 @@
+Package: model.parameters.pipeline
+Type: Package
+Title: Performs transformations according to model parameters
+Version: 0.1.0
+Date: 2026-01-08
+Description: The Model Parameters Pipeline is an R package for applying
+  transformations to data according to the Model Parameters specification
+  developed by Big Life Lab. This package implements a pipeline for sequential
+  data transformations including centering, dummy coding, interactions,
+  restricted cubic splines (RCS), and logistic regression.
+License: MIT + file LICENSE
+Authors@R: c(
+  person(given = "Martin", 
+         family = "Wellman",
+         role = c("aut", "cre", "cph"),
+         email = "mwellman@ohri.ca")
+  )
+Depends:
+  R (>= 4.1),
+  stringr (>= 1.6.0)
+Suggests:
+  testthat (>= 3.0.0),
+  devtools (>= 2.4.5)
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/Big-Life-Lab/model-parameters-pipeline
+BugReports: https://github.com/Big-Life-Lab/model-parameters-pipeline/issues
+RoxygenNote: 7.3.3
+Config/testthat/edition: 3
