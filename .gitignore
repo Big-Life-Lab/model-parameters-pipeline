@@ -61,5 +61,8 @@ Thumbs.db
 # *.xlsx
 # *.rds
 # *.rda
+
 docs
 inst/doc
+/doc/
+/Meta/
