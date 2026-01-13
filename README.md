@@ -2,7 +2,6 @@
 
 <!-- badges: start -->
 [![R-CMD-check.yaml](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/R-CMD-check.yaml)
-[![lint-project.yaml](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/lint-project.yaml/badge.svg)](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/lint-project.yaml)
 <!-- badges: end -->
 
 The Model Parameters Pipeline is an R package for applying transformations to
