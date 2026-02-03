@@ -57,7 +57,6 @@
 #' }
 #'
 #' @name model_parameters_pipeline
-#' @docType package
 NULL
 
 library(stringr)
