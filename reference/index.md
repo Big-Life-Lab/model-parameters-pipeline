@@ -2,7 +2,7 @@
 
 ## All functions
 
-- [`model_parameters_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/model_parameters_pipeline.md)
+- [`model.parameters.pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/model.parameters.pipeline.md)
   : Model Parameters Pipeline
 - [`prepare_model_pipeline()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.md)
   : Prepare Model Pipeline
