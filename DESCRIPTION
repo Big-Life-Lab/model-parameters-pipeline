@@ -16,7 +16,8 @@ Authors@R: c(
          email = "mwellman@ohri.ca")
   )
 Depends:
-  R (>= 4.1),
+  R (>= 4.1)
+Imports:
   stringr (>= 1.6.0)
 Suggests:
   testthat (>= 3.0.0),
