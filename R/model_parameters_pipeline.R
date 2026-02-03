@@ -56,7 +56,7 @@
 #'     Model Parameters Reference Documentation}
 #' }
 #'
-#' @name model_parameters_pipeline
+#' @name model.parameters.pipeline
 NULL
 
 library(stringr)
