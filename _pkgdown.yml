@@ -2,3 +2,6 @@ url: https://big-life-lab.github.io/model-parameters-pipeline/
 template:
   bootstrap: 5
 
+home:
+  sidebar:
+    structure: [links, license, community, citation, authors]
