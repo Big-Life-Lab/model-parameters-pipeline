@@ -1,3 +1,5 @@
+^\.vscode$
+^\.claude$
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
