@@ -26,7 +26,7 @@ Suggests:
   rmarkdown
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/Big-Life-Lab/model-parameters-pipeline
+URL: https://github.com/Big-Life-Lab/model-parameters-pipeline, https://big-life-lab.github.io/model-parameters-pipeline/
 BugReports: https://github.com/Big-Life-Lab/model-parameters-pipeline/issues
 RoxygenNote: 7.3.3
 Config/testthat/edition: 3
