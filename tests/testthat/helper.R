@@ -1,3 +1,5 @@
+library(testthat)
+
 #' Get HTNPoRT file paths
 #'
 #' Constructs file paths for HTNPoRT model files based on sex.
