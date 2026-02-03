@@ -15,7 +15,8 @@ Model Parameters specification developed by Big Life Lab.
 
 The typical workflow involves two steps:
 \enumerate{
-  \item \code{prepare_model_pipeline()}: Load and validate model configuration
+  \item \code{prepare_model_pipeline()}: Load and validate model
+    configuration
   \item \code{run_model_pipeline()}: Apply transformations to data
 }
 }
@@ -60,8 +61,11 @@ predictions <- mod$df[, grep("^logistic_", names(mod$df))]
 }
 \seealso{
 \itemize{
-  \item \href{https://github.com/Big-Life-Lab/model-parameters}{Model Parameters Specification}
-  \item \href{https://big-life-lab.github.io/model-parameters/5-reference.html}{Model Parameters Reference Documentation}
+  \item \href{https://github.com/Big-Life-Lab/model-parameters}{Model
+    Parameters Specification}
+  \item \href{
+    https://big-life-lab.github.io/model-parameters/5-reference.html}{
+    Model Parameters Reference Documentation}
 }
 }
 \author{

@@ -54,7 +54,7 @@ The pipeline supports five types of transformations:
 
 ```{r eval=FALSE}
 # Install from GitHub (if published)
-# devtools::install_github("Big-Life-Lab/model-parameters-pipeline")
+devtools::install_github("Big-Life-Lab/model-parameters-pipeline")
 
 # Or install from local source
 devtools::install_local("/path/to/model-parameters-pipeline")
