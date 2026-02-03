@@ -8,22 +8,22 @@ repository](https://big-life-lab.github.io/model-parameters/).
 
 Adding a new transformation step requires three main tasks:
 
-1. **Update [.run_pipeline_steps](R/model_parameters_pipeline.R)** - Add a
+1. **Update [run_model_pipeline](R/model_parameters_pipeline.R)** - Add a
    new conditional block to recognize the step
 2. **Create a new step source file** - Implement `.run_step_{stepname}` in
    `R/step-{stepname}.R` to execute the transformation
 3. **Add unit tests** - Create test files to verify correct behavior
 
-## Step 1: Update `.run_pipeline_steps`
+## Step 1: Update `run_model_pipeline`
 
-The [.run_pipeline_steps](R/model_parameters_pipeline.R) function in
+The [run_model_pipeline](R/model_parameters_pipeline.R) function in
 [R/model_parameters_pipeline.R](R/model_parameters_pipeline.R) processes each
 step defined in the model steps specification. You need to add a new
 conditional block for your step.
 
 ### Location
 
-Find the `if-else` chain in `.run_pipeline_steps`:
+Find the `if-else` chain in `run_model_pipeline`:
 
 ```r
 if (step_name == "center") {
@@ -265,7 +265,7 @@ Use this checklist when adding a new transformation step:
 - [ ] Implement `.run_step_{stepname}` function with proper documentation in the
   new source file
 - [ ] Add `else if` block in
-  [.run_pipeline_steps](R/model_parameters_pipeline.R) for the new step
+  [run_model_pipeline](R/model_parameters_pipeline.R) for the new step
   name
 - [ ] Verify column names match the Model Parameters specification
 - [ ] Create test directory:

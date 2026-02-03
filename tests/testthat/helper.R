@@ -71,11 +71,8 @@ run_test_data <- function(dir_name, input_data_file) {
   data_file <- testthat::test_path(root_dir, input_data_file)
   model_export_file <-
     testthat::test_path(root_dir, dir_name, "test-model-export.csv")
-  mod <- run_model_pipeline(
-    root_dir = dirname(model_export_file),
-    model_export = model_export_file,
-    data = data_file
-  )
+  mod <- prepare_model_pipeline(model_export_file)
+  mod <- run_model_pipeline(mod, data = data_file)
 
   # Compare the pipeline output to the expected output
   valid_data_file <-

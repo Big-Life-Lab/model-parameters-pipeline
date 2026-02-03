@@ -72,15 +72,17 @@ library(model.parameters.pipeline)
 
 ### Simple Example
 
-Let's walk through a simple example. The easiest way to use the package is with a model export file that specifies all configuration files:
+Let's walk through a simple example. The package uses a two-step workflow:
+
+1. `prepare_model_pipeline()` - Load and validate model configuration files
+2. `run_model_pipeline()` - Apply transformations to data
 
 ```{r eval=FALSE}
-# Run the complete transformation pipeline
-mod <- run_model_pipeline(
-  root_dir = "path/to/model/directory",
-  data = "path/to/input-data.csv",
-  model_export = "path/to/model-export.csv"
-)
+# Step 1: Prepare the model pipeline
+mod <- prepare_model_pipeline("path/to/model-export.csv")
+
+# Step 2: Run the pipeline on your data
+mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
 
 # Access the transformed data
 transformed_data <- mod$df
@@ -180,66 +182,35 @@ smoking_current,0.8
 age_smoking_interaction,0.02
 ```
 
-## Alternative Input Methods
+## Using Data Frames for Input Data
 
-### Using Individual Files
-
-Instead of a model export file, you can specify files directly:
+You can pass a data frame instead of a file path for the input data:
 
 ```{r eval=FALSE}
-mod <- run_model_pipeline(
-  root_dir = "path/to/model/directory",
-  data = "path/to/input-data.csv",
-  variables = "path/to/variables.csv",
-  model_steps = "path/to/model-steps.csv"
-)
-```
+# Prepare the model
+mod <- prepare_model_pipeline("path/to/model-export.csv")
 
-### Using Data Frames
-
-You can pass data frames instead of file paths:
-
-```{r eval=FALSE}
-# Load data into data frames
+# Load and preprocess your data
 data_df <- read.csv("path/to/input-data.csv")
-model_export_df <- read.csv("path/to/model-export.csv")
 
-# Run pipeline with data frames
-mod <- run_model_pipeline(
-  root_dir = "path/to/model/directory",
-  data = data_df,
-  model_export = model_export_df
-)
+# Run pipeline with data frame
+mod <- run_model_pipeline(mod, data = data_df)
 ```
 
 This is useful when your data is already loaded or needs preprocessing.
 
-## Performance Optimization
+## Processing Multiple Datasets
 
-If you need to apply the same model to multiple datasets (e.g., processing batches), reuse the model object for better performance:
+If you need to apply the same model to multiple datasets (e.g., processing batches), reuse the prepared model object for better performance:
 
 ```{r eval=FALSE}
-# First run - model files are loaded and cached
-mod <- run_model_pipeline(
-  root_dir = "path/to/model/directory",
-  data = batch1_data,
-  model_export = "path/to/model-export.csv"
-)
+# Prepare the model once - configuration files are loaded and cached
+mod <- prepare_model_pipeline("path/to/model-export.csv")
 
-# Subsequent runs - reuse the cached model configuration
-mod <- run_model_pipeline(
-  root_dir = "path/to/model/directory",
-  data = batch2_data,
-  model_export = "path/to/model-export.csv",
-  existing_mod = mod
-)
-
-mod <- run_model_pipeline(
-  root_dir = "path/to/model/directory",
-  data = batch3_data,
-  model_export = "path/to/model-export.csv",
-  existing_mod = mod
-)
+# Run on multiple datasets
+result1 <- run_model_pipeline(mod, data = "batch1_data.csv")
+result2 <- run_model_pipeline(mod, data = "batch2_data.csv")
+result3 <- run_model_pipeline(mod, data = "batch3_data.csv")
 ```
 
 This avoids re-reading and parsing the configuration files for each batch.
@@ -290,12 +261,11 @@ model_export_file <- file.path(
   "output/logistic-model-export/female/HTNPoRT-female-model-export.csv"
 )
 
+# Prepare the model pipeline
+mod <- prepare_model_pipeline(model_export_file)
+
 # Run the pipeline
-mod <- run_model_pipeline(
-  root_dir = dirname(model_export_file),
-  data = data,
-  model_export = model_export_file
-)
+mod <- run_model_pipeline(mod, data = data)
 
 # View the transformed data with all intermediate steps
 head(mod$df)
