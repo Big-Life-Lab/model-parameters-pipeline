@@ -20,8 +20,9 @@ The model object with the transformed data added. The transformed
   \item Original predictor columns from the input data
   \item New columns created by each transformation step (e.g., centered
     variables, dummy variables, interaction terms, spline terms)
-  \item If a logistic step is included, a column named \code{logistic_N}
-    (where N is a positive integer) containing the predicted probabilities
+  \item If a logistic-regression step is included, a column named
+    \code{logistic_N} (where N is a positive integer) containing the
+    predicted probabilities
 }
 }
 \description{
@@ -38,7 +39,7 @@ mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
 # Access results
 head(mod$df)
 
-# Extract predictions from logistic step
+# Extract predictions from logistic-regression step
 predictions <- mod$df[, grep("^logistic_", names(mod$df))]
 
 # Run on data frame

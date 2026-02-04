@@ -32,8 +32,8 @@ if (step_name == "center") {
   mod <- .run_step_dummy(mod, file_path)
 } else if (step_name == "interaction") {
   mod <- .run_step_interaction(mod, file_path)
-} else if (step_name == "logistic") {
-  mod <- .run_step_logistic(mod, file_path)
+} else if (step_name == "logistic-regression") {
+  mod <- .run_step_logistic_regression(mod, file_path)
 } else if (step_name == "rcs") {
   mod <- .run_step_rcs(mod, file_path)
 } else {

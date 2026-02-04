@@ -43,7 +43,7 @@
 #' input_data <- read.csv("path/to/input-data.csv")
 #' mod <- run_model_pipeline(mod, data = input_data)
 #'
-#' # Extract logistic predictions (if model includes logistic step)
+#' # Extract logistic predictions (if model includes logistic-regression step)
 #' predictions <- mod$df[, grep("^logistic_", names(mod$df))]
 #' }
 #'
@@ -175,8 +175,9 @@ prepare_model_pipeline <- function(model_export) {
 #'   \item Original predictor columns from the input data
 #'   \item New columns created by each transformation step (e.g., centered
 #'     variables, dummy variables, interaction terms, spline terms)
-#'   \item If a logistic step is included, a column named \code{logistic_N}
-#'     (where N is a positive integer) containing the predicted probabilities
+#'   \item If a logistic-regression step is included, a column named
+#'     \code{logistic_N} (where N is a positive integer) containing the
+#'     predicted probabilities
 #' }
 #'
 #' @examples
@@ -188,7 +189,7 @@ prepare_model_pipeline <- function(model_export) {
 #' # Access results
 #' head(mod$df)
 #'
-#' # Extract predictions from logistic step
+#' # Extract predictions from logistic-regression step
 #' predictions <- mod$df[, grep("^logistic_", names(mod$df))]
 #'
 #' # Run on data frame
@@ -241,8 +242,8 @@ run_model_pipeline <- function(mod, data) {
       mod <- .run_step_dummy(mod, file_path)
     } else if (step_name == "interaction") {
       mod <- .run_step_interaction(mod, file_path)
-    } else if (step_name == "logistic") {
-      mod <- .run_step_logistic(mod, file_path)
+    } else if (step_name == "logistic-regression") {
+      mod <- .run_step_logistic_regression(mod, file_path)
     } else if (step_name == "rcs") {
       mod <- .run_step_rcs(mod, file_path)
     } else {

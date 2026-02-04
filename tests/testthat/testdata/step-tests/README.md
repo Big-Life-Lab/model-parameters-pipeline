@@ -63,8 +63,8 @@ separate file, use `N/A` for `fileType` and `filePath`.
 #### `test-{stepname}.csv`
 
 This file contains step-specific parameters. The structure depends on the
-transformation step being tested. For example, a logistic step would have the
-coefficients for each variable and the intercept. Refer to the [Model
+transformation step being tested. For example, a logistic regression step would
+have the coefficients for each variable and the intercept. Refer to the [Model
 Parameters
 documentation](https://big-life-lab.github.io/model-parameters/5-reference.html)
 for details on each step's required parameters.
@@ -128,7 +128,7 @@ Current test directories include:
 - `test-center/` - Center transformation step
 - `test-dummy/` - Dummy variable transformation step
 - `test-interaction/` - Interaction transformation step
-- `test-logistic/` - Logistic transformation step
+- `test-logistic/` - Logistic regression transformation step
 - `test-rcs/` - Restricted cubic spline transformation step
 
 Refer to these examples when creating new tests.

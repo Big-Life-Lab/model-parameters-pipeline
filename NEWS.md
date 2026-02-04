@@ -12,7 +12,7 @@ This is the first release of the Model Parameters Pipeline package, implementing
   - `dummy`: Creates dummy variables for categorical values
   - `interaction`: Creates interaction terms by multiplying variables
   - `rcs`: Applies restricted cubic spline transformations
-  - `logistic`: Applies logistic regression with coefficients
+  - `logistic-regression`: Applies logistic regression with coefficients
 - **Flexible Input**: Support for both file paths and data frames as inputs
 - **Performance Optimization**: Ability to reuse model objects for repeated transformations with different data
 - **Model Parameters Specification**: Full compatibility with Big Life Lab's Model Parameters specification used by HTNPoRT, DemPoRT, CVDPoRT, and MPoRT models

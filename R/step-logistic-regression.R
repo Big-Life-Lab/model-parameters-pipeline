@@ -9,7 +9,7 @@
 #' @param file Path to logistic step specification file
 #' @return Updated model object with logistic prediction added to data
 #' @keywords internal
-.run_step_logistic <- function(mod, file) {
+.run_step_logistic_regression <- function(mod, file) {
   mod <- .add_file(mod, file)
   step_df <- .get_file(mod, file)
   .verify_columns(

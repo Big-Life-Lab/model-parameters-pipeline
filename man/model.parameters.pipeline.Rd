@@ -51,7 +51,7 @@ for (data_file in data_files) {
 input_data <- read.csv("path/to/input-data.csv")
 mod <- run_model_pipeline(mod, data = input_data)
 
-# Extract logistic predictions (if model includes logistic step)
+# Extract logistic predictions (if model includes logistic-regression step)
 predictions <- mod$df[, grep("^logistic_", names(mod$df))]
 }
 
