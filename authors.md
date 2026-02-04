@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/first/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/v0.1.0-alpha/DESCRIPTION)
 
 Wellman M (2026). *model.parameters.pipeline: Performs transformations
 according to model parameters*. R package version 0.1.0,
