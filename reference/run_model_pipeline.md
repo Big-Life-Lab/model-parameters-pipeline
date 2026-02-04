@@ -33,8 +33,8 @@ is accessible via `mod$df`. This data frame contains:
 - New columns created by each transformation step (e.g., centered
   variables, dummy variables, interaction terms, spline terms)
 
-- If a logistic step is included, a column named `logistic_N` (where N
-  is a positive integer) containing the predicted probabilities
+- If a logistic-regression step is included, a column named `logistic_N`
+  (where N is a positive integer) containing the predicted probabilities
 
 ## See also
 
@@ -52,7 +52,7 @@ mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
 # Access results
 head(mod$df)
 
-# Extract predictions from logistic step
+# Extract predictions from logistic-regression step
 predictions <- mod$df[, grep("^logistic_", names(mod$df))]
 
 # Run on data frame

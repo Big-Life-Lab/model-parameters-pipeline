@@ -37,7 +37,7 @@ modifying the data accordingly."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Run Model Pipeline</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/v0.1.0-alpha/R/model_parameters_pipeline.R" class="external-link"><code>R/model_parameters_pipeline.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/first/R/model_parameters_pipeline.R" class="external-link"><code>R/model_parameters_pipeline.R</code></a></small>
       <div class="d-none name"><code>run_model_pipeline.Rd</code></div>
     </div>
 
@@ -72,8 +72,9 @@ as predictors in the variables file.</p></dd>
   data is accessible via <code>mod$df</code>. This data frame contains:</p><ul><li><p>Original predictor columns from the input data</p></li>
 <li><p>New columns created by each transformation step (e.g., centered
     variables, dummy variables, interaction terms, spline terms)</p></li>
-<li><p>If a logistic step is included, a column named <code>logistic_N</code>
-    (where N is a positive integer) containing the predicted probabilities</p></li>
+<li><p>If a logistic-regression step is included, a column named
+    <code>logistic_N</code> (where N is a positive integer) containing the
+    predicted probabilities</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -90,7 +91,7 @@ as predictors in the variables file.</p></dd>
 <span class="r-in"><span><span class="co"># Access results</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">df</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Extract predictions from logistic step</span></span></span>
+<span class="r-in"><span><span class="co"># Extract predictions from logistic-regression step</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">df</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"^logistic_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">df</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Run on data frame</span></span></span>

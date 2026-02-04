@@ -25,7 +25,7 @@ The pipeline supports the following transformation steps:
 - **Dummy**: Creates dummy variables for categorical values
 - **Interaction**: Creates interaction terms by multiplying variables
 - **RCS**: Applies restricted cubic spline transformations
-- **Logistic**: Applies logistic regression with coefficients
+- **Logistic Regression**: Applies logistic regression with coefficients
 
 ### Adding New Transformation Steps
 
@@ -173,7 +173,7 @@ center,center-params.csv
 dummy,dummy-params.csv
 interaction,interaction-params.csv
 rcs,rcs-params.csv
-logistic,logistic-params.csv
+logistic-regression,logistic-regression-params.csv
 ```
 
 ### Transformation Parameter Files
@@ -226,7 +226,7 @@ See
 [rcs](https://big-life-lab.github.io/model-parameters/5-reference.html#rcs)
 in the Model Parameters documentation.
 
-**Logistic** (`logistic-params.csv`):
+**Logistic-regression** (`logistic-regression-params.csv`):
 
 ``` csv
 variable,coefficient
@@ -236,7 +236,7 @@ sex_male,0.3
 ```
 
 See
-[logistic](https://big-life-lab.github.io/model-parameters/5-reference.html#logistic-regression)
+[logistic-regression](https://big-life-lab.github.io/model-parameters/5-reference.html#logistic-regression)
 in the Model Parameters documentation.
 
 ## Example: HTNPoRT Model

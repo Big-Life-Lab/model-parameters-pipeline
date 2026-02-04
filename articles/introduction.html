@@ -59,7 +59,7 @@
       <h1>Introduction to Model Parameters Pipeline</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/v0.1.0-alpha/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/first/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="d-none name"><code>introduction.Rmd</code></div>
     </div>
 
@@ -131,8 +131,8 @@ create interaction terms</li>
 <strong>RCS</strong>: Applies restricted cubic spline
 transformations for non-linear relationships</li>
 <li>
-<strong>Logistic</strong>: Applies logistic regression to generate
-predictions</li>
+<strong>Logistic Regression</strong>: Applies logistic regression to
+generate predictions</li>
 </ol>
 </div>
 <div class="section level2">
@@ -213,7 +213,7 @@ center,center-params.csv
 dummy,dummy-params.csv
 interaction,interaction-params.csv
 rcs,rcs-params.csv
-logistic,logistic-params.csv</code></pre>
+logistic-regression,logistic-regression-params.csv</code></pre>
 <p>Steps are executed in the order specified in this file.</p>
 </div>
 <div class="section level4">
@@ -244,8 +244,9 @@ semicolons.</p>
 transformations</p>
 <pre><code>variable,rcsVariables,knots
 age,age_rcs1;age_rcs2;age_rcs3,20;40;60;80</code></pre>
-<p><strong>Logistic</strong> (<code>logistic-params.csv</code>): Applies
-logistic regression</p>
+<p><strong>Logistic Regression</strong>
+(<code>logistic-regression-params.csv</code>): Applies logistic
+regression</p>
 <pre><code>variable,coefficient
 Intercept,-2.5
 age_centered,0.05
@@ -298,7 +299,7 @@ batch.</p>
 <code class="sourceCode R"><span><span class="co"># Access transformed data</span></span>
 <span><span class="va">result_data</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">df</span></span>
 <span></span>
-<span><span class="co"># If the model includes a logistic step, extract predictions</span></span>
+<span><span class="co"># If the model includes a logistic-regression step, extract predictions</span></span>
 <span><span class="co"># Logistic predictions are stored in columns starting with "logistic_"</span></span>
 <span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">df</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"^logistic_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">df</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
@@ -375,8 +376,8 @@ multiplied (e.g., <code>age_sex = age_centered * sex_male</code>)</li>
 <strong>RCS</strong>: Non-linear relationships are captured with
 splines</li>
 <li>
-<strong>Logistic</strong>: Final prediction is calculated using
-coefficients</li>
+<strong>Logistic Regression</strong>: Final prediction is calculated
+using coefficients</li>
 </ol>
 <p>Each step adds new columns to the data frame while preserving the
 original columns. This allows you to inspect intermediate

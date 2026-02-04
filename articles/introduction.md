@@ -47,7 +47,8 @@ The pipeline supports five types of transformations:
     terms
 4.  **RCS**: Applies restricted cubic spline transformations for
     non-linear relationships
-5.  **Logistic**: Applies logistic regression to generate predictions
+5.  **Logistic Regression**: Applies logistic regression to generate
+    predictions
 
 ## Installation
 
@@ -125,7 +126,7 @@ Defines the sequence of transformation steps:
     dummy,dummy-params.csv
     interaction,interaction-params.csv
     rcs,rcs-params.csv
-    logistic,logistic-params.csv
+    logistic-regression,logistic-regression-params.csv
 
 Steps are executed in the order specified in this file.
 
@@ -160,7 +161,8 @@ Note: Variables in `interactingVariables` are separated by semicolons.
     variable,rcsVariables,knots
     age,age_rcs1;age_rcs2;age_rcs3,20;40;60;80
 
-**Logistic** (`logistic-params.csv`): Applies logistic regression
+**Logistic Regression** (`logistic-regression-params.csv`): Applies
+logistic regression
 
     variable,coefficient
     Intercept,-2.5
@@ -214,7 +216,7 @@ The pipeline returns a model object with the transformed data in the
 # Access transformed data
 result_data <- mod$df
 
-# If the model includes a logistic step, extract predictions
+# If the model includes a logistic-regression step, extract predictions
 # Logistic predictions are stored in columns starting with "logistic_"
 predictions <- mod$df[, grep("^logistic_", names(mod$df))]
 
@@ -283,7 +285,8 @@ Let’s trace what happens to data as it flows through the pipeline:
 4.  **Interaction**: Combinations of variables are multiplied (e.g.,
     `age_sex = age_centered * sex_male`)
 5.  **RCS**: Non-linear relationships are captured with splines
-6.  **Logistic**: Final prediction is calculated using coefficients
+6.  **Logistic Regression**: Final prediction is calculated using
+    coefficients
 
 Each step adds new columns to the data frame while preserving the
 original columns. This allows you to inspect intermediate

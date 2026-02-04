@@ -17,7 +17,7 @@ specification developed by Big Life Lab.
   - `dummy`: Creates dummy variables for categorical values
   - `interaction`: Creates interaction terms by multiplying variables
   - `rcs`: Applies restricted cubic spline transformations
-  - `logistic`: Applies logistic regression with coefficients
+  - `logistic-regression`: Applies logistic regression with coefficients
 - **Flexible Input**: Support for both file paths and data frames as
   inputs
 - **Performance Optimization**: Ability to reuse model objects for

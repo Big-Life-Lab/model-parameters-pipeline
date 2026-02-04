@@ -76,7 +76,7 @@
 <li>
 <strong>RCS</strong>: Applies restricted cubic spline transformations</li>
 <li>
-<strong>Logistic</strong>: Applies logistic regression with coefficients</li>
+<strong>Logistic Regression</strong>: Applies logistic regression with coefficients</li>
 </ul>
 </div>
 <div class="section level3">
@@ -215,7 +215,7 @@ center,center-params.csv
 dummy,dummy-params.csv
 interaction,interaction-params.csv
 rcs,rcs-params.csv
-logistic,logistic-params.csv</code></pre>
+logistic-regression,logistic-regression-params.csv</code></pre>
 </div>
 <div class="section level3">
 <h3 id="transformation-parameter-files">Transformation Parameter Files<a class="anchor" aria-label="anchor" href="#transformation-parameter-files"></a>
@@ -239,12 +239,12 @@ age_centered;sex_male,age_sex_interaction</code></pre>
 <pre class="csv"><code>variable,rcsVariables,knots
 age,age_rcs1;age_rcs2;age_rcs3,20;40;60;80</code></pre>
 <p>See <a href="https://big-life-lab.github.io/model-parameters/5-reference.html#rcs" class="external-link">rcs</a> in the Model Parameters documentation.</p>
-<p><strong>Logistic</strong> (<code>logistic-params.csv</code>):</p>
+<p><strong>Logistic-regression</strong> (<code>logistic-regression-params.csv</code>):</p>
 <pre class="csv"><code>variable,coefficient
 Intercept,-2.5
 age_centered,0.05
 sex_male,0.3</code></pre>
-<p>See <a href="https://big-life-lab.github.io/model-parameters/5-reference.html#logistic-regression" class="external-link">logistic</a> in the Model Parameters documentation.</p>
+<p>See <a href="https://big-life-lab.github.io/model-parameters/5-reference.html#logistic-regression" class="external-link">logistic-regression</a> in the Model Parameters documentation.</p>
 </div>
 </div>
 <div class="section level2">
