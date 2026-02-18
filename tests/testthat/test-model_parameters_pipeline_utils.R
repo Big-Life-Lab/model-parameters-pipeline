@@ -50,12 +50,12 @@ test_that(".add_file and .get_file work", {
 })
 
 test_that("Utility function .verify_columns works", {
-  df <- data.frame(list(
+  df <- data.frame(
     "other" = c("1", "2", "3"),
     "col_1" = c("a", "b", "c"),
     "col_2" = c("d", "e", "f"),
     "col_3" = c("g", "h", "i")
-  ))
+  )
 
   expect_no_error(
     .verify_columns(df, c("col_1"), "test data")
