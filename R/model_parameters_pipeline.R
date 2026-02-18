@@ -59,8 +59,6 @@
 #' @name model.parameters.pipeline
 NULL
 
-library(stringr)
-
 #' Prepare Model Pipeline
 #'
 #' Loads and validates model configuration files, preparing the pipeline for
