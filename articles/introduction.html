@@ -59,7 +59,7 @@
       <h1>Introduction to Model Parameters Pipeline</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/v0.1.2-alpha/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/first/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="d-none name"><code>introduction.Rmd</code></div>
     </div>
 
@@ -181,87 +181,13 @@ data</li>
 <span><span class="co"># View the first few rows</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transformed_data</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="understanding-the-file-structure">Understanding the File Structure<a class="anchor" aria-label="anchor" href="#understanding-the-file-structure"></a>
-</h3>
-<p>The pipeline uses four main types of files:</p>
-<div class="section level4">
-<h4 id="model-export-file-model-export-csv">1. Model Export File (<code>model-export.csv</code>)<a class="anchor" aria-label="anchor" href="#model-export-file-model-export-csv"></a>
-</h4>
-<p>This file points to the locations of the variables and model steps
-files:</p>
-<pre><code>fileType,filePath
-variables,variables.csv
-model-steps,model-steps.csv</code></pre>
-</div>
-<div class="section level4">
-<h4 id="variables-file-variables-csv">2. Variables File (<code>variables.csv</code>)<a class="anchor" aria-label="anchor" href="#variables-file-variables-csv"></a>
-</h4>
-<p>Lists which variables serve as predictors in the model:</p>
-<pre><code>variable,role
-age,Predictor
-sex,Predictor
-bmi,Predictor
-smoking,Predictor</code></pre>
-</div>
-<div class="section level4">
-<h4 id="model-steps-file-model-steps-csv">3. Model Steps File (<code>model-steps.csv</code>)<a class="anchor" aria-label="anchor" href="#model-steps-file-model-steps-csv"></a>
-</h4>
-<p>Defines the sequence of transformation steps:</p>
-<pre><code>step,filePath
-center,center-params.csv
-dummy,dummy-params.csv
-interaction,interaction-params.csv
-rcs,rcs-params.csv
-logistic-regression,logistic-regression-params.csv</code></pre>
-<p>Steps are executed in the order specified in this file.</p>
-</div>
-<div class="section level4">
-<h4 id="transformation-parameter-files">4. Transformation Parameter Files<a class="anchor" aria-label="anchor" href="#transformation-parameter-files"></a>
-</h4>
-<p>Each transformation step has its own parameter file. Here are
-examples:</p>
-<p><strong>Center</strong> (<code>center-params.csv</code>): Specifies
-centering values</p>
-<pre><code>origVariable,centerValue,centeredVariable
-age,50,age_centered
-bmi,25,bmi_centered</code></pre>
-<p><strong>Dummy</strong> (<code>dummy-params.csv</code>): Defines
-categorical encodings</p>
-<pre><code>origVariable,catValue,dummyVariable
-sex,male,sex_male
-sex,female,sex_female
-smoking,current,smoking_current
-smoking,former,smoking_former
-smoking,never,smoking_never</code></pre>
-<p><strong>Interaction</strong> (<code>interaction-params.csv</code>):
-Creates interaction terms</p>
-<pre><code>interactingVariables,interactionVariable
-age_centered;smoking_current,age_smoking_interaction</code></pre>
-<p>Note: Variables in <code>interactingVariables</code> are separated by
-semicolons.</p>
-<p><strong>RCS</strong> (<code>rcs-params.csv</code>): Defines spline
-transformations</p>
-<pre><code>variable,rcsVariables,knots
-age,age_rcs1;age_rcs2;age_rcs3,20;40;60;80</code></pre>
-<p><strong>Logistic Regression</strong>
-(<code>logistic-regression-params.csv</code>): Applies logistic
-regression</p>
-<pre><code>variable,coefficient
-Intercept,-2.5
-age_centered,0.05
-sex_male,0.3
-smoking_current,0.8
-age_smoking_interaction,0.02</code></pre>
-</div>
-</div>
 </div>
 <div class="section level2">
 <h2 id="using-data-frames-for-input-data">Using Data Frames for Input Data<a class="anchor" aria-label="anchor" href="#using-data-frames-for-input-data"></a>
 </h2>
 <p>You can pass a data frame instead of a file path for the input
 data:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prepare the model</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span>
 <span></span>
@@ -279,7 +205,7 @@ preprocessing.</p>
 <p>If you need to apply the same model to multiple datasets (e.g.,
 processing batches), reuse the prepared model object for better
 performance:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prepare the model once - configuration files are loaded and cached</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span>
 <span></span>
@@ -295,7 +221,7 @@ batch.</p>
 </h2>
 <p>The pipeline returns a model object with the transformed data in the
 <code>$df</code> component:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Access transformed data</span></span>
 <span><span class="va">result_data</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">df</span></span>
 <span></span>
@@ -312,7 +238,7 @@ batch.</p>
 <p>The HTNPoRT (Hypertension Population Risk Tool) is a validated
 predictive model for hypertension risk. Here’s how to use this package
 with HTNPoRT:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Clone the HTNPoRT repository to get model parameters and validation data</span></span>
 <span><span class="co"># In your terminal:</span></span>
 <span><span class="co"># git clone https://github.com/Big-Life-Lab/htnport.git</span></span>
@@ -353,35 +279,6 @@ with HTNPoRT:</p>
 <span></span>
 <span><span class="co"># Summary statistics of predictions</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="understanding-the-transformation-flow">Understanding the Transformation Flow<a class="anchor" aria-label="anchor" href="#understanding-the-transformation-flow"></a>
-</h2>
-<p>Let’s trace what happens to data as it flows through the
-pipeline:</p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>Input</strong>: Raw data with predictor variables (age, sex,
-BMI, etc.)</li>
-<li>
-<strong>Center</strong>: Continuous variables are centered (e.g.,
-<code>age_centered = age - 50</code>)</li>
-<li>
-<strong>Dummy</strong>: Categorical variables become binary
-indicators (e.g., <code>sex_male = 1</code> if male, 0 otherwise)</li>
-<li>
-<strong>Interaction</strong>: Combinations of variables are
-multiplied (e.g., <code>age_sex = age_centered * sex_male</code>)</li>
-<li>
-<strong>RCS</strong>: Non-linear relationships are captured with
-splines</li>
-<li>
-<strong>Logistic Regression</strong>: Final prediction is calculated
-using coefficients</li>
-</ol>
-<p>Each step adds new columns to the data frame while preserving the
-original columns. This allows you to inspect intermediate
-transformations and understand how the model works.</p>
 </div>
 <div class="section level2">
 <h2 id="next-steps">Next Steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
