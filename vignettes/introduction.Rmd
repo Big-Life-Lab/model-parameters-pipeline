@@ -91,97 +91,6 @@ transformed_data <- mod$df
 head(transformed_data)
 ```
 
-### Understanding the File Structure
-
-The pipeline uses four main types of files:
-
-#### 1. Model Export File (`model-export.csv`)
-
-This file points to the locations of the variables and model steps files:
-
-```
-fileType,filePath
-variables,variables.csv
-model-steps,model-steps.csv
-```
-
-#### 2. Variables File (`variables.csv`)
-
-Lists which variables serve as predictors in the model:
-
-```
-variable,role
-age,Predictor
-sex,Predictor
-bmi,Predictor
-smoking,Predictor
-```
-
-#### 3. Model Steps File (`model-steps.csv`)
-
-Defines the sequence of transformation steps:
-
-```
-step,filePath
-center,center-params.csv
-dummy,dummy-params.csv
-interaction,interaction-params.csv
-rcs,rcs-params.csv
-logistic-regression,logistic-regression-params.csv
-```
-
-Steps are executed in the order specified in this file.
-
-#### 4. Transformation Parameter Files
-
-Each transformation step has its own parameter file. Here are examples:
-
-**Center** (`center-params.csv`): Specifies centering values
-
-```
-origVariable,centerValue,centeredVariable
-age,50,age_centered
-bmi,25,bmi_centered
-```
-
-**Dummy** (`dummy-params.csv`): Defines categorical encodings
-
-```
-origVariable,catValue,dummyVariable
-sex,male,sex_male
-sex,female,sex_female
-smoking,current,smoking_current
-smoking,former,smoking_former
-smoking,never,smoking_never
-```
-
-**Interaction** (`interaction-params.csv`): Creates interaction terms
-
-```
-interactingVariables,interactionVariable
-age_centered;smoking_current,age_smoking_interaction
-```
-
-Note: Variables in `interactingVariables` are separated by semicolons.
-
-**RCS** (`rcs-params.csv`): Defines spline transformations
-
-```
-variable,rcsVariables,knots
-age,age_rcs1;age_rcs2;age_rcs3,20;40;60;80
-```
-
-**Logistic Regression** (`logistic-regression-params.csv`): Applies logistic regression
-
-```
-variable,coefficient
-Intercept,-2.5
-age_centered,0.05
-sex_male,0.3
-smoking_current,0.8
-age_smoking_interaction,0.02
-```
-
 ## Using Data Frames for Input Data
 
 You can pass a data frame instead of a file path for the input data:
@@ -277,19 +186,6 @@ head(predictions)
 # Summary statistics of predictions
 summary(predictions)
 ```
-
-## Understanding the Transformation Flow
-
-Let's trace what happens to data as it flows through the pipeline:
-
-1. **Input**: Raw data with predictor variables (age, sex, BMI, etc.)
-2. **Center**: Continuous variables are centered (e.g., `age_centered = age - 50`)
-3. **Dummy**: Categorical variables become binary indicators (e.g., `sex_male = 1` if male, 0 otherwise)
-4. **Interaction**: Combinations of variables are multiplied (e.g., `age_sex = age_centered * sex_male`)
-5. **RCS**: Non-linear relationships are captured with splines
-6. **Logistic Regression**: Final prediction is calculated using coefficients
-
-Each step adds new columns to the data frame while preserving the original columns. This allows you to inspect intermediate transformations and understand how the model works.
 
 ## Next Steps
 
