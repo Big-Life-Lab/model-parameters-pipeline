@@ -7,7 +7,7 @@ modifying the data accordingly.
 ## Usage
 
 ``` r
-run_model_pipeline(mod, data)
+run_model_pipeline(mod, data, mode = "output")
 ```
 
 ## Arguments
@@ -22,6 +22,15 @@ run_model_pipeline(mod, data)
   Either a file path (character) to a CSV file containing the input
   data, or a data frame. The data must contain all columns specified as
   predictors in the variables file.
+
+- mode:
+
+  A character string specifying what data to return. Can be one of:
+  "output": Only return the final output of the model. These are the
+  values of all variables calculated in the final step found in the
+  model export file. "full": Return all data, which includes the input
+  data, all intermediate variables, and the final output of the model.
+  Default is "output".
 
 ## Value
 
