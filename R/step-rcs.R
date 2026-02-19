@@ -18,6 +18,7 @@
     file
   )
 
+  mod$output_columns <- c()
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     variable <- info[["variable"]]
@@ -26,6 +27,7 @@
 
     vals <- .get_rcs(mod$data[[variable]], knots)
     mod$data[rcs_variables] <- vals
+    mod$output_columns <- c(mod$output_columns, rcs_variables)
   }
 
   mod

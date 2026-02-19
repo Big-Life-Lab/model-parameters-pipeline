@@ -166,6 +166,14 @@ prepare_model_pipeline <- function(model_export) {
 #' @param data Either a file path (character) to a CSV file containing the
 #'   input data, or a data frame. The data must contain all columns specified
 #'   as predictors in the variables file.
+#' @param mode A character string specifying what data to return. Can be one
+#'   of:
+#'      "output": Only return the final output of the model. These are the
+#'        values of all variables calculated in the final step found in the
+#'        model export file.
+#'      "full": Return all data, which includes the input data, all intermediate
+#'        variables, and the final output of the model.
+#'   Default is "output".
 #'
 #' @return The model object with the transformed data added. The transformed
 #'   data is accessible via \code{mod$data}. This data contains:
@@ -197,7 +205,7 @@ prepare_model_pipeline <- function(model_export) {
 #'
 #' @seealso \code{\link{prepare_model_pipeline}} to prepare the model object
 #' @export
-run_model_pipeline <- function(mod, data) {
+run_model_pipeline <- function(mod, data, mode = "output") {
   # Load data if it is a file
   if (is.character(data)) {
     mod <- .add_file(mod, data)
@@ -230,7 +238,6 @@ run_model_pipeline <- function(mod, data) {
 
     file_path <- step$filePath
     if (is.null(file_path) || stringr::str_length(file_path) == 0) {
-      next
     }
     file_path <- file.path(mod$root_dir, file_path)
 
@@ -254,5 +261,16 @@ run_model_pipeline <- function(mod, data) {
     }
   }
 
-  mod
+  if (mode == "output") {
+    mod$data[mod$output_columns]
+  } else if (mode == "full") {
+    mod$data
+  } else {
+    stop(paste0(
+      "Unrecognized value for \"mode\" in run_model_pipeline. ",
+      "Must be one of \"output\" or \"full\", instead found \"",
+      mode,
+      "\""
+    ))
+  }
 }

@@ -18,6 +18,7 @@
     file
   )
 
+  mod$output_columns <- c()
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     interacting_variables <- .get_string_parts(info[["interactingVariables"]])
@@ -28,6 +29,7 @@
       mod$data[interaction_variable] <- mod$data[interaction_variable] *
         mod$data[interacting_variables[i]]
     }
+    mod$output_columns <- c(mod$output_columns, interaction_variable)
   }
 
   mod

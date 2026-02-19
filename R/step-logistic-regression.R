@@ -25,7 +25,7 @@
   colnames(logistic_data) <- c(logistic_col)
   logistic_data[logistic_col] <- 0
 
-  # Multiple all variables by all coefficients
+  # Multiply all variables by all coefficients
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     variable <- info[["variable"]]
@@ -41,6 +41,8 @@
 
   # Apply the logistic function to the output
   logistic_data[logistic_col] <- 1 / (1 + exp(-logistic_data[logistic_col]))
+
+  mod$output_columns <- c(logistic_col)
 
   mod$data <- cbind(mod$data, logistic_data)
 

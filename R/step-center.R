@@ -18,6 +18,7 @@
     file
   )
 
+  mod$output_columns <- c()
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
@@ -25,6 +26,7 @@
     centered_variable <- info[["centeredVariable"]]
 
     mod$data[centered_variable] <- mod$data[orig_variable] - center_value
+    mod$output_columns <- c(mod$output_columns, centered_variable)
   }
 
   mod

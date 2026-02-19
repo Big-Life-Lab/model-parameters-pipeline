@@ -19,6 +19,7 @@
     file
   )
 
+  mod$output_columns <- c()
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
@@ -26,6 +27,7 @@
     dummy_variable <- info[["dummyVariable"]]
 
     mod$data[dummy_variable] <- as.integer(mod$data[orig_variable] == cat_value)
+    mod$output_columns <- c(mod$output_columns, dummy_variable)
   }
 
   mod

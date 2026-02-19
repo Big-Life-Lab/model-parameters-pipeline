@@ -74,13 +74,13 @@ run_test_data <- function(dir_name, input_data_file) {
   model_export_file <-
     testthat::test_path(root_dir, dir_name, "test-model-export.csv")
   mod <- prepare_model_pipeline(model_export_file)
-  mod <- run_model_pipeline(mod, data = data_file)
+  output_data <- run_model_pipeline(mod, data = data_file, mode = "full")
 
   # Compare the pipeline output to the expected output
   valid_data_file <-
     testthat::test_path(root_dir, dir_name, "test-expected.csv")
   valid_data <- utils::read.csv(valid_data_file)
-  expect_equal(mod$data,
+  expect_equal(output_data,
     valid_data,
     info = paste("Failed on transformation step", dir_name)
   )
