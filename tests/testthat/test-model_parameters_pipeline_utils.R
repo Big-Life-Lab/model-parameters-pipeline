@@ -2,33 +2,33 @@ test_that(".add_file and .get_file work", {
   # Get and load datafiles for HTNPoRT for testing
   female_paths <- get_htnport_paths("female")
   female_data_file <- female_paths$data_file
-  female_expected_df <- utils::read.csv(female_paths$data_file)
+  female_expected_data <- utils::read.csv(female_paths$data_file)
   male_paths <- get_htnport_paths("male")
   male_data_file <- male_paths$data_file
-  male_expected_df <- utils::read.csv(male_paths$data_file)
+  male_expected_data <- utils::read.csv(male_paths$data_file)
 
   mod <- list()
 
   mod <- .add_file(mod, female_data_file)
-  test_df <- .get_file(mod, female_data_file)
+  test_data <- .get_file(mod, female_data_file)
   expect_equal(
-    test_df,
-    female_expected_df,
+    test_data,
+    female_expected_data,
     info = "Failed retrieving single file added with .add_file"
   )
 
   mod <- .add_file(mod, male_data_file)
-  test_df <- .get_file(mod, male_data_file)
+  test_data <- .get_file(mod, male_data_file)
   expect_equal(
-    test_df,
-    male_expected_df,
+    test_data,
+    male_expected_data,
     info = "Failed retrieving second file added with .add_file"
   )
 
-  test_df <- .get_file(mod, female_data_file)
+  test_data <- .get_file(mod, female_data_file)
   expect_equal(
-    test_df,
-    female_expected_df,
+    test_data,
+    female_expected_data,
     info = "Failed retrieving 1st file after adding 2nd file with .add_file"
   )
 
@@ -50,7 +50,7 @@ test_that(".add_file and .get_file work", {
 })
 
 test_that("Utility function .verify_columns works", {
-  df <- data.frame(
+  test_data <- data.frame(
     "other" = c("1", "2", "3"),
     "col_1" = c("a", "b", "c"),
     "col_2" = c("d", "e", "f"),
@@ -58,33 +58,33 @@ test_that("Utility function .verify_columns works", {
   )
 
   expect_no_error(
-    .verify_columns(df, c("col_1"), "test data")
+    .verify_columns(test_data, c("col_1"), "test data")
   )
 
   expect_no_error(
-    .verify_columns(df, c("col_1", "col_2", "col_3"), "test data")
+    .verify_columns(test_data, c("col_1", "col_2", "col_3"), "test data")
   )
 
   expect_error(
-    .verify_columns(df, c("missing"), "test data"),
+    .verify_columns(test_data, c("missing"), "test data"),
     info = "Expected error testing for a single missing column"
   )
 
   expect_error(
-    .verify_columns(df, c("col_1", "col_2", "bad"), "test data"),
+    .verify_columns(test_data, c("col_1", "col_2", "bad"), "test data"),
     info = "Expected error testing for multiple missing columns"
   )
 })
 
 test_that("Utility function .get_unused_column works", {
-  df <- data.frame(list(
+  test_data <- data.frame(
     "other" = c("1", "2", "3"),
     "col_1" = c("a", "b", "c"),
     "col_2" = c("d", "e", "f"),
     "col_4" = c("g", "h", "i")
-  ))
+  )
   expect_equal(
-    .get_unused_column(df, "col_"),
+    .get_unused_column(test_data, "col_"),
     "col_3",
     info = paste("Failed with two existing columns")
   )
