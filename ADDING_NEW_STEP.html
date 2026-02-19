@@ -115,19 +115,19 @@
 <span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>.run_step_{stepname} <span class="ot">&lt;-</span> <span class="cf">function</span>(mod, file) {</span>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="co"># Load the step specification file</span></span>
 <span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="fu">.add_file</span>(mod, file)</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  step_df <span class="ot">&lt;-</span> <span class="fu">.get_file</span>(mod, file)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  step_data <span class="ot">&lt;-</span> <span class="fu">.get_file</span>(mod, file)</span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
 <span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  <span class="co"># Verify required columns exist in the specification file</span></span>
 <span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>  <span class="fu">.verify_columns</span>(</span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    step_df,</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    step_data,</span>
 <span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">"column1"</span>, <span class="st">"column2"</span>, <span class="st">"column3"</span>),</span>
 <span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>    <span class="st">"{stepname} step file"</span>,</span>
 <span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>    file</span>
 <span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>  )</span>
 <span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a></span>
 <span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>  <span class="co"># Process each row in the step specification</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(step_df))) {</span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>    info <span class="ot">&lt;-</span> step_df[i, ]</span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(step_data))) {</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>    info <span class="ot">&lt;-</span> step_data[i, ]</span>
 <span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a></span>
 <span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>    <span class="co"># Extract parameters from the specification</span></span>
 <span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>    param1 <span class="ot">&lt;-</span> info[[<span class="st">"column1"</span>]]</span>
@@ -135,7 +135,7 @@
 <span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>    param3 <span class="ot">&lt;-</span> info[[<span class="st">"column3"</span>]]</span>
 <span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a></span>
 <span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>    <span class="co"># Implement your transformation logic here</span></span>
-<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>    <span class="co"># Example: mod$df[new_column] &lt;- transformation(mod$df[existing_column])</span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>    <span class="co"># Example: mod$data[new_column] &lt;- transformation(mod$data[existing_column])</span></span>
 <span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>  }</span>
 <span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a></span>
 <span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>  <span class="co"># Return the updated model object</span></span>
@@ -159,13 +159,13 @@
 <p><strong>Load Specification File</strong>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-add_file.html">.add_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span>
-<span><span class="va">step_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_file.html">.get_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">step_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_file.html">.get_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span></code></pre></div>
 <p>These helper functions cache and retrieve the CSV specification file.</p>
 </li>
 <li>
 <p><strong>Verify Columns</strong>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/dot-verify_columns.html">.verify_columns</a></span><span class="op">(</span><span class="va">step_df</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/dot-verify_columns.html">.verify_columns</a></span><span class="op">(</span><span class="va">step_data</span>,</span>
 <span>                <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"column1"</span>, <span class="st">"column2"</span>, <span class="st">"column3"</span><span class="op">)</span>,</span>
 <span>                <span class="st">"{stepname} step file"</span>,</span>
 <span>                <span class="va">file</span><span class="op">)</span></span></code></pre></div>
@@ -174,9 +174,9 @@
 <li><p><strong>Process Each Row</strong>: The <code>for</code> loop processes each row in the specification file. Each row typically defines one transformation to apply.</p></li>
 <li>
 <p><strong>Access Data</strong>:</p>
-<ul><li>Read data: <code>mod$df[column_name]</code> or <code>mod$df[[column_name]]</code>
+<ul><li>Read data: <code>mod$data[column_name]</code> or <code>mod$data[[column_name]]</code>
 </li>
-<li>Write data: <code>mod$df[new_column] &lt;- transformed_values</code>
+<li>Write data: <code>mod$data[new_column] &lt;- transformed_values</code>
 </li>
 </ul></li>
 <li><p><strong>Return Updated Model</strong>: Always return <code>mod</code> at the end so transformations can be chained.</p></li>
@@ -187,26 +187,26 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">.run_step_center</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-add_file.html">.add_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span>
-<span>  <span class="va">step_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_file.html">.get_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span>
+<span>  <span class="va">step_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_file.html">.get_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="reference/dot-verify_columns.html">.verify_columns</a></span><span class="op">(</span></span>
-<span>    <span class="va">step_df</span>,</span>
+<span>    <span class="va">step_data</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"origVariable"</span>, <span class="st">"centerValue"</span>, <span class="st">"centeredVariable"</span><span class="op">)</span>,</span>
 <span>    <span class="st">"center step file"</span>,</span>
 <span>    <span class="va">file</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">step_df</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">info</span> <span class="op">&lt;-</span> <span class="va">step_df</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">step_data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">info</span> <span class="op">&lt;-</span> <span class="va">step_data</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span></span>
 <span>    <span class="va">orig_variable</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"origVariable"</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="va">center_value</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"centerValue"</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="va">centered_variable</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"centeredVariable"</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
-<span>    <span class="va">mod</span><span class="op">$</span><span class="va">df</span><span class="op">[</span><span class="va">centered_variable</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">df</span><span class="op">[</span><span class="va">orig_variable</span><span class="op">]</span> <span class="op">-</span> <span class="va">center_value</span></span>
+<span>    <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="va">centered_variable</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="va">orig_variable</span><span class="op">]</span> <span class="op">-</span> <span class="va">center_value</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
 <span>  <span class="va">mod</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>This function: - Is defined in its own source file <code>R/step-center.R</code> - Loads the center specification file - Verifies it has the required columns (<code>origVariable</code>, <code>centerValue</code>, <code>centeredVariable</code>) - For each row, creates a new centered variable by subtracting <code>centerValue</code> from the original variable - Returns the updated model with new columns added to <code>mod$df</code></p>
+<p>This function: - Is defined in its own source file <code>R/step-center.R</code> - Loads the center specification file - Verifies it has the required columns (<code>origVariable</code>, <code>centerValue</code>, <code>centeredVariable</code>) - For each row, creates a new centered variable by subtracting <code>centerValue</code> from the original variable - Returns the updated model with new columns added to <code>mod$data</code></p>
 </div>
 </div>
 <div class="section level2">
@@ -292,7 +292,7 @@
 <h3 id="creating-new-columns-safely">Creating New Columns Safely<a class="anchor" aria-label="anchor" href="#creating-new-columns-safely"></a></h3>
 <p>To avoid column name conflicts:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">new_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_unused_column.html">.get_unused_column</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">df</span>, <span class="st">"prefix_"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">new_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_unused_column.html">.get_unused_column</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">data</span>, <span class="st">"prefix_"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="adding-multiple-columns">Adding Multiple Columns<a class="anchor" aria-label="anchor" href="#adding-multiple-columns"></a></h3>
@@ -303,7 +303,7 @@
 <span>  col1 <span class="op">=</span> <span class="va">values1</span>,</span>
 <span>  col2 <span class="op">=</span> <span class="va">values2</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">mod</span><span class="op">$</span><span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"col1"</span>, <span class="st">"col2"</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">new_cols</span></span></code></pre></div>
+<span><span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"col1"</span>, <span class="st">"col2"</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">new_cols</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

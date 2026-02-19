@@ -21,4 +21,4 @@ model's cache.
 
 ## Value
 
-Data frame from the file cache
+Data from the file cache (eg. a dataframe)

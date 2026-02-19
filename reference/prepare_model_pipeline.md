@@ -32,15 +32,15 @@ A model object (list) containing:
 
 - model_export:
 
-  The model export data frame
+  The data from the model export file
 
 - variables:
 
-  The variables data frame
+  The data from the variables file
 
 - model_steps:
 
-  The model steps data frame
+  The data from the model steps file
 
 - predictor_variables:
 

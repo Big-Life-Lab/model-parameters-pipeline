@@ -52,13 +52,13 @@ mod <- prepare_model_pipeline("path/to/model-export.csv")
 mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
 
 # Access transformed data
-transformed_data <- mod$df
+transformed_data <- mod$data
 
 # Processing multiple datasets with the same model
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 for (data_file in data_files) {
   result <- run_model_pipeline(mod, data = data_file)
-  # Process result$df
+  # Process result$data
 }
 
 # Pass a data frame to run_model_pipeline
@@ -66,6 +66,6 @@ input_data <- read.csv("path/to/input-data.csv")
 mod <- run_model_pipeline(mod, data = input_data)
 
 # Extract logistic predictions (if model includes logistic-regression step)
-predictions <- mod$df[, grep("^logistic_", names(mod$df))]
+predictions <- mod$data[, grep("^logistic_", names(mod$data))]
 } # }
 ```

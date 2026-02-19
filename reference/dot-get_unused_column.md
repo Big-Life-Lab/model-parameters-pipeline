@@ -1,20 +1,20 @@
-# Find an unused column name in a dataframe
+# Find an unused column name in the data
 
 Generates a unique column name by appending an integer to a prefix.
 Iteratively checks for column_prefix1, column_prefix2, etc. until
-finding a name that doesn't exist in the dataframe.
+finding a name that doesn't exist in the data (eg. a dataframe).
 
 ## Usage
 
 ``` r
-.get_unused_column(df, column_prefix)
+.get_unused_column(data, column_prefix)
 ```
 
 ## Arguments
 
-- df:
+- data:
 
-  Data frame to check for existing column names
+  Data to check for existing column names.
 
 - column_prefix:
 

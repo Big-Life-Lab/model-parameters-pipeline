@@ -26,7 +26,7 @@ run_model_pipeline(mod, data)
 ## Value
 
 The model object with the transformed data added. The transformed data
-is accessible via `mod$df`. This data frame contains:
+is accessible via `mod$data`. This data contains:
 
 - Original predictor columns from the input data
 
@@ -50,13 +50,13 @@ mod <- prepare_model_pipeline("path/to/model-export.csv")
 mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
 
 # Access results
-head(mod$df)
+head(mod$data)
 
 # Extract predictions from logistic-regression step
-predictions <- mod$df[, grep("^logistic_", names(mod$df))]
+predictions <- mod$data[, grep("^logistic_", names(mod$data))]
 
 # Run on data frame
-input_df <- read.csv("path/to/data.csv")
-mod <- run_model_pipeline(mod, data = input_df)
+input_data <- read.csv("path/to/data.csv")
+mod <- run_model_pipeline(mod, data = input_data)
 } # }
 ```
