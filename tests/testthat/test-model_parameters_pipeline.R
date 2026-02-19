@@ -11,7 +11,7 @@ test_that("model pipeline matches predicted risk with HTNPoRT", {
     validation_data <- utils::read.csv(paths$data_file)
 
     expect_equal(
-      mod$df[["logistic_1"]],
+      mod$data[["logistic_1"]],
       validation_data[["predicted_risk"]],
       tolerance = 1e-6
     )
@@ -33,8 +33,8 @@ test_that("model pipeline works with dataframes (instead of files)", {
     mod2 <- run_model_pipeline(mod2, data = paths$data_file)
 
     expect_equal(
-      mod$df,
-      mod2$df
+      mod$data,
+      mod2$data
     )
   }
 })

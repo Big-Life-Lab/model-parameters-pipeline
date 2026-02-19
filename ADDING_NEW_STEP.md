@@ -98,19 +98,19 @@ Use this template as a starting point:
 .run_step_{stepname} <- function(mod, file) {
   # Load the step specification file
   mod <- .add_file(mod, file)
-  step_df <- .get_file(mod, file)
+  step_data <- .get_file(mod, file)
 
   # Verify required columns exist in the specification file
   .verify_columns(
-    step_df,
+    step_data,
     c("column1", "column2", "column3"),
     "{stepname} step file",
     file
   )
 
   # Process each row in the step specification
-  for (i in seq_len(nrow(step_df))) {
-    info <- step_df[i, ]
+  for (i in seq_len(nrow(step_data))) {
+    info <- step_data[i, ]
 
     # Extract parameters from the specification
     param1 <- info[["column1"]]
@@ -118,7 +118,7 @@ Use this template as a starting point:
     param3 <- info[["column3"]]
 
     # Implement your transformation logic here
-    # Example: mod$df[new_column] <- transformation(mod$df[existing_column])
+    # Example: mod$data[new_column] <- transformation(mod$data[existing_column])
   }
 
   # Return the updated model object
@@ -139,13 +139,13 @@ Use this template as a starting point:
 3. **Load Specification File**:
    ```r
    mod <- .add_file(mod, file)
-   step_df <- .get_file(mod, file)
+   step_data <- .get_file(mod, file)
    ```
    These helper functions cache and retrieve the CSV specification file.
 
 4. **Verify Columns**:
    ```r
-   .verify_columns(step_df,
+   .verify_columns(step_data,
                    c("column1", "column2", "column3"),
                    "{stepname} step file",
                    file)
@@ -158,8 +158,8 @@ Use this template as a starting point:
    file. Each row typically defines one transformation to apply.
 
 6. **Access Data**:
-   - Read data: `mod$df[column_name]` or `mod$df[[column_name]]`
-   - Write data: `mod$df[new_column] <- transformed_values`
+   - Read data: `mod$data[column_name]` or `mod$data[[column_name]]`
+   - Write data: `mod$data[new_column] <- transformed_values`
 
 7. **Return Updated Model**: Always return `mod` at the end so transformations
    can be chained.
@@ -172,21 +172,21 @@ Here's a real example from the existing codebase
 ```r
 .run_step_center <- function(mod, file) {
   mod <- .add_file(mod, file)
-  step_df <- .get_file(mod, file)
+  step_data <- .get_file(mod, file)
   .verify_columns(
-    step_df,
+    step_data,
     c("origVariable", "centerValue", "centeredVariable"),
     "center step file",
     file
   )
 
-  for (i in seq_len(nrow(step_df))) {
-    info <- step_df[i, ]
+  for (i in seq_len(nrow(step_data))) {
+    info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
     center_value <- info[["centerValue"]]
     centered_variable <- info[["centeredVariable"]]
 
-    mod$df[centered_variable] <- mod$df[orig_variable] - center_value
+    mod$data[centered_variable] <- mod$data[orig_variable] - center_value
   }
 
   mod
@@ -200,7 +200,7 @@ This function:
   `centeredVariable`)
 - For each row, creates a new centered variable by subtracting `centerValue`
   from the original variable
-- Returns the updated model with new columns added to `mod$df`
+- Returns the updated model with new columns added to `mod$data`
 
 ## Step 3: Add Unit Tests
 
@@ -301,7 +301,7 @@ numeric_values <- as.double(.get_string_parts(info[["knots"]]))
 To avoid column name conflicts:
 
 ```r
-new_col <- .get_unused_column(mod$df, "prefix_")
+new_col <- .get_unused_column(mod$data, "prefix_")
 ```
 
 ### Adding Multiple Columns
@@ -314,7 +314,7 @@ new_cols <- data.frame(
   col1 = values1,
   col2 = values2
 )
-mod$df[c("col1", "col2")] <- new_cols
+mod$data[c("col1", "col2")] <- new_cols
 ```
 
 ## Getting Help

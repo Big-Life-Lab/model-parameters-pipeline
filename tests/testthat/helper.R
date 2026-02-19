@@ -80,7 +80,7 @@ run_test_data <- function(dir_name, input_data_file) {
   valid_data_file <-
     testthat::test_path(root_dir, dir_name, "test-expected.csv")
   valid_data <- utils::read.csv(valid_data_file)
-  expect_equal(mod$df,
+  expect_equal(mod$data,
     valid_data,
     info = paste("Failed on transformation step", dir_name)
   )

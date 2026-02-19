@@ -12,7 +12,7 @@
 \item{file}{Path to file to retrieve}
 }
 \value{
-Data frame from the file cache
+Data from the file cache (eg. a dataframe)
 }
 \description{
 Internal function that retrieves a previously loaded file from the

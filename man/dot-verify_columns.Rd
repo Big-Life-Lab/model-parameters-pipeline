@@ -2,12 +2,12 @@
 % Please edit documentation in R/model_parameters_pipeline_utils.R
 \name{.verify_columns}
 \alias{.verify_columns}
-\title{Verify required columns exist in a dataframe}
+\title{Verify required columns exist in the data}
 \usage{
-.verify_columns(df, columns, data_description, file = NULL)
+.verify_columns(data, columns, data_description, file = NULL)
 }
 \arguments{
-\item{df}{Data frame to validate}
+\item{data}{Data to validate (eg. a dataframe)}
 
 \item{columns}{Character vector of required column names}
 
@@ -19,7 +19,7 @@ where the data originated from). For example: "model steps file" or
 "model steps data".}
 }
 \description{
-Checks that all required columns are present in the dataframe and stops
+Checks that all required columns are present in the data and stops
 with an informative error message if any are missing.
 }
 \keyword{internal}

@@ -10,22 +10,22 @@
 #' @keywords internal
 .run_step_rcs <- function(mod, file) {
   mod <- .add_file(mod, file)
-  step_df <- .get_file(mod, file)
+  step_data <- .get_file(mod, file)
   .verify_columns(
-    step_df,
+    step_data,
     c("variable", "rcsVariables", "knots"),
     "rcs step file",
     file
   )
 
-  for (i in seq_len(nrow(step_df))) {
-    info <- step_df[i, ]
+  for (i in seq_len(nrow(step_data))) {
+    info <- step_data[i, ]
     variable <- info[["variable"]]
     rcs_variables <- .get_string_parts(info[["rcsVariables"]])
     knots <- as.double(.get_string_parts(info[["knots"]]))
 
-    vals <- .get_rcs(mod$df[[variable]], knots)
-    mod$df[rcs_variables] <- vals
+    vals <- .get_rcs(mod$data[[variable]], knots)
+    mod$data[rcs_variables] <- vals
   }
 
   mod

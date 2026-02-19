@@ -15,7 +15,7 @@ as predictors in the variables file.}
 }
 \value{
 The model object with the transformed data added. The transformed
-  data is accessible via \code{mod$df}. This data frame contains:
+  data is accessible via \code{mod$data}. This data contains:
 \itemize{
   \item Original predictor columns from the input data
   \item New columns created by each transformation step (e.g., centered
@@ -37,14 +37,14 @@ mod <- prepare_model_pipeline("path/to/model-export.csv")
 mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
 
 # Access results
-head(mod$df)
+head(mod$data)
 
 # Extract predictions from logistic-regression step
-predictions <- mod$df[, grep("^logistic_", names(mod$df))]
+predictions <- mod$data[, grep("^logistic_", names(mod$data))]
 
 # Run on data frame
-input_df <- read.csv("path/to/data.csv")
-mod <- run_model_pipeline(mod, data = input_df)
+input_data <- read.csv("path/to/data.csv")
+mod <- run_model_pipeline(mod, data = input_data)
 }
 
 }

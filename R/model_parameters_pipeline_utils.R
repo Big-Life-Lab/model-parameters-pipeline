@@ -22,34 +22,34 @@ library(stringr)
   parts
 }
 
-#' Find an unused column name in a dataframe
+#' Find an unused column name in the data
 #'
 #' Generates a unique column name by appending an integer to a prefix.
 #' Iteratively checks for column_prefix1, column_prefix2, etc. until
-#' finding a name that doesn't exist in the dataframe.
+#' finding a name that doesn't exist in the data (eg. a dataframe).
 #'
-#' @param df Data frame to check for existing column names
+#' @param data Data to check for existing column names.
 #' @param column_prefix Character prefix for the column name
 #' @return Character string of an unused column name
 #'   (e.g., "prefix1", "prefix2")
 #' @keywords internal
-.get_unused_column <- function(df, column_prefix) {
+.get_unused_column <- function(data, column_prefix) {
   col_i <- 1
   while (TRUE) {
     cur_col <- paste0(column_prefix, col_i)
-    if (!(cur_col %in% colnames(df))) {
+    if (!(cur_col %in% colnames(data))) {
       return(cur_col)
     }
     col_i <- col_i + 1
   }
 }
 
-#' Verify required columns exist in a dataframe
+#' Verify required columns exist in the data
 #'
-#' Checks that all required columns are present in the dataframe and stops
+#' Checks that all required columns are present in the data and stops
 #' with an informative error message if any are missing.
 #'
-#' @param df Data frame to validate
+#' @param data Data to validate (eg. a dataframe)
 #' @param columns Character vector of required column names
 #' @param data_description Description of the data being validated to include
 #'   in the error message.
@@ -57,9 +57,9 @@ library(stringr)
 #'   where the data originated from). For example: "model steps file" or
 #'   "model steps data".
 #' @keywords internal
-.verify_columns <- function(df, columns, data_description, file = NULL) {
-  # Make sure all the columns exist in the dataframe
-  missing_columns <- columns[!(columns %in% colnames(df))]
+.verify_columns <- function(data, columns, data_description, file = NULL) {
+  # Make sure all the columns exist in the data
+  missing_columns <- columns[!(columns %in% colnames(data))]
   if (length(missing_columns) > 0) {
     missing_columns <- paste0("'", missing_columns, "'", collapse = ", ")
     message <- paste0(
@@ -88,8 +88,8 @@ library(stringr)
   file <- normalizePath(file, mustWork = TRUE)
   if (!(file %in% names(mod$files))) {
     # Add file contents to the model, so we can retrieve it with .get_file
-    df <- utils::read.csv(file)
-    mod$files[[file]] <- df
+    data <- utils::read.csv(file)
+    mod$files[[file]] <- data
   }
 
   mod
@@ -102,7 +102,7 @@ library(stringr)
 #'
 #' @param mod Model object
 #' @param file Path to file to retrieve
-#' @return Data frame from the file cache
+#' @return Data from the file cache (eg. a dataframe)
 #' @keywords internal
 .get_file <- function(mod, file) {
   # The file should have already been added by calling .add_file

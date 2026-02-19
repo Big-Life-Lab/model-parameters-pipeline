@@ -30,13 +30,13 @@
 #' mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
 #'
 #' # Access transformed data
-#' transformed_data <- mod$df
+#' transformed_data <- mod$data
 #'
 #' # Processing multiple datasets with the same model
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
 #' for (data_file in data_files) {
 #'   result <- run_model_pipeline(mod, data = data_file)
-#'   # Process result$df
+#'   # Process result$data
 #' }
 #'
 #' # Pass a data frame to run_model_pipeline
@@ -44,7 +44,7 @@
 #' mod <- run_model_pipeline(mod, data = input_data)
 #'
 #' # Extract logistic predictions (if model includes logistic-regression step)
-#' predictions <- mod$df[, grep("^logistic_", names(mod$df))]
+#' predictions <- mod$data[, grep("^logistic_", names(mod$data))]
 #' }
 #'
 #' @seealso
@@ -77,9 +77,9 @@ NULL
 #' \describe{
 #'   \item{root_dir}{The root directory used for resolving file paths
 #'     (derived from the model export file location)}
-#'   \item{model_export}{The model export data frame}
-#'   \item{variables}{The variables data frame}
-#'   \item{model_steps}{The model steps data frame}
+#'   \item{model_export}{The data from the model export file}
+#'   \item{variables}{The data from the variables file}
+#'   \item{model_steps}{The data from the model steps file}
 #'   \item{predictor_variables}{Character vector of predictor variable names}
 #'   \item{files}{Named list of cached file contents}
 #' }
@@ -168,7 +168,7 @@ prepare_model_pipeline <- function(model_export) {
 #'   as predictors in the variables file.
 #'
 #' @return The model object with the transformed data added. The transformed
-#'   data is accessible via \code{mod$df}. This data frame contains:
+#'   data is accessible via \code{mod$data}. This data contains:
 #' \itemize{
 #'   \item Original predictor columns from the input data
 #'   \item New columns created by each transformation step (e.g., centered
@@ -185,14 +185,14 @@ prepare_model_pipeline <- function(model_export) {
 #' mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
 #'
 #' # Access results
-#' head(mod$df)
+#' head(mod$data)
 #'
 #' # Extract predictions from logistic-regression step
-#' predictions <- mod$df[, grep("^logistic_", names(mod$df))]
+#' predictions <- mod$data[, grep("^logistic_", names(mod$data))]
 #'
 #' # Run on data frame
-#' input_df <- read.csv("path/to/data.csv")
-#' mod <- run_model_pipeline(mod, data = input_df)
+#' input_data <- read.csv("path/to/data.csv")
+#' mod <- run_model_pipeline(mod, data = input_data)
 #' }
 #'
 #' @seealso \code{\link{prepare_model_pipeline}} to prepare the model object
@@ -221,8 +221,8 @@ run_model_pipeline <- function(mod, data) {
   }
   data <- data[unlist(mod$predictor_variables)]
 
-  # Each step will modify the data at mod$df
-  mod$df <- data
+  # Each step will modify the data at mod$data
+  mod$data <- data
 
   for (i in seq_len(nrow(mod$model_steps))) {
     step <- mod$model_steps[i, ]

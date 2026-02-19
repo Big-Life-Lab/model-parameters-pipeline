@@ -2,12 +2,12 @@
 % Please edit documentation in R/model_parameters_pipeline_utils.R
 \name{.get_unused_column}
 \alias{.get_unused_column}
-\title{Find an unused column name in a dataframe}
+\title{Find an unused column name in the data}
 \usage{
-.get_unused_column(df, column_prefix)
+.get_unused_column(data, column_prefix)
 }
 \arguments{
-\item{df}{Data frame to check for existing column names}
+\item{data}{Data to check for existing column names.}
 
 \item{column_prefix}{Character prefix for the column name}
 }
@@ -18,6 +18,6 @@ Character string of an unused column name
 \description{
 Generates a unique column name by appending an integer to a prefix.
 Iteratively checks for column_prefix1, column_prefix2, etc. until
-finding a name that doesn't exist in the dataframe.
+finding a name that doesn't exist in the data (eg. a dataframe).
 }
 \keyword{internal}

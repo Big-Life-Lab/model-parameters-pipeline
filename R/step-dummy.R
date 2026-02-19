@@ -11,21 +11,21 @@
 #' @keywords internal
 .run_step_dummy <- function(mod, file) {
   mod <- .add_file(mod, file)
-  step_df <- .get_file(mod, file)
+  step_data <- .get_file(mod, file)
   .verify_columns(
-    step_df,
+    step_data,
     c("origVariable", "catValue", "dummyVariable"),
     "dummy step file",
     file
   )
 
-  for (i in seq_len(nrow(step_df))) {
-    info <- step_df[i, ]
+  for (i in seq_len(nrow(step_data))) {
+    info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
     cat_value <- info[["catValue"]]
     dummy_variable <- info[["dummyVariable"]]
 
-    mod$df[dummy_variable] <- as.integer(mod$df[orig_variable] == cat_value)
+    mod$data[dummy_variable] <- as.integer(mod$data[orig_variable] == cat_value)
   }
 
   mod

@@ -66,6 +66,6 @@ generate_step_tests_expected <- function(steps = NULL) {
     # Save the results as the expected output
     cat("Saving expected output for", basename(cur_dir), "\n")
     output_file <- file.path(cur_dir, "test-expected.csv")
-    write.csv(mod$df, output_file, row.names = FALSE)
+    write.csv(mod$data, output_file, row.names = FALSE)
   }
 }

@@ -85,7 +85,7 @@ mod <- prepare_model_pipeline("path/to/model-export.csv")
 mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
 
 # Access the transformed data
-transformed_data <- mod$df
+transformed_data <- mod$data
 
 # View the first few rows
 head(transformed_data)
@@ -100,10 +100,10 @@ You can pass a data frame instead of a file path for the input data:
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 
 # Load and preprocess your data
-data_df <- read.csv("path/to/input-data.csv")
+input_data <- read.csv("path/to/input-data.csv")
 
 # Run pipeline with data frame
-mod <- run_model_pipeline(mod, data = data_df)
+mod <- run_model_pipeline(mod, data = input_data)
 ```
 
 This is useful when your data is already loaded or needs preprocessing.
@@ -126,18 +126,18 @@ This avoids re-reading and parsing the configuration files for each batch.
 
 ## Working with Results
 
-The pipeline returns a model object with the transformed data in the `$df` component:
+The pipeline returns a model object with the transformed data in the `$data` component:
 
 ```{r eval=FALSE}
 # Access transformed data
-result_data <- mod$df
+result_data <- mod$data
 
 # If the model includes a logistic-regression step, extract predictions
 # Logistic predictions are stored in columns starting with "logistic_"
-predictions <- mod$df[, grep("^logistic_", names(mod$df))]
+predictions <- mod$data[, grep("^logistic_", names(mod$data))]
 
 # View column names to see what transformations were created
-colnames(mod$df)
+colnames(mod$data)
 ```
 
 ## Real-World Example: HTNPoRT Model
@@ -177,10 +177,10 @@ mod <- prepare_model_pipeline(model_export_file)
 mod <- run_model_pipeline(mod, data = data)
 
 # View the transformed data with all intermediate steps
-head(mod$df)
+head(mod$data)
 
 # Extract logistic predictions (hypertension risk probabilities)
-predictions <- mod$df[, grep("^logistic_", names(mod$df))]
+predictions <- mod$data[, grep("^logistic_", names(mod$data))]
 head(predictions)
 
 # Summary statistics of predictions

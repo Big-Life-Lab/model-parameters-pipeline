@@ -19,9 +19,9 @@ A model object (list) containing:
 \describe{
   \item{root_dir}{The root directory used for resolving file paths
     (derived from the model export file location)}
-  \item{model_export}{The model export data frame}
-  \item{variables}{The variables data frame}
-  \item{model_steps}{The model steps data frame}
+  \item{model_export}{The data from the model export file}
+  \item{variables}{The data from the variables file}
+  \item{model_steps}{The data from the model steps file}
   \item{predictor_variables}{Character vector of predictor variable names}
   \item{files}{Named list of cached file contents}
 }

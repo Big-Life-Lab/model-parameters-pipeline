@@ -10,21 +10,21 @@
 #' @keywords internal
 .run_step_center <- function(mod, file) {
   mod <- .add_file(mod, file)
-  step_df <- .get_file(mod, file)
+  step_data <- .get_file(mod, file)
   .verify_columns(
-    step_df,
+    step_data,
     c("origVariable", "centerValue", "centeredVariable"),
     "center step file",
     file
   )
 
-  for (i in seq_len(nrow(step_df))) {
-    info <- step_df[i, ]
+  for (i in seq_len(nrow(step_data))) {
+    info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
     center_value <- info[["centerValue"]]
     centered_variable <- info[["centeredVariable"]]
 
-    mod$df[centered_variable] <- mod$df[orig_variable] - center_value
+    mod$data[centered_variable] <- mod$data[orig_variable] - center_value
   }
 
   mod
