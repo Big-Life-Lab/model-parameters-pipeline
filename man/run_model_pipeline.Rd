@@ -4,7 +4,7 @@
 \alias{run_model_pipeline}
 \title{Run Model Pipeline}
 \usage{
-run_model_pipeline(mod, data)
+run_model_pipeline(mod, data, mode = "output")
 }
 \arguments{
 \item{mod}{A model object created by \code{\link{prepare_model_pipeline}}.}
@@ -12,6 +12,15 @@ run_model_pipeline(mod, data)
 \item{data}{Either a file path (character) to a CSV file containing the
 input data, or a data frame. The data must contain all columns specified
 as predictors in the variables file.}
+
+\item{mode}{A character string specifying what data to return. Can be one
+of:
+   "output": Only return the final output of the model. These are the
+     values of all variables calculated in the final step found in the
+     model export file.
+   "full": Return all data, which includes the input data, all intermediate
+     variables, and the final output of the model.
+Default is "output".}
 }
 \value{
 The model object with the transformed data added. The transformed
