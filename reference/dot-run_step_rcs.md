@@ -7,7 +7,7 @@ Parameters pipeline.
 ## Usage
 
 ``` r
-.run_step_rcs(mod, file)
+.run_step_rcs(mod, dat, file)
 ```
 
 ## Arguments
@@ -16,10 +16,16 @@ Parameters pipeline.
 
   Model object
 
+- dat:
+
+  Data frame containing the input data to be transformed
+
 - file:
 
   Path to RCS step specification file
 
 ## Value
 
-Updated model object with RCS variables added to data
+A list containing: `mod` (the updated model object), `data` (the
+transformed data frame with RCS variables added), and `output_columns`
+(character vector of new column names added by this step)

@@ -8,7 +8,7 @@ pipeline.
 ## Usage
 
 ``` r
-.run_step_logistic_regression(mod, file)
+.run_step_logistic_regression(mod, dat, file)
 ```
 
 ## Arguments
@@ -17,10 +17,17 @@ pipeline.
 
   Model object
 
+- dat:
+
+  Data frame containing the input data to be transformed
+
 - file:
 
   Path to logistic step specification file
 
 ## Value
 
-Updated model object with logistic prediction added to data
+A list containing: `mod` (the updated model object), `data` (the
+transformed data frame with the logistic prediction column added), and
+`output_columns` (character vector of new column names added by this
+step)

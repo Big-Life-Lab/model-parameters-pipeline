@@ -8,7 +8,7 @@ pipeline.
 ## Usage
 
 ``` r
-.run_step_dummy(mod, file)
+.run_step_dummy(mod, dat, file)
 ```
 
 ## Arguments
@@ -17,10 +17,16 @@ pipeline.
 
   Model object
 
+- dat:
+
+  Data frame containing the input data to be transformed
+
 - file:
 
   Path to dummy step specification file
 
 ## Value
 
-Updated model object with dummy variables added to data
+A list containing: `mod` (the updated model object), `data` (the
+transformed data frame with dummy variables added), and `output_columns`
+(character vector of new column names added by this step)

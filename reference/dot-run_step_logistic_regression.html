@@ -52,7 +52,7 @@ from the Model Parameters pipeline.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.run_step_logistic_regression</span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.run_step_logistic_regression</span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span>, <span class="va">file</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -63,13 +63,20 @@ from the Model Parameters pipeline.</p>
 <dd><p>Model object</p></dd>
 
 
+<dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
+<dd><p>Data frame containing the input data to be transformed</p></dd>
+
+
 <dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
 <dd><p>Path to logistic step specification file</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Updated model object with logistic prediction added to data</p>
+    <p>A list containing: <code>mod</code> (the updated model object),
+  <code>data</code> (the transformed data frame with the logistic prediction
+  column added), and <code>output_columns</code> (character vector of new
+  column names added by this step)</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

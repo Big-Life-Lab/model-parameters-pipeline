@@ -7,7 +7,7 @@ Parameters pipeline.
 ## Usage
 
 ``` r
-.run_step_center(mod, file)
+.run_step_center(mod, dat, file)
 ```
 
 ## Arguments
@@ -16,10 +16,17 @@ Parameters pipeline.
 
   Model object
 
+- dat:
+
+  Data frame containing the input data to be transformed
+
 - file:
 
   Path to center step specification file
 
 ## Value
 
-Updated model object with centered variables added to data
+A list containing: `mod` (the updated model object), `data` (the
+transformed data frame with centered variables added), and
+`output_columns` (character vector of new column names added by this
+step)

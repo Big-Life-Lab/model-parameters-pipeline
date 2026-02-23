@@ -58,15 +58,15 @@
 <p>Find the <code>if-else</code> chain in <code>run_model_pipeline</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_center.html">.run_step_center</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_center.html">.run_step_center</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span>, <span class="va">file_path</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"dummy"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_dummy.html">.run_step_dummy</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_dummy.html">.run_step_dummy</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span>, <span class="va">file_path</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"interaction"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_interaction.html">.run_step_interaction</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_interaction.html">.run_step_interaction</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span>, <span class="va">file_path</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"logistic-regression"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_logistic_regression.html">.run_step_logistic_regression</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_logistic_regression.html">.run_step_logistic_regression</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span>, <span class="va">file_path</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"rcs"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_rcs.html">.run_step_rcs</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_rcs.html">.run_step_rcs</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span>, <span class="va">file_path</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Unrecognized or unimplemented step type for step #"</span>,</span>
@@ -75,22 +75,30 @@
 <span>    <span class="va">step_name</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+<p>After each step call, the pipeline extracts the results:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">mod</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">data</span></span>
+<span><span class="va">output_columns</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">output_columns</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="add-your-step">Add Your Step<a class="anchor" aria-label="anchor" href="#add-your-step"></a></h3>
 <p>Add a new <code>else if</code> block for your step <strong>before</strong> the final <code>else</code> clause:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="er">}</span> <span class="cf">else</span> <span class="cf">if</span> (step_name <span class="sc">==</span> <span class="st">"your-step-name"</span>) {</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="fu">.run_step_your_step_name</span>(mod, file_path)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="fu">paste0</span>(</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="st">"Unrecognized or unimplemented step type for step #"</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    i,</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="st">": "</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    step_name</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  ))</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>}</span></code></pre></div>
-<p><strong>Important:</strong> - Replace <code>"your-step-name"</code> with the exact step name as it appears in the Model Parameters specification - Replace <code>your_step_name</code> with an underscored version for the function name - The step name must match what users will specify in their <code>model-steps.csv</code> file</p>
-</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="er">}</span> <span class="cf">else</span> <span class="cf">if</span> (step_name <span class="sc">==</span> <span class="st">"your-step-name"</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">.run_step_your_step_name</span>(mod, dat, file_path)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="fu">paste0</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="st">"Unrecognized or unimplemented step type for step #"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    i,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    <span class="st">": "</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    step_name</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  ))</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Important:</strong></p>
+<ul><li>Replace <code>"your-step-name"</code> with the exact step name as it appears in the Model Parameters specification</li>
+<li>Replace <code>your_step_name</code> with an underscored version for the function name</li>
+<li>The step name must match what users will specify in their <code>model-steps.csv</code> file</li>
+</ul></div>
 </div>
 <div class="section level2">
 <h2 id="step-2-create-the-step-function">Step 2: Create the Step Function<a class="anchor" aria-label="anchor" href="#step-2-create-the-step-function"></a></h2>
@@ -102,45 +110,57 @@
 <div class="section level3">
 <h3 id="function-template">Function Template<a class="anchor" aria-label="anchor" href="#function-template"></a></h3>
 <p>Use this template as a starting point:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#' Run {Step Name} Step</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#' {Brief description of what this step does and its purpose}.</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#' Implements the '{stepname}' transformation step from the Model</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#' Parameters pipeline.</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#' @param mod Model object</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#' @param file Path to {stepname} step specification file</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#' @return Updated model object with {description of added data}</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#' @keywords internal</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>.run_step_{stepname} <span class="ot">&lt;-</span> <span class="cf">function</span>(mod, file) {</span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="co"># Load the step specification file</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="fu">.add_file</span>(mod, file)</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  step_data <span class="ot">&lt;-</span> <span class="fu">.get_file</span>(mod, file)</span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  <span class="co"># Verify required columns exist in the specification file</span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>  <span class="fu">.verify_columns</span>(</span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    step_data,</span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">"column1"</span>, <span class="st">"column2"</span>, <span class="st">"column3"</span>),</span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>    <span class="st">"{stepname} step file"</span>,</span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>    file</span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>  )</span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>  <span class="co"># Process each row in the step specification</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(step_data))) {</span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>    info <span class="ot">&lt;-</span> step_data[i, ]</span>
-<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>    <span class="co"># Extract parameters from the specification</span></span>
-<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>    param1 <span class="ot">&lt;-</span> info[[<span class="st">"column1"</span>]]</span>
-<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>    param2 <span class="ot">&lt;-</span> info[[<span class="st">"column2"</span>]]</span>
-<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>    param3 <span class="ot">&lt;-</span> info[[<span class="st">"column3"</span>]]</span>
-<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>    <span class="co"># Implement your transformation logic here</span></span>
-<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>    <span class="co"># Example: mod$data[new_column] &lt;- transformation(mod$data[existing_column])</span></span>
-<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>  }</span>
-<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a></span>
-<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>  <span class="co"># Return the updated model object</span></span>
-<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a>  mod</span>
-<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#' Run {Step Name} Step</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#' {Brief description of what this step does and its purpose}.</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#' Implements the '{stepname}' transformation step from the Model</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#' Parameters pipeline.</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#' @param mod Model object</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#' @param dat Data frame containing the input data to be transformed</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#' @param file Path to {stepname} step specification file</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#' @return A list containing: \code{mod} (the updated model object),</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#'   \code{data} (the transformed data frame with {description of added data}),</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#'   and \code{output_columns} (character vector of new column names added</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#'   by this step)</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#' @keywords internal</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>.run_step_{stepname} <span class="ot">&lt;-</span> <span class="cf">function</span>(mod, dat, file) {</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  <span class="co"># Load the step specification file</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="fu">.add_file</span>(mod, file)</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  step_data <span class="ot">&lt;-</span> <span class="fu">.get_file</span>(mod, file)</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>  <span class="co"># Verify required columns exist in the specification file</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>  <span class="fu">.verify_columns</span>(</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>    step_data,</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">"column1"</span>, <span class="st">"column2"</span>, <span class="st">"column3"</span>),</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>    <span class="st">"{stepname} step file"</span>,</span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>    file</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>  )</span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>  <span class="co"># Track which columns are produced by this step</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>  output_columns <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>  <span class="co"># Process each row in the step specification</span></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(step_data))) {</span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>    info <span class="ot">&lt;-</span> step_data[i, ]</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>    <span class="co"># Extract parameters from the specification</span></span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a>    param1 <span class="ot">&lt;-</span> info[[<span class="st">"column1"</span>]]</span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>    param2 <span class="ot">&lt;-</span> info[[<span class="st">"column2"</span>]]</span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>    param3 <span class="ot">&lt;-</span> info[[<span class="st">"column3"</span>]]</span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a>    <span class="co"># Implement your transformation logic here</span></span>
+<span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a>    <span class="co"># Example: dat[new_column] &lt;- transformation(dat[existing_column])</span></span>
+<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a>    output_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(output_columns, new_column)</span>
+<span id="cb4-43"><a href="#cb4-43" tabindex="-1"></a>  }</span>
+<span id="cb4-44"><a href="#cb4-44" tabindex="-1"></a></span>
+<span id="cb4-45"><a href="#cb4-45" tabindex="-1"></a>  <span class="co"># Return the updated model object, transformed data, and output column names</span></span>
+<span id="cb4-46"><a href="#cb4-46" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb4-47"><a href="#cb4-47" tabindex="-1"></a>    <span class="at">mod =</span> mod,</span>
+<span id="cb4-48"><a href="#cb4-48" tabindex="-1"></a>    <span class="at">data =</span> dat,</span>
+<span id="cb4-49"><a href="#cb4-49" tabindex="-1"></a>    <span class="at">output_columns =</span> output_columns</span>
+<span id="cb4-50"><a href="#cb4-50" tabindex="-1"></a>  )</span>
+<span id="cb4-51"><a href="#cb4-51" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="key-components-explained">Key Components Explained<a class="anchor" aria-label="anchor" href="#key-components-explained"></a></h3>
@@ -151,20 +171,21 @@
 </ul></li>
 <li>
 <p><strong>Function Signature</strong>:</p>
-<ul><li>Always takes <code>mod</code> (model object) and <code>file</code> (path to specification file)</li>
-<li>Always returns the updated <code>mod</code> object</li>
-<li>Function name is <code>.run_step_{stepname}</code> (no leading dot)</li>
+<ul><li>Always takes <code>mod</code> (model object), <code>dat</code> (input data frame), and <code>file</code> (path to specification file)</li>
+<li>Always returns a named list with <code>mod</code>, <code>data</code>, and <code>output_columns</code>
+</li>
+<li>Function name is <code>.run_step_{stepname}</code> (with leading dot, making it internal)</li>
 </ul></li>
 <li>
 <p><strong>Load Specification File</strong>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-add_file.html">.add_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span>
 <span><span class="va">step_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_file.html">.get_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span></code></pre></div>
 <p>These helper functions cache and retrieve the CSV specification file.</p>
 </li>
 <li>
 <p><strong>Verify Columns</strong>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/dot-verify_columns.html">.verify_columns</a></span><span class="op">(</span><span class="va">step_data</span>,</span>
 <span>                <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"column1"</span>, <span class="st">"column2"</span>, <span class="st">"column3"</span><span class="op">)</span>,</span>
 <span>                <span class="st">"{stepname} step file"</span>,</span>
@@ -173,19 +194,20 @@
 </li>
 <li><p><strong>Process Each Row</strong>: The <code>for</code> loop processes each row in the specification file. Each row typically defines one transformation to apply.</p></li>
 <li>
-<p><strong>Access Data</strong>:</p>
-<ul><li>Read data: <code>mod$data[column_name]</code> or <code>mod$data[[column_name]]</code>
+<p><strong>Access and Write Data</strong>:</p>
+<ul><li>Read data: <code>dat[column_name]</code> or <code>dat[[column_name]]</code>
 </li>
-<li>Write data: <code>mod$data[new_column] &lt;- transformed_values</code>
+<li>Write data: <code>dat[new_column] &lt;- transformed_values</code>
 </li>
 </ul></li>
-<li><p><strong>Return Updated Model</strong>: Always return <code>mod</code> at the end so transformations can be chained.</p></li>
+<li><p><strong>Track Output Columns</strong>: Append each new column name to <code>output_columns</code> so the pipeline knows which columns this step produced.</p></li>
+<li><p><strong>Return a List</strong>: Always return a named list with <code>mod</code>, <code>data</code>, and <code>output_columns</code> so the pipeline can chain steps together.</p></li>
 </ol></div>
 <div class="section level3">
 <h3 id="example-center-step">Example: Center Step<a class="anchor" aria-label="anchor" href="#example-center-step"></a></h3>
 <p>Here’s a real example from the existing codebase (<a href="R/step-center.R">R/step-center.R</a>):</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">.run_step_center</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">.run_step_center</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span>, <span class="va">file</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-add_file.html">.add_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span>
 <span>  <span class="va">step_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_file.html">.get_file</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="reference/dot-verify_columns.html">.verify_columns</a></span><span class="op">(</span></span>
@@ -195,19 +217,34 @@
 <span>    <span class="va">file</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
+<span>  <span class="va">output_columns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">step_data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">info</span> <span class="op">&lt;-</span> <span class="va">step_data</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span></span>
 <span>    <span class="va">orig_variable</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"origVariable"</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="va">center_value</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"centerValue"</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="va">centered_variable</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"centeredVariable"</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
-<span>    <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="va">centered_variable</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="va">orig_variable</span><span class="op">]</span> <span class="op">-</span> <span class="va">center_value</span></span>
+<span>    <span class="va">dat</span><span class="op">[</span><span class="va">centered_variable</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">[</span><span class="va">orig_variable</span><span class="op">]</span> <span class="op">-</span> <span class="va">center_value</span></span>
+<span>    <span class="va">output_columns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">output_columns</span>, <span class="va">centered_variable</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
-<span>  <span class="va">mod</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    mod <span class="op">=</span> <span class="va">mod</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">dat</span>,</span>
+<span>    output_columns <span class="op">=</span> <span class="va">output_columns</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>This function: - Is defined in its own source file <code>R/step-center.R</code> - Loads the center specification file - Verifies it has the required columns (<code>origVariable</code>, <code>centerValue</code>, <code>centeredVariable</code>) - For each row, creates a new centered variable by subtracting <code>centerValue</code> from the original variable - Returns the updated model with new columns added to <code>mod$data</code></p>
-</div>
+<p>This function:</p>
+<ul><li>Is defined in its own source file <code>R/step-center.R</code>
+</li>
+<li>Accepts <code>mod</code>, <code>dat</code> (the data to transform), and <code>file</code>
+</li>
+<li>Loads the center specification file</li>
+<li>Verifies it has the required columns (<code>origVariable</code>, <code>centerValue</code>, <code>centeredVariable</code>)</li>
+<li>For each row, creates a new centered variable by subtracting <code>centerValue</code> from the original variable in <code>dat</code>
+</li>
+<li>Returns a list with the updated model object, the modified data frame, and the names of the new columns</li>
+</ul></div>
 </div>
 <div class="section level2">
 <h2 id="step-3-add-unit-tests">Step 3: Add Unit Tests<a class="anchor" aria-label="anchor" href="#step-3-add-unit-tests"></a></h2>
@@ -230,20 +267,20 @@
 </ul></li>
 <li>
 <p><strong>Generate expected output</strong>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"tests/testthat/generate_step_tests_expected.R"</span><span class="op">)</span></span>
 <span><span class="fu">generate_step_tests_expected</span><span class="op">(</span>steps <span class="op">=</span> <span class="st">"stepname"</span><span class="op">)</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>Run tests</strong>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Your test is automatically discovered and run!</p>
 </li>
 </ol></div>
 <div class="section level3">
 <h3 id="test-file-structure">Test File Structure<a class="anchor" aria-label="anchor" href="#test-file-structure"></a></h3>
-<pre><code>tests/testthat/testdata/step-tests/
+<pre class="text"><code>tests/testthat/testdata/step-tests/
 ├── test-data.csv              # Shared test data (already exists)
 ├── test-variables.csv         # Shared variables definition (already exists)
 └── test-{stepname}/           # Your new test directory
@@ -279,31 +316,31 @@
 <div class="section level3">
 <h3 id="parsing-delimited-strings">Parsing Delimited Strings<a class="anchor" aria-label="anchor" href="#parsing-delimited-strings"></a></h3>
 <p>Some steps use delimited strings (e.g., “var1;var2;var3”) in their parameters file. Use the helper function:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_string_parts.html">.get_string_parts</a></span><span class="op">(</span><span class="va">info</span><span class="op">[[</span><span class="st">"columnName"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="working-with-numeric-values">Working with Numeric Values<a class="anchor" aria-label="anchor" href="#working-with-numeric-values"></a></h3>
 <p>Convert string values to numeric when needed:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">numeric_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="reference/dot-get_string_parts.html">.get_string_parts</a></span><span class="op">(</span><span class="va">info</span><span class="op">[[</span><span class="st">"knots"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="creating-new-columns-safely">Creating New Columns Safely<a class="anchor" aria-label="anchor" href="#creating-new-columns-safely"></a></h3>
 <p>To avoid column name conflicts:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">new_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_unused_column.html">.get_unused_column</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">data</span>, <span class="st">"prefix_"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">new_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_unused_column.html">.get_unused_column</a></span><span class="op">(</span><span class="va">dat</span>, <span class="st">"prefix_"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="adding-multiple-columns">Adding Multiple Columns<a class="anchor" aria-label="anchor" href="#adding-multiple-columns"></a></h3>
 <p>You can add multiple columns at once using data frame assignment:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a data frame with new columns</span></span>
 <span><span class="va">new_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  col1 <span class="op">=</span> <span class="va">values1</span>,</span>
 <span>  col2 <span class="op">=</span> <span class="va">values2</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"col1"</span>, <span class="st">"col2"</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">new_cols</span></span></code></pre></div>
+<span><span class="va">dat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"col1"</span>, <span class="st">"col2"</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">new_cols</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

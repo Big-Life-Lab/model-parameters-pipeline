@@ -84,14 +84,11 @@ workflow:
 # Step 1: Prepare the model pipeline
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 
-# Step 2: Run the pipeline on your data
-mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
-
-# Access the transformed data
-transformed_data <- mod$data
+# Step 2: Run the pipeline on your data (returns a data frame)
+result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 
 # View the first few rows
-head(transformed_data)
+head(result)
 ```
 
 ## Using Data Frames for Input Data
@@ -105,8 +102,8 @@ mod <- prepare_model_pipeline("path/to/model-export.csv")
 # Load and preprocess your data
 input_data <- read.csv("path/to/input-data.csv")
 
-# Run pipeline with data frame
-mod <- run_model_pipeline(mod, data = input_data)
+# Run pipeline with data frame (returns a data frame)
+result <- run_model_pipeline(mod, dat = input_data)
 ```
 
 This is useful when your data is already loaded or needs preprocessing.
@@ -122,9 +119,9 @@ performance:
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 
 # Run on multiple datasets
-result1 <- run_model_pipeline(mod, data = "batch1_data.csv")
-result2 <- run_model_pipeline(mod, data = "batch2_data.csv")
-result3 <- run_model_pipeline(mod, data = "batch3_data.csv")
+result1 <- run_model_pipeline(mod, dat = "batch1_data.csv")
+result2 <- run_model_pipeline(mod, dat = "batch2_data.csv")
+result3 <- run_model_pipeline(mod, dat = "batch3_data.csv")
 ```
 
 This avoids re-reading and parsing the configuration files for each
@@ -132,19 +129,28 @@ batch.
 
 ## Working with Results
 
-The pipeline returns a model object with the transformed data in the
-`$data` component:
+[`run_model_pipeline()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md)
+returns a data frame directly. Its contents depend on the `mode`
+argument (default `"output"`):
+
+- `"output"`: only the columns produced by the final transformation step
+- `"full"`: all columns — original predictors plus every intermediate
+  and output column
 
 ``` r
-# Access transformed data
-result_data <- mod$data
+# Default mode: only the final step's output columns
+result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+
+# Full mode: all columns including intermediate transformation variables
+result_full <- run_model_pipeline(mod, dat = "path/to/input-data.csv",
+  mode = "full")
 
 # If the model includes a logistic-regression step, extract predictions
 # Logistic predictions are stored in columns starting with "logistic_"
-predictions <- mod$data[, grep("^logistic_", names(mod$data))]
+predictions <- result_full[, grep("^logistic_", names(result_full))]
 
 # View column names to see what transformations were created
-colnames(mod$data)
+colnames(result_full)
 ```
 
 ## Real-World Example: HTNPoRT Model
@@ -182,14 +188,14 @@ model_export_file <- file.path(
 # Prepare the model pipeline
 mod <- prepare_model_pipeline(model_export_file)
 
-# Run the pipeline
-mod <- run_model_pipeline(mod, data = data)
+# Run the pipeline in full mode to keep all intermediate columns
+result_full <- run_model_pipeline(mod, dat = data, mode = "full")
 
 # View the transformed data with all intermediate steps
-head(mod$data)
+head(result_full)
 
 # Extract logistic predictions (hypertension risk probabilities)
-predictions <- mod$data[, grep("^logistic_", names(mod$data))]
+predictions <- result_full[, grep("^logistic_", names(result_full))]
 head(predictions)
 
 # Summary statistics of predictions
