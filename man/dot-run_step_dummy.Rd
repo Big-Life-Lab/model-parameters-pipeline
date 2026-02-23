@@ -4,15 +4,20 @@
 \alias{.run_step_dummy}
 \title{Run Dummy Coding Step}
 \usage{
-.run_step_dummy(mod, file)
+.run_step_dummy(mod, dat, file)
 }
 \arguments{
 \item{mod}{Model object}
 
+\item{dat}{Data frame containing the input data to be transformed}
+
 \item{file}{Path to dummy step specification file}
 }
 \value{
-Updated model object with dummy variables added to data
+A list containing: \code{mod} (the updated model object),
+  \code{data} (the transformed data frame with dummy variables added),
+  and \code{output_columns} (character vector of new column names added
+  by this step)
 }
 \description{
 Creates dummy variables for categorical values, setting 1 when the

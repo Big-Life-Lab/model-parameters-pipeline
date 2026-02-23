@@ -27,24 +27,23 @@
 #' \dontrun{
 #' # Basic usage
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
-#' mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
-#'
-#' # Access transformed data
-#' transformed_data <- mod$data
+#' result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 #'
 #' # Processing multiple datasets with the same model
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
 #' for (data_file in data_files) {
-#'   result <- run_model_pipeline(mod, data = data_file)
-#'   # Process result$data
+#'   result <- run_model_pipeline(mod, dat = data_file)
+#'   # Process result (a data frame)
 #' }
 #'
 #' # Pass a data frame to run_model_pipeline
 #' input_data <- read.csv("path/to/input-data.csv")
-#' mod <- run_model_pipeline(mod, data = input_data)
+#' result <- run_model_pipeline(mod, dat = input_data)
 #'
 #' # Extract logistic predictions (if model includes logistic-regression step)
-#' predictions <- mod$data[, grep("^logistic_", names(mod$data))]
+#' # Use "full" mode to access all columns including intermediate variables
+#' result_full <- run_model_pipeline(mod, dat = input_data, mode = "full")
+#' predictions <- result_full[, grep("^logistic_", names(result_full))]
 #' }
 #'
 #' @seealso
@@ -163,7 +162,7 @@ prepare_model_pipeline <- function(model_export) {
 #' modifying the data accordingly.
 #'
 #' @param mod A model object created by \code{\link{prepare_model_pipeline}}.
-#' @param data Either a file path (character) to a CSV file containing the
+#' @param dat Either a file path (character) to a CSV file containing the
 #'   input data, or a data frame. The data must contain all columns specified
 #'   as predictors in the variables file.
 #' @param mode A character string specifying what data to return. Can be one
@@ -175,46 +174,50 @@ prepare_model_pipeline <- function(model_export) {
 #'        variables, and the final output of the model.
 #'   Default is "output".
 #'
-#' @return The model object with the transformed data added. The transformed
-#'   data is accessible via \code{mod$data}. This data contains:
+#' @return A data frame containing the transformed data. Its contents depend
+#'   on \code{mode}:
 #' \itemize{
-#'   \item Original predictor columns from the input data
-#'   \item New columns created by each transformation step (e.g., centered
-#'     variables, dummy variables, interaction terms, spline terms)
-#'   \item If a logistic-regression step is included, a column named
-#'     \code{logistic_N} (where N is a positive integer) containing the
-#'     predicted probabilities
+#'   \item \code{"output"}: Only the output columns produced by the final
+#'     transformation step (e.g., the logistic prediction column when the
+#'     last step is logistic-regression)
+#'   \item \code{"full"}: All columns — the original predictor columns plus
+#'     every new column created by each transformation step (centered
+#'     variables, dummy variables, interaction terms, spline terms, etc.)
 #' }
 #'
 #' @examples
 #' \dontrun{
-#' # Prepare and run pipeline
+#' # Prepare and run pipeline (returns a data frame)
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
-#' mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
+#' result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 #'
 #' # Access results
-#' head(mod$data)
+#' head(result)
+#'
+#' # Get all columns including intermediate transformation variables
+#' result_full <- run_model_pipeline(mod, dat = "path/to/input-data.csv",
+#'   mode = "full")
 #'
 #' # Extract predictions from logistic-regression step
-#' predictions <- mod$data[, grep("^logistic_", names(mod$data))]
+#' predictions <- result_full[, grep("^logistic_", names(result_full))]
 #'
 #' # Run on data frame
 #' input_data <- read.csv("path/to/data.csv")
-#' mod <- run_model_pipeline(mod, data = input_data)
+#' result <- run_model_pipeline(mod, dat = input_data)
 #' }
 #'
 #' @seealso \code{\link{prepare_model_pipeline}} to prepare the model object
 #' @export
-run_model_pipeline <- function(mod, data, mode = "output") {
+run_model_pipeline <- function(mod, dat, mode = "output") {
   # Load data if it is a file
-  if (is.character(data)) {
-    mod <- .add_file(mod, data)
-    data <- .get_file(mod, data)
+  if (is.character(dat)) {
+    mod <- .add_file(mod, dat)
+    dat <- .get_file(mod, dat)
   }
 
   # Stop if there are predictors that do not exist in the data
   missing_variable_columns <-
-    mod$predictor_variables[!(mod$predictor_variables %in% colnames(data))]
+    mod$predictor_variables[!(mod$predictor_variables %in% colnames(dat))]
   if (length(missing_variable_columns)) {
     missing_variable_columns <- paste0("'", missing_variable_columns, "'",
       collapse = ", "
@@ -227,10 +230,9 @@ run_model_pipeline <- function(mod, data, mode = "output") {
       )
     )
   }
-  data <- data[unlist(mod$predictor_variables)]
+  dat <- dat[unlist(mod$predictor_variables)]
 
-  # Each step will modify the data at mod$data
-  mod$data <- data
+  output_columns <- c()
 
   for (i in seq_len(nrow(mod$model_steps))) {
     step <- mod$model_steps[i, ]
@@ -242,15 +244,15 @@ run_model_pipeline <- function(mod, data, mode = "output") {
     file_path <- file.path(mod$root_dir, file_path)
 
     if (step_name == "center") {
-      mod <- .run_step_center(mod, file_path)
+      res <- .run_step_center(mod, dat, file_path)
     } else if (step_name == "dummy") {
-      mod <- .run_step_dummy(mod, file_path)
+      res <- .run_step_dummy(mod, dat, file_path)
     } else if (step_name == "interaction") {
-      mod <- .run_step_interaction(mod, file_path)
+      res <- .run_step_interaction(mod, dat, file_path)
     } else if (step_name == "logistic-regression") {
-      mod <- .run_step_logistic_regression(mod, file_path)
+      res <- .run_step_logistic_regression(mod, dat, file_path)
     } else if (step_name == "rcs") {
-      mod <- .run_step_rcs(mod, file_path)
+      res <- .run_step_rcs(mod, dat, file_path)
     } else {
       stop(paste0(
         "Unrecognized or unimplemented step type for step #",
@@ -259,12 +261,16 @@ run_model_pipeline <- function(mod, data, mode = "output") {
         step_name
       ))
     }
+
+    mod <- res$mod
+    dat <- res$data
+    output_columns <- res$output_columns
   }
 
   if (mode == "output") {
-    mod$data[mod$output_columns]
+    dat[output_columns]
   } else if (mode == "full") {
-    mod$data
+    dat
   } else {
     stop(paste0(
       "Unrecognized value for \"mode\" in run_model_pipeline. ",

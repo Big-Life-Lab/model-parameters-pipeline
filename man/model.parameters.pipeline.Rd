@@ -35,24 +35,23 @@ The pipeline requires the following CSV files:
 \dontrun{
 # Basic usage
 mod <- prepare_model_pipeline("path/to/model-export.csv")
-mod <- run_model_pipeline(mod, data = "path/to/input-data.csv")
-
-# Access transformed data
-transformed_data <- mod$data
+result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 
 # Processing multiple datasets with the same model
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 for (data_file in data_files) {
-  result <- run_model_pipeline(mod, data = data_file)
-  # Process result$data
+  result <- run_model_pipeline(mod, dat = data_file)
+  # Process result (a data frame)
 }
 
 # Pass a data frame to run_model_pipeline
 input_data <- read.csv("path/to/input-data.csv")
-mod <- run_model_pipeline(mod, data = input_data)
+result <- run_model_pipeline(mod, dat = input_data)
 
 # Extract logistic predictions (if model includes logistic-regression step)
-predictions <- mod$data[, grep("^logistic_", names(mod$data))]
+# Use "full" mode to access all columns including intermediate variables
+result_full <- run_model_pipeline(mod, dat = input_data, mode = "full")
+predictions <- result_full[, grep("^logistic_", names(result_full))]
 }
 
 }

@@ -5,10 +5,14 @@
 #' Parameters pipeline.
 #'
 #' @param mod Model object
+#' @param dat Data frame containing the input data to be transformed
 #' @param file Path to interaction step specification file
-#' @return Updated model object with interaction variables added to data
+#' @return A list containing: \code{mod} (the updated model object),
+#'   \code{data} (the transformed data frame with interaction variables added),
+#'   and \code{output_columns} (character vector of new column names added
+#'   by this step)
 #' @keywords internal
-.run_step_interaction <- function(mod, file) {
+.run_step_interaction <- function(mod, dat, file) {
   mod <- .add_file(mod, file)
   step_data <- .get_file(mod, file)
   .verify_columns(
@@ -18,19 +22,23 @@
     file
   )
 
-  mod$output_columns <- c()
+  output_columns <- c()
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     interacting_variables <- .get_string_parts(info[["interactingVariables"]])
     interaction_variable <- info[["interactionVariable"]]
 
-    mod$data[interaction_variable] <- 1
+    dat[interaction_variable] <- 1
     for (i in seq_along(interacting_variables)) {
-      mod$data[interaction_variable] <- mod$data[interaction_variable] *
-        mod$data[interacting_variables[i]]
+      dat[interaction_variable] <- dat[interaction_variable] *
+        dat[interacting_variables[i]]
     }
-    mod$output_columns <- c(mod$output_columns, interaction_variable)
+    output_columns <- c(output_columns, interaction_variable)
   }
 
-  mod
+  list(
+    mod = mod,
+    data = dat,
+    output_columns = output_columns
+  )
 }

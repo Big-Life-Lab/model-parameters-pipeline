@@ -6,10 +6,14 @@
 #' Parameters pipeline.
 #'
 #' @param mod Model object
+#' @param dat Data frame containing the input data to be transformed
 #' @param file Path to dummy step specification file
-#' @return Updated model object with dummy variables added to data
+#' @return A list containing: \code{mod} (the updated model object),
+#'   \code{data} (the transformed data frame with dummy variables added),
+#'   and \code{output_columns} (character vector of new column names added
+#'   by this step)
 #' @keywords internal
-.run_step_dummy <- function(mod, file) {
+.run_step_dummy <- function(mod, dat, file) {
   mod <- .add_file(mod, file)
   step_data <- .get_file(mod, file)
   .verify_columns(
@@ -19,16 +23,20 @@
     file
   )
 
-  mod$output_columns <- c()
+  output_columns <- c()
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
     cat_value <- info[["catValue"]]
     dummy_variable <- info[["dummyVariable"]]
 
-    mod$data[dummy_variable] <- as.integer(mod$data[orig_variable] == cat_value)
-    mod$output_columns <- c(mod$output_columns, dummy_variable)
+    dat[dummy_variable] <- as.integer(dat[orig_variable] == cat_value)
+    output_columns <- c(output_columns, dummy_variable)
   }
 
-  mod
+  list(
+    mod = mod,
+    data = dat,
+    output_columns = output_columns
+  )
 }

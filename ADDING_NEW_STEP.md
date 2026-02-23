@@ -27,15 +27,15 @@ Find the `if-else` chain in `run_model_pipeline`:
 
 ```r
 if (step_name == "center") {
-  mod <- .run_step_center(mod, file_path)
+  res <- .run_step_center(mod, dat, file_path)
 } else if (step_name == "dummy") {
-  mod <- .run_step_dummy(mod, file_path)
+  res <- .run_step_dummy(mod, dat, file_path)
 } else if (step_name == "interaction") {
-  mod <- .run_step_interaction(mod, file_path)
+  res <- .run_step_interaction(mod, dat, file_path)
 } else if (step_name == "logistic-regression") {
-  mod <- .run_step_logistic_regression(mod, file_path)
+  res <- .run_step_logistic_regression(mod, dat, file_path)
 } else if (step_name == "rcs") {
-  mod <- .run_step_rcs(mod, file_path)
+  res <- .run_step_rcs(mod, dat, file_path)
 } else {
   stop(paste0(
     "Unrecognized or unimplemented step type for step #",
@@ -46,13 +46,21 @@ if (step_name == "center") {
 }
 ```
 
+After each step call, the pipeline extracts the results:
+
+```r
+mod <- res$mod
+dat <- res$data
+output_columns <- res$output_columns
+```
+
 ### Add Your Step
 
 Add a new `else if` block for your step **before** the final `else` clause:
 
 ```r
 } else if (step_name == "your-step-name") {
-  mod <- .run_step_your_step_name(mod, file_path)
+  res <- .run_step_your_step_name(mod, dat, file_path)
 } else {
   stop(paste0(
     "Unrecognized or unimplemented step type for step #",
@@ -64,6 +72,7 @@ Add a new `else if` block for your step **before** the final `else` clause:
 ```
 
 **Important:**
+
 - Replace `"your-step-name"` with the exact step name as it appears in the
   Model Parameters specification
 - Replace `your_step_name` with an underscored version for the function name
@@ -92,10 +101,14 @@ Use this template as a starting point:
 #' Parameters pipeline.
 #'
 #' @param mod Model object
+#' @param dat Data frame containing the input data to be transformed
 #' @param file Path to {stepname} step specification file
-#' @return Updated model object with {description of added data}
+#' @return A list containing: \code{mod} (the updated model object),
+#'   \code{data} (the transformed data frame with {description of added data}),
+#'   and \code{output_columns} (character vector of new column names added
+#'   by this step)
 #' @keywords internal
-.run_step_{stepname} <- function(mod, file) {
+.run_step_{stepname} <- function(mod, dat, file) {
   # Load the step specification file
   mod <- .add_file(mod, file)
   step_data <- .get_file(mod, file)
@@ -108,6 +121,9 @@ Use this template as a starting point:
     file
   )
 
+  # Track which columns are produced by this step
+  output_columns <- c()
+
   # Process each row in the step specification
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
@@ -118,11 +134,16 @@ Use this template as a starting point:
     param3 <- info[["column3"]]
 
     # Implement your transformation logic here
-    # Example: mod$data[new_column] <- transformation(mod$data[existing_column])
+    # Example: dat[new_column] <- transformation(dat[existing_column])
+    output_columns <- c(output_columns, new_column)
   }
 
-  # Return the updated model object
-  mod
+  # Return the updated model object, transformed data, and output column names
+  list(
+    mod = mod,
+    data = dat,
+    output_columns = output_columns
+  )
 }
 ```
 
@@ -132,24 +153,30 @@ Use this template as a starting point:
    - Create your step function in `R/step-{stepname}.R`
 
 2. **Function Signature**:
-   - Always takes `mod` (model object) and `file` (path to specification file)
-   - Always returns the updated `mod` object
-   - Function name is `.run_step_{stepname}` (no leading dot)
+   - Always takes `mod` (model object), `dat` (input data frame), and `file`
+     (path to specification file)
+   - Always returns a named list with `mod`, `data`, and `output_columns`
+   - Function name is `.run_step_{stepname}` (with leading dot, making it
+     internal)
 
 3. **Load Specification File**:
+
    ```r
    mod <- .add_file(mod, file)
    step_data <- .get_file(mod, file)
    ```
+
    These helper functions cache and retrieve the CSV specification file.
 
 4. **Verify Columns**:
+
    ```r
    .verify_columns(step_data,
                    c("column1", "column2", "column3"),
                    "{stepname} step file",
                    file)
    ```
+
    Validates that the specification file contains all required columns. Update
    the column list to match your step's requirements from the Model Parameters
    documentation.
@@ -157,12 +184,15 @@ Use this template as a starting point:
 5. **Process Each Row**: The `for` loop processes each row in the specification
    file. Each row typically defines one transformation to apply.
 
-6. **Access Data**:
-   - Read data: `mod$data[column_name]` or `mod$data[[column_name]]`
-   - Write data: `mod$data[new_column] <- transformed_values`
+6. **Access and Write Data**:
+   - Read data: `dat[column_name]` or `dat[[column_name]]`
+   - Write data: `dat[new_column] <- transformed_values`
 
-7. **Return Updated Model**: Always return `mod` at the end so transformations
-   can be chained.
+7. **Track Output Columns**: Append each new column name to `output_columns`
+   so the pipeline knows which columns this step produced.
+
+8. **Return a List**: Always return a named list with `mod`, `data`, and
+   `output_columns` so the pipeline can chain steps together.
 
 ### Example: Center Step
 
@@ -170,7 +200,7 @@ Here's a real example from the existing codebase
 ([R/step-center.R](R/step-center.R)):
 
 ```r
-.run_step_center <- function(mod, file) {
+.run_step_center <- function(mod, dat, file) {
   mod <- .add_file(mod, file)
   step_data <- .get_file(mod, file)
   .verify_columns(
@@ -180,27 +210,36 @@ Here's a real example from the existing codebase
     file
   )
 
+  output_columns <- c()
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
     center_value <- info[["centerValue"]]
     centered_variable <- info[["centeredVariable"]]
 
-    mod$data[centered_variable] <- mod$data[orig_variable] - center_value
+    dat[centered_variable] <- dat[orig_variable] - center_value
+    output_columns <- c(output_columns, centered_variable)
   }
 
-  mod
+  list(
+    mod = mod,
+    data = dat,
+    output_columns = output_columns
+  )
 }
 ```
 
 This function:
+
 - Is defined in its own source file `R/step-center.R`
+- Accepts `mod`, `dat` (the data to transform), and `file`
 - Loads the center specification file
 - Verifies it has the required columns (`origVariable`, `centerValue`,
   `centeredVariable`)
 - For each row, creates a new centered variable by subtracting `centerValue`
-  from the original variable
-- Returns the updated model with new columns added to `mod$data`
+  from the original variable in `dat`
+- Returns a list with the updated model object, the modified data frame, and
+  the names of the new columns
 
 ## Step 3: Add Unit Tests
 
@@ -224,20 +263,23 @@ for complete instructions.
    - `test-{stepname}.csv` - Contains step-specific parameters
 
 3. **Generate expected output**:
+
    ```r
    source("tests/testthat/generate_step_tests_expected.R")
    generate_step_tests_expected(steps = "stepname")
    ```
 
 4. **Run tests**:
+
    ```r
    devtools::test()
    ```
+
    Your test is automatically discovered and run!
 
 ### Test File Structure
 
-```
+```text
 tests/testthat/testdata/step-tests/
 ├── test-data.csv              # Shared test data (already exists)
 ├── test-variables.csv         # Shared variables definition (already exists)
@@ -301,7 +343,7 @@ numeric_values <- as.double(.get_string_parts(info[["knots"]]))
 To avoid column name conflicts:
 
 ```r
-new_col <- .get_unused_column(mod$data, "prefix_")
+new_col <- .get_unused_column(dat, "prefix_")
 ```
 
 ### Adding Multiple Columns
@@ -314,7 +356,7 @@ new_cols <- data.frame(
   col1 = values1,
   col2 = values2
 )
-mod$data[c("col1", "col2")] <- new_cols
+dat[c("col1", "col2")] <- new_cols
 ```
 
 ## Getting Help

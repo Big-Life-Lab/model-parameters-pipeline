@@ -4,15 +4,20 @@
 \alias{.run_step_rcs}
 \title{Run Restricted Cubic Spline Step}
 \usage{
-.run_step_rcs(mod, file)
+.run_step_rcs(mod, dat, file)
 }
 \arguments{
 \item{mod}{Model object}
 
+\item{dat}{Data frame containing the input data to be transformed}
+
 \item{file}{Path to RCS step specification file}
 }
 \value{
-Updated model object with RCS variables added to data
+A list containing: \code{mod} (the updated model object),
+  \code{data} (the transformed data frame with RCS variables added),
+  and \code{output_columns} (character vector of new column names added
+  by this step)
 }
 \description{
 Creates restricted cubic spline (RCS) transformations using
