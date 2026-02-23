@@ -136,7 +136,7 @@ result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 
 # Full mode: all columns including intermediate transformation variables
 result_full <- run_model_pipeline(mod, dat = "path/to/input-data.csv",
-  mode = "full")
+                                  mode = "full")
 
 # If the model includes a logistic-regression step, extract predictions
 # Logistic predictions are stored in columns starting with "logistic_"
