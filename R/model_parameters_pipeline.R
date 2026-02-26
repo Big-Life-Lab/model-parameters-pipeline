@@ -232,14 +232,23 @@ run_model_pipeline <- function(mod, dat, mode = "output") {
   }
   dat <- dat[unlist(mod$predictor_variables)]
 
+  # These are the output columns of whatever the most recent step was.
+  # We use this to retrieve the output of the last step when mode == "output"
   output_columns <- c()
 
+  # Run each step in the model steps file
   for (i in seq_len(nrow(mod$model_steps))) {
     step <- mod$model_steps[i, ]
     step_name <- step$step
 
     file_path <- step$filePath
     if (is.null(file_path) || stringr::str_length(file_path) == 0) {
+      stop(paste0(
+        "File path is empty for step #",
+        i,
+        ": ",
+        step_name
+      ))
     }
     file_path <- file.path(mod$root_dir, file_path)
 
