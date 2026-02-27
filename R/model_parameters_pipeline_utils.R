@@ -107,7 +107,7 @@ NULL
       stop(paste(
         "A file was specified that is outside of",
         "the sandbox path:",
-        .file_relative_to_path(file, mod$sandbox_path)
+        file, " sandbox_path =", mod$sandbox_path
       ))
     }
 
