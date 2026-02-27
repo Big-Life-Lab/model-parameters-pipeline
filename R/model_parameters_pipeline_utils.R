@@ -109,7 +109,9 @@ NULL
         "the sandbox path:",
         file,
         " sandbox_path =",
-        .expand_and_normalize_path(mod$sandbox_path, add_trailing_slash = TRUE)
+        .expand_and_normalize_path(mod$sandbox_path, add_trailing_slash = TRUE),
+        " platform separator =",
+        .Platform$file.sep
       ))
     }
 
@@ -180,8 +182,7 @@ NULL
     # Add a trailing slash if there isn't one. This is useful
     # for directories
     len <- stringr::str_length(normalized)
-    if (len > 0 &&
-          substr(normalized, len, len) != .Platform$file.sep) {
+    if (len > 0 && substr(normalized, len, len) != .Platform$file.sep) {
       normalized <- paste0(normalized, .Platform$file.sep)
     }
   }
