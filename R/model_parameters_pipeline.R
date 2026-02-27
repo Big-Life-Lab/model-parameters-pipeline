@@ -108,7 +108,7 @@ prepare_model_pipeline <- function(
   mod$sandbox_path <- sandbox_path
 
   # Get the root dir from the model_export path
-  mod$root_dir <- normalizePath(dirname(model_export))
+  mod$root_dir <- .expand_and_normalize_path(dirname(model_export))
 
   # Load and validate model export file
   mod <- .add_file(mod, model_export)
