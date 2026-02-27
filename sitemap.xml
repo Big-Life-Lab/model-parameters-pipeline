@@ -1,6 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/404.html</loc></url>
-<url><loc>https://big-life-lab.github.io/model-parameters-pipeline/ADDING_NEW_STEP.html</loc></url>
+<url><loc>https://big-life-lab.github.io/model-parameters-pipeline/CONTRIBUTING.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/LICENSE-text.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/articles/index.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/articles/introduction.html</loc></url>
@@ -8,16 +8,20 @@
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/index.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/news/index.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-add_file.html</loc></url>
+<url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-expand_and_normalize_path.html</loc></url>
+<url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-file_relative_to_path.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-get_file.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-get_rcs.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-get_string_parts.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-get_unused_column.html</loc></url>
+<url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-is_file_descendant_of.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-run_step_center.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-run_step_dummy.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-run_step_interaction.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-run_step_logistic_regression.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-run_step_rcs.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-verify_columns.html</loc></url>
+<url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/index.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/model.parameters.pipeline.html</loc></url>
 <url><loc>https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.html</loc></url>

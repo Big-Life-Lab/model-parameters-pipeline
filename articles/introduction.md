@@ -84,8 +84,11 @@ workflow:
 # Step 1: Prepare the model pipeline
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 
-# Step 2: Run the pipeline on your data (returns a data frame)
-result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+# Step 2: Run the pipeline on your data (returns the mod object)
+mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+
+# Step 3: Extract the output as a data frame
+result <- get_pipeline_output(mod)
 
 # View the first few rows
 head(result)
@@ -102,8 +105,11 @@ mod <- prepare_model_pipeline("path/to/model-export.csv")
 # Load and preprocess your data
 input_data <- read.csv("path/to/input-data.csv")
 
-# Run pipeline with data frame (returns a data frame)
-result <- run_model_pipeline(mod, dat = input_data)
+# Run pipeline with data frame (returns the mod object)
+mod <- run_model_pipeline(mod, dat = input_data)
+
+# Extract the output as a data frame
+result <- get_pipeline_output(mod)
 ```
 
 This is useful when your data is already loaded or needs preprocessing.
@@ -118,39 +124,84 @@ performance:
 # Prepare the model once - configuration files are loaded and cached
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 
-# Run on multiple datasets
-result1 <- run_model_pipeline(mod, dat = "batch1_data.csv")
-result2 <- run_model_pipeline(mod, dat = "batch2_data.csv")
-result3 <- run_model_pipeline(mod, dat = "batch3_data.csv")
+# Run on multiple datasets and extract output from each
+result1 <- get_pipeline_output(run_model_pipeline(mod, dat = "batch1_data.csv"))
+result2 <- get_pipeline_output(run_model_pipeline(mod, dat = "batch2_data.csv"))
+result3 <- get_pipeline_output(run_model_pipeline(mod, dat = "batch3_data.csv"))
 ```
 
 This avoids re-reading and parsing the configuration files for each
 batch.
 
+## Restricting File Access with `sandbox_path`
+
+When running on a server or any public-facing system, the model
+configuration files can reference arbitrary paths on the filesystem. Use
+the `sandbox_path` parameter to restrict which files the pipeline is
+allowed to read.
+
+``` r
+mod <- prepare_model_pipeline(
+  "path/to/model-files/model-export.csv",
+  sandbox_path = "path/to/model-files/"
+)
+```
+
+When `sandbox_path` is set, every file referenced inside the model
+configuration (the model export, variables file, model-steps file, and
+any step parameter files) must be located within that directory. If any
+path resolves outside of it,
+[`prepare_model_pipeline()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.md)
+stops with an error.
+
+This restriction applies only to the **model configuration files** — it
+does not affect data files passed to
+[`run_model_pipeline()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md).
+It does, however, affect the model export file passed to
+[`prepare_model_pipeline()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.md).
+
+**When to use it:**
+
+- You expose the pipeline as a web service or API and the model export
+  path (or paths inside it) could be influenced by user input.
+- You want to enforce that a model package stays self-contained within a
+  specific directory and never reads files from elsewhere on the
+  filesystem.
+
+**When you can omit it:**
+
+- You are running the pipeline locally in a trusted environment where
+  all model files are under your control and path traversal is not a
+  concern. The default (`sandbox_path = NULL`) imposes no restriction.
+
 ## Working with Results
 
 [`run_model_pipeline()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md)
-returns a data frame directly. Its contents depend on the `mode`
-argument (default `"output"`):
+returns a model object. Use
+[`get_pipeline_output()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
+to extract a data frame from it. The `mode` argument of
+[`get_pipeline_output()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
+(default `"output"`) controls what columns are returned:
 
 - `"output"`: only the columns produced by the final transformation step
 - `"full"`: all columns — original predictors plus every intermediate
   and output column
 
 ``` r
+mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+
 # Default mode: only the final step's output columns
-result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+output <- get_pipeline_output(mod)
 
 # Full mode: all columns including intermediate transformation variables
-result_full <- run_model_pipeline(mod, dat = "path/to/input-data.csv",
-                                  mode = "full")
+output_full <- get_pipeline_output(mod, mode = "full")
 
 # If the model includes a logistic-regression step, extract predictions
 # Logistic predictions are stored in columns starting with "logistic_"
-predictions <- result_full[, grep("^logistic_", names(result_full))]
+predictions <- output_full[, grep("^logistic_", names(output_full))]
 
 # View column names to see what transformations were created
-colnames(result_full)
+colnames(output_full)
 ```
 
 ## Real-World Example: HTNPoRT Model
@@ -188,8 +239,9 @@ model_export_file <- file.path(
 # Prepare the model pipeline
 mod <- prepare_model_pipeline(model_export_file)
 
-# Run the pipeline in full mode to keep all intermediate columns
-result_full <- run_model_pipeline(mod, dat = data, mode = "full")
+# Run the pipeline and extract full output to keep all intermediate columns
+mod <- run_model_pipeline(mod, dat = data)
+result_full <- get_pipeline_output(mod, mode = "full")
 
 # View the transformed data with all intermediate steps
 head(result_full)
@@ -207,8 +259,9 @@ summary(predictions)
 - For detailed information about the Model Parameters specification, see
   the [Model Parameters Reference
   Documentation](https://big-life-lab.github.io/model-parameters/5-reference.html)
-- To add new transformation steps, see the `ADDING_NEW_STEP.md` guide in
-  the package
+- To add new transformation steps, see the [Adding a New Transformation
+  Step](https://big-life-lab.github.io/model-parameters-pipeline/CONTRIBUTING.html#adding-a-new-transformation-step)
+  guide
 - To report issues or request features, visit the [issue
   tracker](https://github.com/Big-Life-Lab/model-parameters-pipeline/issues)
 

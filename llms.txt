@@ -31,7 +31,7 @@ The pipeline supports the following transformation steps:
 
 For instructions on implementing additional transformation steps, see
 [Adding a New Transformation
-Step](https://big-life-lab.github.io/model-parameters-pipeline/ADDING_NEW_STEP.md).
+Step](https://big-life-lab.github.io/model-parameters-pipeline/CONTRIBUTING.html#adding-a-new-transformation-step).
 
 ## Installation
 
@@ -110,6 +110,8 @@ Martin Wellman (<mwellman@ohri.ca>)
 
 ## All functions
 
+- [`get_pipeline_output()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
+  : Get Model Output
 - [`model.parameters.pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/model.parameters.pipeline.md)
   : Model Parameters Pipeline
 - [`prepare_model_pipeline()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.md)

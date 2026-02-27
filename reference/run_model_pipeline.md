@@ -7,7 +7,7 @@ modifying the data accordingly.
 ## Usage
 
 ``` r
-run_model_pipeline(mod, dat, mode = "output")
+run_model_pipeline(mod, dat)
 ```
 
 ## Arguments
@@ -23,53 +23,37 @@ run_model_pipeline(mod, dat, mode = "output")
   data, or a data frame. The data must contain all columns specified as
   predictors in the variables file.
 
-- mode:
-
-  A character string specifying what data to return. Can be one of:
-  "output": Only return the final output of the model. These are the
-  values of all variables calculated in the final step found in the
-  model export file. "full": Return all data, which includes the input
-  data, all intermediate variables, and the final output of the model.
-  Default is "output".
-
 ## Value
 
-A data frame containing the transformed data. Its contents depend on
-`mode`:
-
-- `"output"`: Only the output columns produced by the final
-  transformation step (e.g., the logistic prediction column when the
-  last step is logistic-regression)
-
-- `"full"`: All columns — the original predictor columns plus every new
-  column created by each transformation step (centered variables, dummy
-  variables, interaction terms, spline terms, etc.)
+A model object (list) with all transformation results stored in
+`mod$data`. Pass the returned object to
+[`get_pipeline_output`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
+to extract a data frame.
 
 ## See also
 
 [`prepare_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.md)
-to prepare the model object
+to prepare the model object,
+[`get_pipeline_output`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
+to extract the output of the pipeline
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-# Prepare and run pipeline (returns a data frame)
+# Prepare and run pipeline
 mod <- prepare_model_pipeline("path/to/model-export.csv")
-result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 
-# Access results
-head(result)
+# Extract final output columns as a data frame
+output <- get_pipeline_output(mod, mode = "output")
+head(output)
 
 # Get all columns including intermediate transformation variables
-result_full <- run_model_pipeline(mod, dat = "path/to/input-data.csv",
-  mode = "full")
-
-# Extract predictions from logistic-regression step
-predictions <- result_full[, grep("^logistic_", names(result_full))]
+output_full <- get_pipeline_output(mod, mode = "full")
 
 # Run on data frame
 input_data <- read.csv("path/to/data.csv")
-result <- run_model_pipeline(mod, dat = input_data)
+mod <- run_model_pipeline(mod, dat = input_data)
 } # }
 ```

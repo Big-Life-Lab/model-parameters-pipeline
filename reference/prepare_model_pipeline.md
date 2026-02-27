@@ -8,7 +8,7 @@ files into a cached model object.
 ## Usage
 
 ``` r
-prepare_model_pipeline(model_export)
+prepare_model_pipeline(model_export, sandbox_path = NULL)
 ```
 
 ## Arguments
@@ -20,6 +20,19 @@ prepare_model_pipeline(model_export)
   locations of the variables and model-steps files. The directory
   containing the model export file is used as the root directory for
   resolving relative file paths found within the model-steps file.
+
+- sandbox_path:
+
+  Character or `NULL`. If specified, all file paths referenced in the
+  model parameters configuration files (model export, variables, model
+  steps, and step parameter files) must be descendants of this
+  directory. If any file resolves outside of `sandbox_path`, an error is
+  raised. This prevents access to files outside the expected directory
+  structure, which is useful when running on a server or other
+  public-facing system where increased security is required. Note that
+  this restriction does not apply to data files passed to
+  [`run_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md).
+  Defaults to `NULL` (no restriction).
 
 ## Value
 

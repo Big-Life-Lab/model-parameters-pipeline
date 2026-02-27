@@ -11,7 +11,7 @@ modifying the data accordingly."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">model.parameters.pipeline</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ modifying the data accordingly.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_model_pipeline</span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span>, mode <span class="op">=</span> <span class="st">"output"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_model_pipeline</span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -65,53 +65,36 @@ modifying the data accordingly.</p>
 input data, or a data frame. The data must contain all columns specified
 as predictors in the variables file.</p></dd>
 
-
-<dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
-<dd><p>A character string specifying what data to return. Can be one
-of:
-   "output": Only return the final output of the model. These are the
-     values of all variables calculated in the final step found in the
-     model export file.
-   "full": Return all data, which includes the input data, all intermediate
-     variables, and the final output of the model.
-Default is "output".</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame containing the transformed data. Its contents depend
-  on <code>mode</code>:</p><ul><li><p><code>"output"</code>: Only the output columns produced by the final
-    transformation step (e.g., the logistic prediction column when the
-    last step is logistic-regression)</p></li>
-<li><p><code>"full"</code>: All columns — the original predictor columns plus
-    every new column created by each transformation step (centered
-    variables, dummy variables, interaction terms, spline terms, etc.)</p></li>
-</ul></div>
+    <p>A model object (list) with all transformation results stored in
+  <code>mod$data</code>. Pass the returned object to
+  <code><a href="get_pipeline_output.html">get_pipeline_output</a></code> to extract a data frame.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="prepare_model_pipeline.html">prepare_model_pipeline</a></code> to prepare the model object</p></div>
+    <div class="dont-index"><p><code><a href="prepare_model_pipeline.html">prepare_model_pipeline</a></code> to prepare the model object,
+  <code><a href="get_pipeline_output.html">get_pipeline_output</a></code> to extract the output of the pipeline</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># Prepare and run pipeline (returns a data frame)</span></span></span>
+<span class="r-in"><span><span class="co"># Prepare and run pipeline</span></span></span>
 <span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">run_model_pipeline</span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">run_model_pipeline</span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Access results</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Extract final output columns as a data frame</span></span></span>
+<span class="r-in"><span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span>, mode <span class="op">=</span> <span class="st">"output"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get all columns including intermediate transformation variables</span></span></span>
-<span class="r-in"><span><span class="va">result_full</span> <span class="op">&lt;-</span> <span class="fu">run_model_pipeline</span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span>,</span></span>
-<span class="r-in"><span>  mode <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Extract predictions from logistic-regression step</span></span></span>
-<span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="va">result_full</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"^logistic_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">result_full</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">output_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span>, mode <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Run on data frame</span></span></span>
 <span class="r-in"><span><span class="va">input_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"path/to/data.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">run_model_pipeline</span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">input_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">run_model_pipeline</span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">input_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

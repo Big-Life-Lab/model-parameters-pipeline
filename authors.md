@@ -10,13 +10,13 @@ Source:
 [`DESCRIPTION`](https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/first/DESCRIPTION)
 
 Wellman M (2026). *model.parameters.pipeline: Performs transformations
-according to model parameters*. R package version 0.1.0,
+according to model parameters*. R package version 0.2.0,
 <https://github.com/Big-Life-Lab/model-parameters-pipeline>.
 
     @Manual{,
       title = {model.parameters.pipeline: Performs transformations according to model parameters},
       author = {Martin Wellman},
       year = {2026},
-      note = {R package version 0.1.0},
+      note = {R package version 0.2.0},
       url = {https://github.com/Big-Life-Lab/model-parameters-pipeline},
     }
