@@ -1,10 +1,91 @@
-# Adding a New Transformation Step
+# Contributing to Model Parameters Pipeline
+
+Thank you for your interest in contributing to the Model Parameters Pipeline!
+This document outlines the guidelines for contributing to this project.
+
+## Code of Conduct
+
+Please be respectful and constructive in all interactions. We aim to maintain a
+welcoming environment for contributors of all backgrounds and experience levels.
+
+## How to Contribute
+
+### Reporting Bugs
+
+If you find a bug, please open an issue on
+[GitHub](https://github.com/Big-Life-Lab/model-parameters-pipeline/issues) with:
+
+- A clear description of the problem
+- A minimal reproducible example
+- Your R version and package version (`packageVersion("model.parameters.pipeline")`)
+
+### Suggesting Features
+
+Feature requests are welcome. Open an issue describing:
+
+- The use case you are trying to address
+- How the proposed feature would work
+- Any relevant references to the [Model Parameters
+  specification](https://big-life-lab.github.io/model-parameters/)
+
+### Submitting Changes
+
+1. Fork the repository and create a branch from `main`
+2. Make your changes, following the code style guidelines below
+3. Add or update tests as needed
+4. Run `devtools::test()` to ensure all tests pass
+5. Run `devtools::check()` to ensure the package passes R CMD check
+6. Submit a pull request with a clear description of your changes
+
+## Code Style
+
+This project uses [`lintr`](https://lintr.r-lib.org/) to enforce consistent
+code style. Before submitting a pull request, check your code with:
+
+```r
+lintr::lint_package()
+```
+
+Key style conventions:
+
+- Use `snake_case` for variable and function names
+- Internal (non-exported) functions are prefixed with `.` (e.g.,
+  `.run_step_center`)
+- Keep lines to a maximum of 80 characters where practical
+- Document all exported functions using
+  [roxygen2](https://roxygen2.r-lib.org/) comments
+
+## Running Tests
+
+```r
+devtools::test()
+```
+
+To regenerate expected test outputs after changing a step's behaviour:
+
+```r
+source("tests/testthat/generate_step_tests_expected.R")
+generate_step_tests_expected()
+```
+
+## Package Structure
+
+- `R/` - Source files. One file per transformation step (`step-{stepname}.R`),
+  plus core pipeline files
+- `tests/testthat/` - Unit tests and test data
+- `man/` - Auto-generated documentation (do not edit directly; regenerate with
+  `devtools::document()`)
+- `vignettes/` - Long-form documentation
+
+---
+
+## Adding a New Transformation Step
 
 This guide explains how to add support for a new transformation step to the
 Model Parameters Pipeline, as defined by the [Model Parameters
 repository](https://big-life-lab.github.io/model-parameters/).
 
-## Overview
+### Overview
 
 Adding a new transformation step requires three main tasks:
 
@@ -14,28 +95,28 @@ Adding a new transformation step requires three main tasks:
    `R/step-{stepname}.R` to execute the transformation
 3. **Add unit tests** - Create test files to verify correct behavior
 
-## Step 1: Update `run_model_pipeline`
+### Step 1: Update `run_model_pipeline`
 
 The [run_model_pipeline](R/model_parameters_pipeline.R) function in
 [R/model_parameters_pipeline.R](R/model_parameters_pipeline.R) processes each
 step defined in the model steps specification. You need to add a new
 conditional block for your step.
 
-### Location
+#### Location
 
 Find the `if-else` chain in `run_model_pipeline`:
 
 ```r
 if (step_name == "center") {
-  res <- .run_step_center(mod, dat, file_path)
+  res <- .run_step_center(mod, file_path)
 } else if (step_name == "dummy") {
-  res <- .run_step_dummy(mod, dat, file_path)
+  res <- .run_step_dummy(mod, file_path)
 } else if (step_name == "interaction") {
-  res <- .run_step_interaction(mod, dat, file_path)
+  res <- .run_step_interaction(mod, file_path)
 } else if (step_name == "logistic-regression") {
-  res <- .run_step_logistic_regression(mod, dat, file_path)
+  res <- .run_step_logistic_regression(mod, file_path)
 } else if (step_name == "rcs") {
-  res <- .run_step_rcs(mod, dat, file_path)
+  res <- .run_step_rcs(mod, file_path)
 } else {
   stop(paste0(
     "Unrecognized or unimplemented step type for step #",
@@ -50,17 +131,16 @@ After each step call, the pipeline extracts the results:
 
 ```r
 mod <- res$mod
-dat <- res$data
 output_columns <- res$output_columns
 ```
 
-### Add Your Step
+#### Add Your Step
 
 Add a new `else if` block for your step **before** the final `else` clause:
 
 ```r
 } else if (step_name == "your-step-name") {
-  res <- .run_step_your_step_name(mod, dat, file_path)
+  res <- .run_step_your_step_name(mod, file_path)
 } else {
   stop(paste0(
     "Unrecognized or unimplemented step type for step #",
@@ -79,17 +159,17 @@ Add a new `else if` block for your step **before** the final `else` clause:
 - The step name must match what users will specify in their `model-steps.csv`
   file
 
-## Step 2: Create the Step Function
+### Step 2: Create the Step Function
 
 Create a new source file `R/step-{stepname}.R` containing a function
 named `.run_step_{stepname}` that implements the transformation logic.
 
-### Create the Source File
+#### Create the Source File
 
 Create a new file at `R/step-{stepname}.R` (replace `{stepname}` with
 your step name).
 
-### Function Template
+#### Function Template
 
 Use this template as a starting point:
 
@@ -100,15 +180,14 @@ Use this template as a starting point:
 #' Implements the '{stepname}' transformation step from the Model
 #' Parameters pipeline.
 #'
-#' @param mod Model object
-#' @param dat Data frame containing the input data to be transformed
+#' @param mod Model object containing input data in \code{mod$data}
 #' @param file Path to {stepname} step specification file
-#' @return A list containing: \code{mod} (the updated model object),
-#'   \code{data} (the transformed data frame with {description of added data}),
-#'   and \code{output_columns} (character vector of new column names added
-#'   by this step)
+#' @return A list containing: \code{mod} (the updated model object with
+#'   {description of added data} added to \code{mod$data}), and
+#'   \code{output_columns} (character vector of output columns
+#'   of this step)
 #' @keywords internal
-.run_step_{stepname} <- function(mod, dat, file) {
+.run_step_{stepname} <- function(mod, file) {
   # Load the step specification file
   mod <- .add_file(mod, file)
   step_data <- .get_file(mod, file)
@@ -134,28 +213,27 @@ Use this template as a starting point:
     param3 <- info[["column3"]]
 
     # Implement your transformation logic here
-    # Example: dat[new_column] <- transformation(dat[existing_column])
+    # Example: mod$data[new_column] <- transformation(mod$data[existing_column])
     output_columns <- c(output_columns, new_column)
   }
 
-  # Return the updated model object, transformed data, and output column names
+  # Return the updated model object and output column names
   list(
     mod = mod,
-    data = dat,
     output_columns = output_columns
   )
 }
 ```
 
-### Key Components Explained
+#### Key Components Explained
 
 1. **File Location**:
    - Create your step function in `R/step-{stepname}.R`
 
 2. **Function Signature**:
-   - Always takes `mod` (model object), `dat` (input data frame), and `file`
-     (path to specification file)
-   - Always returns a named list with `mod`, `data`, and `output_columns`
+   - Always takes `mod` (model object) and `file` (path to specification file)
+   - Input data is accessed and modified via `mod$data`
+   - Always returns a named list with `mod` and `output_columns`
    - Function name is `.run_step_{stepname}` (with leading dot, making it
      internal)
 
@@ -166,7 +244,11 @@ Use this template as a starting point:
    step_data <- .get_file(mod, file)
    ```
 
-   These helper functions cache and retrieve the CSV specification file.
+   Always use these helper functions to load files — never read files directly
+   (e.g. with `read.csv`). `.add_file` and `.get_file` ensure that any file
+   path is validated against the sandbox path, if one was specified via
+   `prepare_model_pipeline`. This prevents steps from reading files outside the
+   permitted directory.
 
 4. **Verify Columns**:
 
@@ -185,22 +267,22 @@ Use this template as a starting point:
    file. Each row typically defines one transformation to apply.
 
 6. **Access and Write Data**:
-   - Read data: `dat[column_name]` or `dat[[column_name]]`
-   - Write data: `dat[new_column] <- transformed_values`
+   - Read data: `mod$data[column_name]` or `mod$data[[column_name]]`
+   - Write data: `mod$data[new_column] <- transformed_values`
 
 7. **Track Output Columns**: Append each new column name to `output_columns`
    so the pipeline knows which columns this step produced.
 
-8. **Return a List**: Always return a named list with `mod`, `data`, and
+8. **Return a List**: Always return a named list with `mod` and
    `output_columns` so the pipeline can chain steps together.
 
-### Example: Center Step
+#### Example: Center Step
 
 Here's a real example from the existing codebase
 ([R/step-center.R](R/step-center.R)):
 
 ```r
-.run_step_center <- function(mod, dat, file) {
+.run_step_center <- function(mod, file) {
   mod <- .add_file(mod, file)
   step_data <- .get_file(mod, file)
   .verify_columns(
@@ -217,13 +299,12 @@ Here's a real example from the existing codebase
     center_value <- info[["centerValue"]]
     centered_variable <- info[["centeredVariable"]]
 
-    dat[centered_variable] <- dat[orig_variable] - center_value
+    mod$data[centered_variable] <- mod$data[orig_variable] - center_value
     output_columns <- c(output_columns, centered_variable)
   }
 
   list(
     mod = mod,
-    data = dat,
     output_columns = output_columns
   )
 }
@@ -232,27 +313,26 @@ Here's a real example from the existing codebase
 This function:
 
 - Is defined in its own source file `R/step-center.R`
-- Accepts `mod`, `dat` (the data to transform), and `file`
+- Accepts `mod` and `file`; data is accessed via `mod$data`
 - Loads the center specification file
 - Verifies it has the required columns (`origVariable`, `centerValue`,
   `centeredVariable`)
 - For each row, creates a new centered variable by subtracting `centerValue`
-  from the original variable in `dat`
-- Returns a list with the updated model object, the modified data frame, and
-  the names of the new columns
+  from the original variable in `mod$data`
+- Returns a list with the updated model object and the names of the new columns
 
-## Step 3: Add Unit Tests
+### Step 3: Add Unit Tests
 
 Unit tests ensure your transformation step works correctly. The testing
 framework automatically discovers and runs tests based on directory structure.
 
-### Quick Reference
+#### Quick Reference
 
 See the detailed guide at
 [tests/testthat/testdata/step-tests/README.md](tests/testthat/testdata/step-tests/README.md)
 for complete instructions.
 
-### Summary
+#### Summary
 
 1. **Create test directory**:
    `tests/testthat/testdata/step-tests/test-{stepname}/`
@@ -277,7 +357,7 @@ for complete instructions.
 
    Your test is automatically discovered and run!
 
-### Test File Structure
+#### Test File Structure
 
 ```text
 tests/testthat/testdata/step-tests/
@@ -290,7 +370,7 @@ tests/testthat/testdata/step-tests/
     └── test-expected.csv      # Auto-generated expected output
 ```
 
-## Reference Documentation
+### Reference Documentation
 
 For detailed information about Model Parameters transformation steps and their
 required file formats, see:
@@ -299,7 +379,7 @@ required file formats, see:
   Documentation](https://big-life-lab.github.io/model-parameters/5-reference.html)
 - [Step Tests README](tests/testthat/testdata/step-tests/README.md)
 
-## Checklist
+### Checklist
 
 Use this checklist when adding a new transformation step:
 
@@ -319,9 +399,9 @@ Use this checklist when adding a new transformation step:
 - [ ] Run `devtools::test()` to verify tests pass
 - [ ] Review and commit all changes including `test-expected.csv`
 
-## Common Patterns
+### Common Patterns
 
-### Parsing Delimited Strings
+#### Parsing Delimited Strings
 
 Some steps use delimited strings (e.g., "var1;var2;var3") in their parameters
 file. Use the helper function:
@@ -330,7 +410,7 @@ file. Use the helper function:
 parts <- .get_string_parts(info[["columnName"]])
 ```
 
-### Working with Numeric Values
+#### Working with Numeric Values
 
 Convert string values to numeric when needed:
 
@@ -338,15 +418,15 @@ Convert string values to numeric when needed:
 numeric_values <- as.double(.get_string_parts(info[["knots"]]))
 ```
 
-### Creating New Columns Safely
+#### Creating New Columns Safely
 
 To avoid column name conflicts:
 
 ```r
-new_col <- .get_unused_column(dat, "prefix_")
+new_col <- .get_unused_column(mod$data, "prefix_")
 ```
 
-### Adding Multiple Columns
+#### Adding Multiple Columns
 
 You can add multiple columns at once using data frame assignment:
 
@@ -356,10 +436,10 @@ new_cols <- data.frame(
   col1 = values1,
   col2 = values2
 )
-dat[c("col1", "col2")] <- new_cols
+mod$data[c("col1", "col2")] <- new_cols
 ```
 
-## Getting Help
+### Getting Help
 
 - For Model Parameters specification questions, refer to the [Model Parameters
   documentation](https://big-life-lab.github.io/model-parameters/)
