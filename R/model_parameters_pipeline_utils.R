@@ -88,14 +88,17 @@ NULL
 #' @return Updated model object with file in cache
 #' @keywords internal
 .add_file <- function(mod, file) {
-  orig_file <- file
+  # We use this general error message that says a file either doesn't exist
+  # or it is outside of the sandbox path (but not telling them which one)
+  # so that users cannot determine which files exist on the file system.
+  general_error_message <- paste(
+    "The file does not exist or is outside of the sandbox path:",
+    .file_relative_to_path(file, mod$sandbox_path)
+  )
+
   file <- .expand_and_normalize_path(file)
   if (is.null(file)) {
-    stop(paste(
-      "The file",
-      .file_relative_to_path(orig_file, mod$sandbox_path),
-      "does not exist"
-    ))
+    stop(general_error_message)
   }
 
   if (!(file %in% names(mod$files))) {
@@ -106,11 +109,7 @@ NULL
     if (!is.null(mod$sandbox_path) &&
         !.is_file_descendant_of(file, mod$sandbox_path)
     ) {
-      stop(paste(
-        "A file was specified that is outside of",
-        "the sandbox path:",
-        .file_relative_to_path(file, mod$sandbox_path)
-      ))
+      stop(general_error_message)
     }
 
     # Load and add file contents to the file cache, so we can retrieve
