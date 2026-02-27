@@ -78,7 +78,7 @@ NULL
   }
 }
 
-#' Add File to Model Cache
+#' Load and Add File to Model Cache
 #'
 #' Internal function that loads a CSV file and adds it to the model's file
 #' cache.
@@ -88,34 +88,33 @@ NULL
 #' @return Updated model object with file in cache
 #' @keywords internal
 .add_file <- function(mod, file) {
-  tryCatch({
-    file <- normalizePath(file, mustWork = TRUE)
-  }, error = function(e) {
+  orig_file <- file
+  file <- .expand_and_normalize_path(file)
+  if (is.null(file)) {
     stop(paste(
       "The file",
-      .file_relative_to_path(file, mod$sandbox_path),
+      .file_relative_to_path(orig_file, mod$sandbox_path),
       "does not exist"
     ))
-  })
+  }
+
   if (!(file %in% names(mod$files))) {
-    # Make sure the file is a descendant of the root directory (ie. the
-    # directory that the model export file is located in). This is
-    # for security reasons, to avoid path traversals.
+    # The file was not previously added, so we load and add it to the
+    # file cache
+
+    # Make sure the file is a descendant of the sandbox path
     if (!is.null(mod$sandbox_path) &&
         !.is_file_descendant_of(file, mod$sandbox_path)
     ) {
       stop(paste(
         "A file was specified that is outside of",
         "the sandbox path:",
-        file,
-        " sandbox_path =",
-        .expand_and_normalize_path(mod$sandbox_path, add_trailing_slash = TRUE),
-        " platform separator =",
-        .Platform$file.sep
+        .file_relative_to_path(file, mod$sandbox_path)
       ))
     }
 
-    # Add file contents to the model, so we can retrieve it with .get_file
+    # Load and add file contents to the file cache, so we can retrieve
+    # it with .get_file
     tryCatch({
       data <- utils::read.csv(file)
       mod$files[[file]] <- data
@@ -141,7 +140,7 @@ NULL
 #' @keywords internal
 .get_file <- function(mod, file) {
   # The file should have already been added by calling .add_file
-  file <- normalizePath(file, mustWork = TRUE)
+  file <- .expand_and_normalize_path(file)
   if (!(file %in% names(mod$files))) {
     stop(paste(
       "The file must be added by calling",
@@ -154,8 +153,7 @@ NULL
 
 #' Expand and normalize a file path.
 #'
-#' Symbolic links and ".." will be followed and expanded. Path separators
-#' will match those of the underlying OS platform.
+#' Symbolic links and ".." will be followed and expanded.
 #'
 #' @param p Character. The path to expand and normalize.
 #' @param add_trailing_slash Logical. If `TRUE`, a trailing slash is appended to
@@ -165,14 +163,17 @@ NULL
 #'   does not exist.
 #' @keywords internal
 .expand_and_normalize_path <- function(p, add_trailing_slash = FALSE) {
-  # Replace backslash with forward slash
-  p <- gsub("\\\\", "/", p)
-
   # Try to normalize the path. If the path does not exist then
   # we return NULL
   normalized <- NULL
-  try({
-    normalized <- normalizePath(p, mustWork = TRUE)
+  tryCatch({
+    normalized <- normalizePath(
+      p,
+      winslash = .Platform$file.sep,
+      mustWork = TRUE
+    )
+  }, error = function(e) {
+    # This error handler stops normalizePath from printing out an error
   })
   if (is.null(normalized)) {
     return(NULL)
