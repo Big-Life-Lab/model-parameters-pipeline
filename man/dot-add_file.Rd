@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_parameters_pipeline_utils.R
 \name{.add_file}
 \alias{.add_file}
-\title{Add File to Model Cache}
+\title{Load and Add File to Model Cache}
 \usage{
 .add_file(mod, file)
 }

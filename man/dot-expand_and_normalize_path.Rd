@@ -18,7 +18,6 @@ Character. The normalized path, or `NULL` if the path is invalid or
   does not exist.
 }
 \description{
-Symbolic links and ".." will be followed and expanded. Path separators
-will match those of the underlying OS platform.
+Symbolic links and ".." will be followed and expanded.
 }
 \keyword{internal}
