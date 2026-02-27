@@ -1,7 +1,6 @@
 # Expand and normalize a file path.
 
-Symbolic links and ".." will be followed and expanded. Path separators
-will match those of the underlying OS platform.
+Symbolic links and ".." will be followed and expanded.
 
 ## Usage
 

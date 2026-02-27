@@ -1,4 +1,4 @@
-# Add File to Model Cache
+# Load and Add File to Model Cache
 
 Internal function that loads a CSV file and adds it to the model's file
 cache.
