@@ -4,20 +4,17 @@
 \alias{.run_step_logistic_regression}
 \title{Run Logistic Regression Step}
 \usage{
-.run_step_logistic_regression(mod, dat, file)
+.run_step_logistic_regression(mod, file)
 }
 \arguments{
-\item{mod}{Model object}
-
-\item{dat}{Data frame containing the input data to be transformed}
+\item{mod}{Model object containing input data in \code{mod$data}}
 
 \item{file}{Path to logistic step specification file}
 }
 \value{
-A list containing: \code{mod} (the updated model object),
-  \code{data} (the transformed data frame with the logistic prediction
-  column added), and \code{output_columns} (character vector of new
-  column names added by this step)
+A list containing: \code{mod} (the updated model object with the
+  logistic prediction column added to \code{mod$data}), and
+  \code{output_columns} (character vector of output columns of this step)
 }
 \description{
 Applies logistic regression by multiplying variables by

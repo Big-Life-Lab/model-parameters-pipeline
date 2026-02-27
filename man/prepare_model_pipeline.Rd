@@ -4,7 +4,7 @@
 \alias{prepare_model_pipeline}
 \title{Prepare Model Pipeline}
 \usage{
-prepare_model_pipeline(model_export)
+prepare_model_pipeline(model_export, sandbox_path = NULL)
 }
 \arguments{
 \item{model_export}{A file path (character) to a model export CSV file.
@@ -13,6 +13,16 @@ specify the locations of the variables and model-steps files. The
 directory containing the model export file is used as the root
 directory for resolving relative file paths found within the
 model-steps file.}
+
+\item{sandbox_path}{Character or \code{NULL}. If specified, all file paths
+referenced in the model parameters configuration files (model export,
+variables, model steps, and step parameter files) must be descendants of
+this directory. If any file resolves outside of \code{sandbox_path}, an
+error is raised. This prevents access to files outside the expected
+directory structure, which is useful when running on a server or other
+public-facing system where increased security is required. Note that this
+restriction does not apply to data files passed to
+\code{\link{run_model_pipeline}}. Defaults to \code{NULL} (no restriction).}
 }
 \value{
 A model object (list) containing:
