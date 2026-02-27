@@ -78,6 +78,29 @@ NULL
   }
 }
 
+#' Get a file path safe to include in user-facing error messages
+#'
+#' If `mod$sandbox_path` is set, returns the path of `file` relative to
+#' `sandbox_path`, or just the filename if `file` is not inside `sandbox_path`
+#' or if it does not exist. If `mod$sandbox_path` is not set, returns `file`
+#' unchanged.
+#'
+#' The returned path avoids exposing the underlying directory structure of the
+#' system to the user, which is useful for displaying error messages on a
+#' website or other public-facing context.
+#'
+#' @param mod The model object, optionally containing `sandbox_path`.
+#' @param file The file path to make reportable.
+#' @return A file path safe to display in user-facing error messages.
+#' @keywords internal
+.reportable_file <- function(mod, file) {
+  if (is.null(mod$sandbox_path)) {
+    file
+  } else {
+    .file_relative_to_path(file, mod$sandbox_path)
+  }
+}
+
 #' Load and Add File to Model Cache
 #'
 #' Internal function that loads a CSV file and adds it to the model's file
@@ -88,17 +111,31 @@ NULL
 #' @return Updated model object with file in cache
 #' @keywords internal
 .add_file <- function(mod, file) {
+  # If an error occurs, we display this file to the user. If mod$sandbox_path is
+  # set then the reportable_file only shows the path relative to the
+  # sandbox_path (or just the filename if it is not in the sandbox_path)
+  reportable_file <- .reportable_file(mod, file)
+
   # We use this general error message that says a file either doesn't exist
   # or it is outside of the sandbox path (but not telling them which one)
   # so that users cannot determine which files exist on the file system.
+  # We only do this if mod$sandbox_path is set. If it isn't, we give a
+  # more detailed error message.
   general_error_message <- paste(
     "The file does not exist or is outside of the sandbox path:",
-    .file_relative_to_path(file, mod$sandbox_path)
+    reportable_file
   )
 
   file <- .expand_and_normalize_path(file)
   if (is.null(file)) {
-    stop(general_error_message)
+    if (is.null(mod$sandbox_path)) {
+      stop(paste(
+        "The file does not exist:",
+        reportable_file
+      ))
+    } else {
+      stop(general_error_message)
+    }
   }
 
   if (!(file %in% names(mod$files))) {
@@ -120,7 +157,7 @@ NULL
     }, error = function(e) {
       stop(paste(
         "Could not load the file",
-        .file_relative_to_path(file, mod$sandbox_path)
+        reportable_file
       ))
     })
   }
@@ -144,7 +181,7 @@ NULL
     stop(paste(
       "The file must be added by calling",
       ".add_file before calling .get_file:",
-      .file_relative_to_path(file, mod$sandbox_path)
+      .reportable_file(mod, file)
     ))
   }
   mod$files[[file]]
