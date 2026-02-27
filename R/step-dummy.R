@@ -12,8 +12,11 @@
 #'   (character vector of output columns of this step)
 #' @keywords internal
 .run_step_dummy <- function(mod, file) {
+  # Load the step specification file
   mod <- .add_file(mod, file)
   step_data <- .get_file(mod, file)
+
+  # Verify required columns exist in the specification file
   .verify_columns(
     step_data,
     c("origVariable", "catValue", "dummyVariable"),
@@ -21,17 +24,22 @@
     file
   )
 
+  # Track which columns are produced by this step
   output_columns <- c()
+
+  # Process each row in the step specification
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
     cat_value <- info[["catValue"]]
     dummy_variable <- info[["dummyVariable"]]
 
+    # Create the dummy variable
     mod$data[dummy_variable] <- as.integer(mod$data[orig_variable] == cat_value)
     output_columns <- c(output_columns, dummy_variable)
   }
 
+  # Return the updated model object and output column names
   list(
     mod = mod,
     output_columns = output_columns
