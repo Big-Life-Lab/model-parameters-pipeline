@@ -34,7 +34,7 @@ The pipeline supports the following transformation steps:
 ### Adding New Transformation Steps
 
 For instructions on implementing additional transformation steps, see [Adding a
-New Transformation Step](ADDING_NEW_STEP.md).
+New Transformation Step](CONTRIBUTING.md#adding-a-new-transformation-step).
 
 ## Installation
 
