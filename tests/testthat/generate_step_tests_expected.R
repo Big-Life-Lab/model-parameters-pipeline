@@ -61,7 +61,10 @@ generate_step_tests_expected <- function(steps = NULL) {
     # Run the pipeline on the current directory
     model_export_file <- file.path(cur_dir, "test-model-export.csv")
     mod <- prepare_model_pipeline(model_export_file)
-    output_data <- run_model_pipeline(mod, dat = data, mode = "full")
+    output_data <- get_pipeline_output(
+      run_model_pipeline(mod, dat = data),
+      mode = "full"
+    )
 
     # Save the results as the expected output
     cat("Saving expected output for", basename(cur_dir), "\n")
