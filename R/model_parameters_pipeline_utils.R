@@ -107,7 +107,7 @@ NULL
       stop(paste(
         "A file was specified that is outside of",
         "the sandbox path:",
-        file, " sandbox_path =", mod$sandbox_path
+        .file_relative_to_path(file, mod$sandbox_path)
       ))
     }
 
@@ -150,7 +150,8 @@ NULL
 
 #' Expand and normalize a file path.
 #'
-#' Symbolic links and ".." will be followed and expanded.
+#' Symbolic links and ".." will be followed and expanded. Path separators
+#' will match those of the underlying OS platform.
 #'
 #' @param p Character. The path to expand and normalize.
 #' @param add_trailing_slash Logical. If `TRUE`, a trailing slash is appended to
@@ -178,8 +179,8 @@ NULL
     # for directories
     len <- stringr::str_length(normalized)
     if (len > 0 &&
-          substr(normalized, len, len) != "/") {
-      normalized <- paste0(normalized, "/")
+          substr(normalized, len, len) != .Platform$file.sep) {
+      normalized <- paste0(normalized, .Platform$file.sep)
     }
   }
 
