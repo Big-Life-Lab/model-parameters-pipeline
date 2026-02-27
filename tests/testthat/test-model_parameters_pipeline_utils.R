@@ -90,7 +90,6 @@ test_that("Utility function .get_unused_column works", {
   )
 })
 
-
 test_that("Utility function .get_string_parts works", {
   # Basic test with 3 parts
   expected_parts <- c("part1", "part2", "part3")
