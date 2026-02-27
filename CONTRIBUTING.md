@@ -283,8 +283,11 @@ Here's a real example from the existing codebase
 
 ```r
 .run_step_center <- function(mod, file) {
+  # Load the step specification file
   mod <- .add_file(mod, file)
   step_data <- .get_file(mod, file)
+
+  # Verify required columns exist in the specification file
   .verify_columns(
     step_data,
     c("origVariable", "centerValue", "centeredVariable"),
@@ -292,17 +295,22 @@ Here's a real example from the existing codebase
     file
   )
 
+  # Track which columns are produced by this step
   output_columns <- c()
+
+  # Process each row in the step specification
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
     center_value <- info[["centerValue"]]
     centered_variable <- info[["centeredVariable"]]
 
+    # Center the variable
     mod$data[centered_variable] <- mod$data[orig_variable] - center_value
     output_columns <- c(output_columns, centered_variable)
   }
 
+  # Return the updated model object and output column names
   list(
     mod = mod,
     output_columns = output_columns
@@ -328,47 +336,9 @@ framework automatically discovers and runs tests based on directory structure.
 
 #### Quick Reference
 
-See the detailed guide at
-[tests/testthat/testdata/step-tests/README.md](tests/testthat/testdata/step-tests/README.md)
+See the detailed guide
+[Model Parameters Step Tests](tests/testthat/testdata/step-tests/README.md)
 for complete instructions.
-
-#### Summary
-
-1. **Create test directory**:
-   `tests/testthat/testdata/step-tests/test-{stepname}/`
-
-2. **Create required files**:
-   - `test-model-export.csv` - Points to variables and model steps files
-   - `test-model-steps.csv` - Defines which step to test
-   - `test-{stepname}.csv` - Contains step-specific parameters
-
-3. **Generate expected output**:
-
-   ```r
-   source("tests/testthat/generate_step_tests_expected.R")
-   generate_step_tests_expected(steps = "stepname")
-   ```
-
-4. **Run tests**:
-
-   ```r
-   devtools::test()
-   ```
-
-   Your test is automatically discovered and run!
-
-#### Test File Structure
-
-```text
-tests/testthat/testdata/step-tests/
-├── test-data.csv              # Shared test data (already exists)
-├── test-variables.csv         # Shared variables definition (already exists)
-└── test-{stepname}/           # Your new test directory
-    ├── test-model-export.csv  # References to files
-    ├── test-model-steps.csv   # Step definition
-    ├── test-{stepname}.csv    # Step parameters
-    └── test-expected.csv      # Auto-generated expected output
-```
 
 ### Reference Documentation
 
