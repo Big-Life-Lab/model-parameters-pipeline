@@ -231,7 +231,7 @@ run_model_pipeline <- function(mod, dat) {
 
   # We will store information from each step as a named list in mod$steps_info,
   # for example:
-  # \dontrun{
+  # nolint start
   #   mod$steps_info <- list(
   #     list(
   #       step_name = "rcs",
@@ -240,6 +240,7 @@ run_model_pipeline <- function(mod, dat) {
   #     list(...)
   #   )
   # }
+  # nolint end
   mod$steps_info <- list()
 
   # Run each step in the model steps file
