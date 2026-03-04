@@ -59,7 +59,7 @@
       <h1>Introduction to Model Parameters Pipeline</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/v0.2.1-alpha/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/first/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="d-none name"><code>introduction.Rmd</code></div>
     </div>
 
@@ -280,11 +280,10 @@ intermediate and output column</li>
 <span><span class="co"># Full mode: all columns including intermediate transformation variables</span></span>
 <span><span class="va">output_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span>, mode <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># If the model includes a logistic-regression step, extract predictions</span></span>
-<span><span class="co"># Logistic predictions are stored in columns starting with "logistic_"</span></span>
-<span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="va">output_full</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"^logistic_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">output_full</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
-<span></span>
 <span><span class="co"># View column names to see what transformations were created</span></span>
+<span><span class="co"># The last transformation step will have column names "output", "output_2",</span></span>
+<span><span class="co"># "output_3" etc. for each of its output columns. There will typically just</span></span>
+<span><span class="co"># be one output column</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">output_full</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -330,7 +329,7 @@ with HTNPoRT:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">result_full</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract logistic predictions (hypertension risk probabilities)</span></span>
-<span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="va">result_full</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"^logistic_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">result_full</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="va">result_full</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"^output"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">result_full</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Summary statistics of predictions</span></span>

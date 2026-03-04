@@ -36,37 +36,17 @@ prepare_model_pipeline(model_export, sandbox_path = NULL)
 
 ## Value
 
-A model object (list) containing:
-
-- root_dir:
-
-  The root directory used for resolving file paths (derived from the
-  model export file location)
-
-- model_export:
-
-  The data from the model export file
-
-- variables:
-
-  The data from the variables file
-
-- model_steps:
-
-  The data from the model steps file
-
-- predictor_variables:
-
-  Character vector of predictor variable names
-
-- files:
-
-  Named list of cached file contents
+A model object (list) that can be used to pass to
+[`run_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md)
+and
+[`get_pipeline_output`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md).
 
 ## See also
 
 [`run_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md)
-to execute the pipeline
+to execute the pipeline and
+[`get_pipeline_output`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
+to retrieve the output of the pipeline.
 
 ## Examples
 

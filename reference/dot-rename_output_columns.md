@@ -1,0 +1,38 @@
+# Rename output columns to use a standard prefix/suffix scheme
+
+Renames the output columns of the last step in a pipeline model object
+so that they follow a consistent naming convention based on the given
+prefix and suffix. Each output column is assigned a unique name via
+\[.get_unused_column()\], avoiding collisions with existing columns in
+the data.
+
+## Usage
+
+``` r
+.rename_output_columns(mod, prefix = "output", suffix = "_#")
+```
+
+## Arguments
+
+- mod:
+
+  A pipeline model object. Must contain \`\$data\` (a data frame) and
+  \`\$steps_info\` (a list of step metadata), where the last element of
+  \`steps_info\` has an \`\$output_columns\` field.
+
+- prefix:
+
+  Character string used as the base name for output columns. Defaults to
+  \`"output"\`.
+
+- suffix:
+
+  Character string appended to \`prefix\` (with \`"#"\` replaced by an
+  integer) when the bare prefix is already taken. Must contain \`"#"\`.
+  Defaults to \`"\_#"\`, producing names like \`"output"\`,
+  \`"output_2"\`, \`"output_3"\`, etc.
+
+## Value
+
+The modified pipeline model object with output columns renamed in both
+\`\$data\` and the last element of \`\$steps_info\$output_columns\`.

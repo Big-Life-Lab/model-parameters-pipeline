@@ -33,7 +33,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Contributing to Model Parameters Pipeline</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/v0.2.1-alpha/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/first/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
     </div>
 
 <div id="contributing-to-model-parameters-pipeline" class="section level1">
@@ -323,14 +323,14 @@
 <p>Unit tests ensure your transformation step works correctly. The testing framework automatically discovers and runs tests based on directory structure.</p>
 <div class="section level4">
 <h4 id="quick-reference">Quick Reference<a class="anchor" aria-label="anchor" href="#quick-reference"></a></h4>
-<p>See the detailed guide <a href="tests/testthat/testdata/step-tests/README.html">Model Parameters Step Tests</a> for complete instructions.</p>
+<p>See the detailed guide <a href="tests/testthat/testdata/steps/README.html">Model Parameters Step Tests</a> for complete instructions.</p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="reference-documentation">Reference Documentation<a class="anchor" aria-label="anchor" href="#reference-documentation"></a></h3>
 <p>For detailed information about Model Parameters transformation steps and their required file formats, see:</p>
 <ul><li><a href="https://big-life-lab.github.io/model-parameters/5-reference.html" class="external-link">Model Parameters Reference Documentation</a></li>
-<li><a href="tests/testthat/testdata/step-tests/README.html">Step Tests README</a></li>
+<li><a href="tests/testthat/testdata/steps/README.html">Step Tests README</a></li>
 </ul></div>
 <div class="section level3">
 <h3 id="checklist">Checklist<a class="anchor" aria-label="anchor" href="#checklist"></a></h3>
@@ -339,13 +339,13 @@
 <li><label><input type="checkbox">Implement <code>.run_step_{stepname}</code> function with proper documentation in the new source file</label></li>
 <li><label><input type="checkbox">Add <code>else if</code> block in <a href="R/model_parameters_pipeline.R">run_model_pipeline</a> for the new step name</label></li>
 <li><label><input type="checkbox">Verify column names match the Model Parameters specification</label></li>
-<li><label><input type="checkbox">Create test directory: <code>tests/testthat/testdata/step-tests/test-{stepname}/</code></label></li>
-<li><label><input type="checkbox">Create <code>test-model-export.csv</code> in test directory</label></li>
-<li><label><input type="checkbox">Create <code>test-model-steps.csv</code> in test directory</label></li>
-<li><label><input type="checkbox">Create <code>test-{stepname}.csv</code> with test parameters in test directory</label></li>
+<li><label><input type="checkbox">Create test directory: <code>tests/testthat/testdata/steps/{stepname}/</code></label></li>
+<li><label><input type="checkbox">Create <code>model-export.csv</code> in test directory</label></li>
+<li><label><input type="checkbox">Create <code>model-steps.csv</code> in test directory</label></li>
+<li><label><input type="checkbox">Create <code>{stepname}.csv</code> with test parameters in test directory</label></li>
 <li><label><input type="checkbox">Generate expected output using <code>generate_step_tests_expected()</code></label></li>
 <li><label><input type="checkbox">Run <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code> to verify tests pass</label></li>
-<li><label><input type="checkbox">Review and commit all changes including <code>test-expected.csv</code></label></li>
+<li><label><input type="checkbox">Review and commit all changes including <code>expected.csv</code></label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="common-patterns">Common Patterns<a class="anchor" aria-label="anchor" href="#common-patterns"></a></h3>
@@ -365,7 +365,7 @@
 <h4 id="creating-new-columns-safely">Creating New Columns Safely<a class="anchor" aria-label="anchor" href="#creating-new-columns-safely"></a></h4>
 <p>To avoid column name conflicts:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">new_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_unused_column.html">.get_unused_column</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">data</span>, <span class="st">"prefix_"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">new_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-get_unused_column.html">.get_unused_column</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">data</span>, <span class="st">"prefix"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="adding-multiple-columns">Adding Multiple Columns<a class="anchor" aria-label="anchor" href="#adding-multiple-columns"></a></h4>
@@ -384,7 +384,7 @@
 <ul><li>For Model Parameters specification questions, refer to the <a href="https://big-life-lab.github.io/model-parameters/" class="external-link">Model Parameters documentation</a>
 </li>
 <li>For existing step implementation examples, see source files like <a href="R/step-center.R">R/step-center.R</a>, <a href="R/step-dummy.R">R/step-dummy.R</a>, etc.</li>
-<li>For testing questions, see <a href="tests/testthat/testdata/step-tests/README.html">tests/testthat/testdata/step-tests/README.md</a>
+<li>For testing questions, see <a href="tests/testthat/testdata/steps/README.html">tests/testthat/testdata/steps/README.md</a>
 </li>
 </ul></div>
 </div>
