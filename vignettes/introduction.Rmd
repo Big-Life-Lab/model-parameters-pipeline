@@ -181,11 +181,10 @@ output <- get_pipeline_output(mod)
 # Full mode: all columns including intermediate transformation variables
 output_full <- get_pipeline_output(mod, mode = "full")
 
-# If the model includes a logistic-regression step, extract predictions
-# Logistic predictions are stored in columns starting with "logistic_"
-predictions <- output_full[, grep("^logistic_", names(output_full))]
-
 # View column names to see what transformations were created
+# The last transformation step will have column names "output", "output_2",
+# "output_3" etc. for each of its output columns. There will typically just
+# be one output column
 colnames(output_full)
 ```
 
@@ -230,7 +229,7 @@ result_full <- get_pipeline_output(mod, mode = "full")
 head(result_full)
 
 # Extract logistic predictions (hypertension risk probabilities)
-predictions <- result_full[, grep("^logistic_", names(result_full))]
+predictions <- result_full[, grep("^output", names(result_full))]
 head(predictions)
 
 # Summary statistics of predictions
