@@ -109,7 +109,7 @@
 <h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a></h3>
 <p>Adding a new transformation step requires three main tasks:</p>
 <ol style="list-style-type: decimal"><li>
-<strong>Update <a href="R/model_parameters_pipeline.R">run_model_pipeline</a></strong> - Add a new conditional block to recognize the step</li>
+<strong>Update <code>run_model_pipeline</code> in <code>R/model_parameters_pipeline.R</code></strong> - Add a new conditional block to recognize the step</li>
 <li>
 <strong>Create a new step source file</strong> - Implement <code>.run_step_{stepname}</code> in <code>R/step-{stepname}.R</code> to execute the transformation</li>
 <li>
@@ -118,7 +118,7 @@
 <div class="section level3">
 <h3 id="step-1-update-run_model_pipeline">Step 1: Update <code>run_model_pipeline</code>
 <a class="anchor" aria-label="anchor" href="#step-1-update-run_model_pipeline"></a></h3>
-<p>The <a href="R/model_parameters_pipeline.R">run_model_pipeline</a> function in <a href="R/model_parameters_pipeline.R">R/model_parameters_pipeline.R</a> processes each step defined in the model steps specification. You need to add a new conditional block for your step.</p>
+<p>The <code>run_model_pipeline</code> function in <code>R/model_parameters_pipeline.R</code> processes each step defined in the model steps specification. You need to add a new conditional block for your step.</p>
 <div class="section level4">
 <h4 id="location">Location<a class="anchor" aria-label="anchor" href="#location"></a></h4>
 <p>Find the <code>if-else</code> chain in <code>run_model_pipeline</code>:</p>
@@ -270,7 +270,7 @@
 </ol></div>
 <div class="section level4">
 <h4 id="example-center-step">Example: Center Step<a class="anchor" aria-label="anchor" href="#example-center-step"></a></h4>
-<p>Here’s a real example from the existing codebase (<a href="R/step-center.R">R/step-center.R</a>):</p>
+<p>Here’s a real example from the existing codebase (<code>R/step-center.R</code>):</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">.run_step_center</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">mod</span>, <span class="va">file</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Load the step specification file</span></span>
@@ -383,7 +383,7 @@
 <h3 id="getting-help">Getting Help<a class="anchor" aria-label="anchor" href="#getting-help"></a></h3>
 <ul><li>For Model Parameters specification questions, refer to the <a href="https://big-life-lab.github.io/model-parameters/" class="external-link">Model Parameters documentation</a>
 </li>
-<li>For existing step implementation examples, see source files like <a href="R/step-center.R">R/step-center.R</a>, <a href="R/step-dummy.R">R/step-dummy.R</a>, etc.</li>
+<li>For existing step implementation examples, see source files like <code>R/step-center.R</code>, <code>R/step-dummy.R</code>, etc.</li>
 <li>For testing questions, see <a href="tests/testthat/testdata/steps/README.html">tests/testthat/testdata/steps/README.md</a>
 </li>
 </ul></div>

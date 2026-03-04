@@ -99,8 +99,7 @@ repository](https://big-life-lab.github.io/model-parameters/).
 
 Adding a new transformation step requires three main tasks:
 
-1.  **Update
-    [run_model_pipeline](https://big-life-lab.github.io/model-parameters-pipeline/R/model_parameters_pipeline.R)** -
+1.  **Update `run_model_pipeline` in `R/model_parameters_pipeline.R`** -
     Add a new conditional block to recognize the step
 2.  **Create a new step source file** - Implement `.run_step_{stepname}`
     in `R/step-{stepname}.R` to execute the transformation
@@ -108,10 +107,7 @@ Adding a new transformation step requires three main tasks:
 
 ### Step 1: Update `run_model_pipeline`
 
-The
-[run_model_pipeline](https://big-life-lab.github.io/model-parameters-pipeline/R/model_parameters_pipeline.R)
-function in
-[R/model_parameters_pipeline.R](https://big-life-lab.github.io/model-parameters-pipeline/R/model_parameters_pipeline.R)
+The `run_model_pipeline` function in `R/model_parameters_pipeline.R`
 processes each step defined in the model steps specification. You need
 to add a new conditional block for your step.
 
@@ -299,8 +295,7 @@ Use this template as a starting point:
 
 #### Example: Center Step
 
-Here’s a real example from the existing codebase
-([R/step-center.R](https://big-life-lab.github.io/model-parameters-pipeline/R/step-center.R)):
+Here’s a real example from the existing codebase (`R/step-center.R`):
 
 ``` r
 .run_step_center <- function(mod, file) {
@@ -449,8 +444,6 @@ mod$data[c("col1", "col2")] <- new_cols
   Parameters
   documentation](https://big-life-lab.github.io/model-parameters/)
 - For existing step implementation examples, see source files like
-  [R/step-center.R](https://big-life-lab.github.io/model-parameters-pipeline/R/step-center.R),
-  [R/step-dummy.R](https://big-life-lab.github.io/model-parameters-pipeline/R/step-dummy.R),
-  etc.
+  `R/step-center.R`, `R/step-dummy.R`, etc.
 - For testing questions, see
   [tests/testthat/testdata/steps/README.md](https://big-life-lab.github.io/model-parameters-pipeline/tests/testthat/testdata/steps/README.md)
