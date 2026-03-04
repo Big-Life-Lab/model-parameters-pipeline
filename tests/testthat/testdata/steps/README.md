@@ -122,18 +122,6 @@ devtools::test()
 Your new step test will be included automatically alongside all existing step
 tests.
 
-## Existing Test Examples
-
-Current test directories include:
-
-- `center/` - Center transformation step
-- `dummy/` - Dummy variable transformation step
-- `interaction/` - Interaction transformation step
-- `logistic-regression/` - Logistic regression transformation step
-- `rcs/` - Restricted cubic spline transformation step
-
-Refer to these examples when creating new tests.
-
 ## Model Parameters Steps Reference
 
 For detailed information about available transformation steps and their
