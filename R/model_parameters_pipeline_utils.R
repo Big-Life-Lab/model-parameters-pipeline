@@ -24,18 +24,38 @@ NULL
 #' Find an unused column name in the data
 #'
 #' Generates a unique column name by appending an integer to a prefix.
-#' Iteratively checks for column_prefix1, column_prefix2, etc. until
-#' finding a name that doesn't exist in the data (eg. a dataframe).
 #'
 #' @param data Data to check for existing column names.
 #' @param column_prefix Character prefix for the column name
+#' @param column_suffix If a column named column_prefix already exists
+#'   then column_suffix is appended to column_prefix, replacing "#"
+#'   with an integer, to try to find an unused column name. For example,
+#'   if column_prefix = "output" and column_suffix = "_#", then "output"
+#'   will be returned if such a column doesn't exist. If it does exist,
+#'   then "output_2", "output_3", etc. will be tested until an unused
+#'   column name is found.
 #' @return Character string of an unused column name
-#'   (e.g., "prefix1", "prefix2")
+#'   (e.g., "prefix_2", "prefix_3")
 #' @keywords internal
-.get_unused_column <- function(data, column_prefix) {
+.get_unused_column <- function(data, column_prefix, column_suffix = "_#") {
+  if (!stringr::str_detect(column_suffix, "#")) {
+    stop(paste(
+      "The column_suffix passed to .get_unused_column must contain",
+      "the number sign '#':",
+      column_suffix
+    ))
+  }
+
   col_i <- 1
   while (TRUE) {
-    cur_col <- paste0(column_prefix, col_i)
+    if (col_i == 1) {
+      cur_col = column_prefix
+    } else {
+      cur_col <- paste0(
+        column_prefix,
+        stringr::str_replace_all(column_suffix, "#", as.character(col_i))
+      )
+    }
     if (!(cur_col %in% colnames(data))) {
       return(cur_col)
     }
@@ -285,4 +305,48 @@ NULL
     return(basename(file))
   }
   file
+}
+
+#' Rename output columns to use a standard prefix/suffix scheme
+#'
+#' Renames the output columns of the last step in a pipeline model object so
+#' that they follow a consistent naming convention based on the given prefix and
+#' suffix. Each output column is assigned a unique name via
+#' [.get_unused_column()], avoiding collisions with existing columns in the
+#' data.
+#'
+#' @param mod A pipeline model object. Must contain `$data` (a data frame) and
+#'   `$steps_info` (a list of step metadata), where the last element of
+#'   `steps_info` has an `$output_columns` field.
+#' @param prefix Character string used as the base name for output columns.
+#'   Defaults to `"output"`.
+#' @param suffix Character string appended to `prefix` (with `"#"` replaced by
+#'   an integer) when the bare prefix is already taken. Must contain `"#"`.
+#'   Defaults to `"_#"`, producing names like `"output"`, `"output_2"`,
+#'   `"output_3"`, etc.
+#' @return The modified pipeline model object with output columns renamed in
+#'   both `$data` and the last element of `$steps_info$output_columns`.
+#' @keywords internal
+.rename_output_columns <- function(mod, prefix = "output", suffix = "_#") {
+  dat <- mod$data
+
+  # Get the current output column names
+  original_output_columns <-
+    mod$steps_info[[length(mod$steps_info)]]$output_columns
+
+  # Rename the columns in the data to the final prefix/suffix names
+  new_output_columns <- c()
+  for (column in original_output_columns) {
+    cur_column <- .get_unused_column(dat, prefix, suffix)
+    colnames(dat)[colnames(dat) == column] <- cur_column
+    new_output_columns <- c(new_output_columns, cur_column)
+  }
+
+  # Reassign the output columns to mod
+  mod$steps_info[[length(mod$steps_info)]]$output_columns <- new_output_columns
+
+  # Reassign the data
+  mod$data <- dat
+
+  mod
 }
