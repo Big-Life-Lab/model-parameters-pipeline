@@ -80,23 +80,16 @@ NULL
 #'   restriction does not apply to data files passed to
 #'   \code{\link{run_model_pipeline}}. Defaults to \code{NULL} (no restriction).
 #'
-#' @return A model object (list) containing:
-#' \describe{
-#'   \item{root_dir}{The root directory used for resolving file paths
-#'     (derived from the model export file location)}
-#'   \item{model_export}{The data from the model export file}
-#'   \item{variables}{The data from the variables file}
-#'   \item{model_steps}{The data from the model steps file}
-#'   \item{predictor_variables}{Character vector of predictor variable names}
-#'   \item{files}{Named list of cached file contents}
-#' }
+#' @return A model object (list) that can be used to pass to
+#'   \code{\link{run_model_pipeline}} and \code{\link{get_pipeline_output}}.
 #'
 #' @examples
 #' \dontrun{
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
 #' }
 #'
-#' @seealso \code{\link{run_model_pipeline}} to execute the pipeline
+#' @seealso \code{\link{run_model_pipeline}} to execute the pipeline and
+#'   \code{\link{get_pipeline_output}} to retrieve the output of the pipeline.
 #' @export
 prepare_model_pipeline <- function(
   model_export,
@@ -227,7 +220,7 @@ run_model_pipeline <- function(mod, dat) {
       )
     )
   }
-  mod$data <- dat[unlist(mod$predictor_variables)]
+  mod$data <- dat[mod$predictor_variables]
 
   # We will store information from each step as a named list in mod$steps_info,
   # for example:
@@ -286,6 +279,9 @@ run_model_pipeline <- function(mod, dat) {
       output_columns = res$output_columns
     )
   }
+
+  # Rename the output columns to output_#
+  mod <- .rename_output_columns(mod, "output", "_#")
 
   mod
 }
