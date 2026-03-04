@@ -337,7 +337,7 @@ framework automatically discovers and runs tests based on directory structure.
 #### Quick Reference
 
 See the detailed guide
-[Model Parameters Step Tests](tests/testthat/testdata/step-tests/README.md)
+[Model Parameters Step Tests](tests/testthat/testdata/steps/README.md)
 for complete instructions.
 
 ### Reference Documentation
@@ -347,7 +347,7 @@ required file formats, see:
 
 - [Model Parameters Reference
   Documentation](https://big-life-lab.github.io/model-parameters/5-reference.html)
-- [Step Tests README](tests/testthat/testdata/step-tests/README.md)
+- [Step Tests README](tests/testthat/testdata/steps/README.md)
 
 ### Checklist
 
@@ -361,13 +361,13 @@ Use this checklist when adding a new transformation step:
   name
 - [ ] Verify column names match the Model Parameters specification
 - [ ] Create test directory:
-  `tests/testthat/testdata/step-tests/test-{stepname}/`
-- [ ] Create `test-model-export.csv` in test directory
-- [ ] Create `test-model-steps.csv` in test directory
-- [ ] Create `test-{stepname}.csv` with test parameters in test directory
+  `tests/testthat/testdata/steps/{stepname}/`
+- [ ] Create `model-export.csv` in test directory
+- [ ] Create `model-steps.csv` in test directory
+- [ ] Create `{stepname}.csv` with test parameters in test directory
 - [ ] Generate expected output using `generate_step_tests_expected()`
 - [ ] Run `devtools::test()` to verify tests pass
-- [ ] Review and commit all changes including `test-expected.csv`
+- [ ] Review and commit all changes including `expected.csv`
 
 ### Common Patterns
 
@@ -393,7 +393,7 @@ numeric_values <- as.double(.get_string_parts(info[["knots"]]))
 To avoid column name conflicts:
 
 ```r
-new_col <- .get_unused_column(mod$data, "prefix_")
+new_col <- .get_unused_column(mod$data, "prefix")
 ```
 
 #### Adding Multiple Columns
@@ -417,4 +417,4 @@ mod$data[c("col1", "col2")] <- new_cols
   [R/step-center.R](R/step-center.R),
   [R/step-dummy.R](R/step-dummy.R), etc.
 - For testing questions, see
-  [tests/testthat/testdata/step-tests/README.md](tests/testthat/testdata/step-tests/README.md)
+  [tests/testthat/testdata/steps/README.md](tests/testthat/testdata/steps/README.md)

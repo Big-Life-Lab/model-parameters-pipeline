@@ -52,7 +52,7 @@ get_htnport_paths <- function(sex) {
 #' against expected validation data using testthat expectations.
 #'
 #' @param dir_name Character string specifying the test directory name
-#'   within "data/tests/step-tests"
+#'   within "data/tests/steps"
 #' @param input_data_file Character string specifying the input data file name
 #'   to be used for the test
 #'
@@ -69,17 +69,17 @@ get_htnport_paths <- function(sex) {
 #' @keywords internal
 run_test_data <- function(dir_name, input_data_file) {
   # Run the pipeline to get the output
-  root_dir <- "testdata/step-tests"
+  root_dir <- "testdata/steps"
   data_file <- testthat::test_path(root_dir, input_data_file)
   model_export_file <-
-    testthat::test_path(root_dir, dir_name, "test-model-export.csv")
+    testthat::test_path(root_dir, dir_name, "model-export.csv")
   mod <- prepare_model_pipeline(model_export_file)
   mod <- run_model_pipeline(mod, dat = data_file)
   output_data <- get_pipeline_output(mod, mode = "full")
 
   # Compare the pipeline output to the expected output
   valid_data_file <-
-    testthat::test_path(root_dir, dir_name, "test-expected.csv")
+    testthat::test_path(root_dir, dir_name, "expected.csv")
   valid_data <- utils::read.csv(valid_data_file)
   expect_equal(output_data,
     valid_data,

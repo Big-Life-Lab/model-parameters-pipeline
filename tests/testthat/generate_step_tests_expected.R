@@ -3,30 +3,30 @@
 #' @description
 #' This function generates expected output files for unit tests of the model
 #' parameters pipeline steps. It iterates through subdirectories in the
-#' test/testthat/testdata/step-tests folder, runs the model pipeline on each
+#' tests/testthat/testdata/steps folder, runs the model pipeline on each
 #' test case in the folder, and saves the results as expected output files
 #' for comparison in testthat unit tests.
 #'
 #' @param steps Character vector of step names to generate expected output for.
-#'   If NULL (default), generates output for all steps. Step names should be
-#'   provided without the "test-" prefix (e.g., "dummy", "center", "rcs").
+#'   If NULL (default), generates output for all steps. Step names correspond
+#'   to directory names (e.g., "dummy", "center", "rcs").
 #'
 #' @details
 #' The function performs the following operations:
 #' \itemize{
-#'   \item Reads the shared test data from `test-data.csv`
-#'   \item Iterates through subdirectories in the step-tests folder (or only
+#'   \item Reads the shared test data from `data.csv`
+#'   \item Iterates through subdirectories in the steps folder (or only
 #'         specified steps if `steps` parameter is provided)
 #'   \item For each subdirectory, runs the model pipeline using the
-#'         corresponding `test-model-export.csv` file
-#'   \item Saves the pipeline output as `test-expected.csv` in each subdirectory
+#'         corresponding `model-export.csv` file
+#'   \item Saves the pipeline output as `expected.csv` in each subdirectory
 #' }
 #'
 #' This is a utility function intended to be run manually when test expectations
 #' need to be updated or regenerated, not as part of the regular test suite.
 #'
 #' @return NULL (invisibly). The function is called for its side effects of
-#'   creating/updating `test-expected.csv` files in each test directory.
+#'   creating/updating `expected.csv` files in each step directory.
 #'
 #' @seealso [run_model_pipeline()] for the pipeline function being tested
 #'
@@ -43,14 +43,13 @@
 #' @keywords internal
 #' @noRd
 generate_step_tests_expected <- function(steps = NULL) {
-  root_dir <- testthat::test_path("testdata/step-tests")
-  data <- utils::read.csv(file.path(root_dir, "test-data.csv"))
+  root_dir <- testthat::test_path("testdata/steps")
+  data <- utils::read.csv(file.path(root_dir, "data.csv"))
 
   if (!is.null(steps)) {
     if (is.character(steps)) {
       steps <- c(steps)
     }
-    steps <- paste0("test-", steps)
   }
 
   for (cur_dir in list.dirs(root_dir, recursive = FALSE)) {
@@ -59,7 +58,7 @@ generate_step_tests_expected <- function(steps = NULL) {
     }
 
     # Run the pipeline on the current directory
-    model_export_file <- file.path(cur_dir, "test-model-export.csv")
+    model_export_file <- file.path(cur_dir, "model-export.csv")
     mod <- prepare_model_pipeline(model_export_file)
     output_data <- get_pipeline_output(
       run_model_pipeline(mod, dat = data),
@@ -68,7 +67,7 @@ generate_step_tests_expected <- function(steps = NULL) {
 
     # Save the results as the expected output
     cat("Saving expected output for", basename(cur_dir), "\n")
-    output_file <- file.path(cur_dir, "test-expected.csv")
+    output_file <- file.path(cur_dir, "expected.csv")
     write.csv(output_data, output_file, row.names = FALSE)
   }
 }

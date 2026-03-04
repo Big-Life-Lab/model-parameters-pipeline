@@ -2,20 +2,20 @@
 
 This directory contains unit tests for Model Parameters transformation steps.
 Each subdirectory represents a test case for a specific transformation step.
-The root directory is at tests/testthat/testdata/step-tests.
+The root directory is at tests/testthat/testdata/steps.
 
 ## Directory Structure
 
 ```
-step-tests/
-├── README.md                 # This file
-├── test-data.csv             # Shared test data used by all step tests
-├── test-variables.csv        # Shared variables definition file
-└── test-{stepname}/          # Test directory for a specific step
-    ├── test-model-export.csv # Model export file defining files for transformation
-    ├── test-model-steps.csv  # Model steps file defining transformation steps
-    ├── test-{stepname}.csv   # Step-specific parameters file
-    └── test-expected.csv     # Expected output (auto-generated)
+steps/
+├── README.md              # This file
+├── data.csv               # Shared test data used by all step tests
+├── variables.csv          # Shared variables definition file
+└── {stepname}/            # Test directory for a specific step
+    ├── model-export.csv   # Model export file defining files for transformation
+    ├── model-steps.csv    # Model steps file defining transformation steps
+    ├── {stepname}.csv     # Step-specific parameters file
+    └── expected.csv       # Expected output (auto-generated)
 ```
 
 ## Adding a New Unit Test
@@ -24,43 +24,43 @@ To add a unit test for a Model Parameters transformation step:
 
 ### 1. Create Test Directory
 
-Create a new subdirectory named `test-{stepname}` where `{stepname}` is the
+Create a new subdirectory named `{stepname}` where `{stepname}` is the
 name of the transformation step you want to test.
 
 ### 2. Create Required Files
 
 Each test directory must contain the following files:
 
-#### `test-model-export.csv`
+#### `model-export.csv`
 
 This file defines the files used for the transformation. It generally has the
 same structure for each unit test:
 
 ```csv
 fileType,filePath
-variables,../test-variables.csv
-model-steps,./test-model-steps.csv
+variables,../variables.csv
+model-steps,./model-steps.csv
 ```
 
 The file references:
 
-- `test-variables.csv` - The shared variables definition file (located in the
+- `variables.csv` - The shared variables definition file (located in the
   parent directory)
-- `test-model-steps.csv` - The model steps file (located in the test directory)
+- `model-steps.csv` - The model steps file (located in the test directory)
 
-#### `test-model-steps.csv`
+#### `model-steps.csv`
 
 This file defines the transformation steps to execute. The structure is:
 
 ```csv
 step,fileType,filePath,notes
-{stepname},N/A,./test-{stepname}.csv,
+{stepname},N/A,./{stepname}.csv,
 ```
 
 Replace `{stepname}` with your step name. If the step doesn't require a
 separate file, use `N/A` for `fileType` and `filePath`.
 
-#### `test-{stepname}.csv`
+#### `{stepname}.csv`
 
 This file contains step-specific parameters. The structure depends on the
 transformation step being tested. For example, a logistic regression step would
@@ -85,13 +85,13 @@ generate_step_tests_expected(steps = "stepname")
 
 This function will:
 
-1. Read the shared test data from `test-data.csv`
-2. Iterate through each subdirectory in the step-tests folder (or only
+1. Read the shared test data from `data.csv`
+2. Iterate through each subdirectory in the steps folder (or only
    specified steps)
-3. Run the model pipeline using each `test-model-export.csv` file
-4. Save the pipeline output as `test-expected.csv` in each subdirectory
+3. Run the model pipeline using each `model-export.csv` file
+4. Save the pipeline output as `expected.csv` in each subdirectory
 
-The generated `test-expected.csv` file will be used by the unit tests to verify
+The generated `expected.csv` file will be used by the unit tests to verify
 correct transformation behavior.
 
 ### 4. Run Tests Automatically
@@ -104,9 +104,9 @@ The test automation is implemented in
 [test-model_parameters_pipeline.R](../../test-model_parameters_pipeline.R),
 which:
 
-1. Scans all subdirectories in the `step-tests/` folder
+1. Scans all subdirectories in the `steps/` folder
 2. Automatically runs each test it finds
-3. Compares the pipeline output against the `test-expected.csv` file
+3. Compares the pipeline output against the `expected.csv` file
 
 To run all tests, execute:
 
@@ -125,11 +125,12 @@ tests.
 ## Existing Test Examples
 
 Current test directories include:
-- `test-center/` - Center transformation step
-- `test-dummy/` - Dummy variable transformation step
-- `test-interaction/` - Interaction transformation step
-- `test-logistic/` - Logistic regression transformation step
-- `test-rcs/` - Restricted cubic spline transformation step
+
+- `center/` - Center transformation step
+- `dummy/` - Dummy variable transformation step
+- `interaction/` - Interaction transformation step
+- `logistic-regression/` - Logistic regression transformation step
+- `rcs/` - Restricted cubic spline transformation step
 
 Refer to these examples when creating new tests.
 
@@ -148,4 +149,4 @@ can regenerate output for all tests or specific tests using the `steps`
 parameter.
 
 After regenerating, review the changes to ensure the new output is correct, then
-commit the updated `test-expected.csv` files.
+commit the updated `expected.csv` files.
