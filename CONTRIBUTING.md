@@ -422,7 +422,7 @@ numeric_values <- as.double(.get_string_parts(info[["knots"]]))
 To avoid column name conflicts:
 
 ``` r
-new_col <- .get_unused_column(mod$data, "prefix")
+new_col <- .get_unused_column(colnames(mod$data), "prefix")
 ```
 
 #### Adding Multiple Columns

@@ -1,18 +1,19 @@
-# Find an unused column name in the data
+# Generate a column name that does not already exist in a list of columns
 
 Generates a unique column name by appending an integer to a prefix.
 
 ## Usage
 
 ``` r
-.get_unused_column(data, column_prefix, column_suffix = "_#")
+.get_unused_column(existing_columns, column_prefix, column_suffix = "_#")
 ```
 
 ## Arguments
 
-- data:
+- existing_columns:
 
-  Data to check for existing column names.
+  Existing character vector/list of columns. We want a column name that
+  does not already exist among these column names.
 
 - column_prefix:
 
