@@ -280,8 +280,16 @@ run_model_pipeline <- function(mod, dat) {
     )
   }
 
-  # Rename the output columns to output_#
-  mod <- .rename_output_columns(mod, "output", "_#")
+  # Rename the output columns to "output"/"output_#"
+  res <- .rename_columns(
+    mod$data,
+    mod$steps_info[[length(mod$steps_info)]]$output_columns,
+    prefix = "output",
+    suffix = "_#"
+  )
+  mod$data <- res$dat
+  mod$steps_info[[length(mod$steps_info)]]$output_columns <-
+    res$new_column_names
 
   mod
 }
