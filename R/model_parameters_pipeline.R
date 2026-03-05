@@ -141,10 +141,21 @@ prepare_model_pipeline <- function(
     NULL
   )
 
-  # Get predictors variables
-  mod$predictor_variables <- mod$variables[
-    mod$variables$role == "Predictor", "variable"
-  ]
+  # Create a boolean filter to select rows where "Predictor" is found in the
+  # role column
+  # For each row:
+  #   1) Split the role at commas
+  #   2) Trim whitespace from each split value
+  #   3) Make each value lowercase
+  #   4) Find "predictor" within each row
+  predictor_filt <- unname(mod$variables$role) |>
+    stringr::str_split(",") |>
+    lapply(stringr::str_trim) |>
+    lapply(stringr::str_to_lower) |>
+    lapply(function(row_values) "predictor" %in% row_values) |>
+    unlist()
+  # Select the predictors
+  mod$predictor_variables <- mod$variables[predictor_filt, "variable"]
 
   # Preload all files in the model steps
   for (i in seq_len(nrow(mod$model_steps))) {
