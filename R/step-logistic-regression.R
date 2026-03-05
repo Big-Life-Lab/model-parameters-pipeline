@@ -25,7 +25,7 @@
   )
 
   # Create the initial logistic output (initialize to 0)
-  logistic_col <- .get_unused_column(mod$data, "logistic")
+  logistic_col <- .get_unused_column(colnames(mod$data), "logistic")
   logistic_data <- data.frame(rep(0, nrow(mod$data)))
   colnames(logistic_data) <- c(logistic_col)
   logistic_data[logistic_col] <- 0

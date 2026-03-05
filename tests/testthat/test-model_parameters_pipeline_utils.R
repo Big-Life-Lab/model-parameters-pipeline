@@ -77,20 +77,20 @@ test_that("Utility function .verify_columns works", {
 })
 
 test_that("Utility function .get_unused_column works", {
-  test_data <- data.frame(
-    "other" = c("1", "2", "3"),
-    "col" = c("w", "x", "y"),
-    "col_1" = c("a", "b", "c"),
-    "col_2" = c("d", "e", "f"),
-    "col_4" = c("g", "h", "i")
+  existing_columns <- c(
+    "other",
+    "col",
+    "col_1",
+    "col_2",
+    "col_4"
   )
   expect_equal(
-    .get_unused_column(test_data, "col"),
+    .get_unused_column(existing_columns, "col"),
     "col_3",
     info = paste("Failed with two existing columns")
   )
   expect_equal(
-    .get_unused_column(test_data, "extra"),
+    .get_unused_column(existing_columns, "extra"),
     "extra",
     info = paste("Failed with no existing column")
   )
