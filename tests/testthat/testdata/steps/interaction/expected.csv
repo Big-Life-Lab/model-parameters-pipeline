@@ -1,4 +1,4 @@
-"var_a","var_b","var_c","group_a","group_b","output","output_2","output_3"
+"var_a","var_b","var_c","group_a","group_b","var_a_X_var_b","var_a_X_var_b_X_var_c","group_b_X_var_a_X_var_b_X_var_c"
 100.1,50.5,60,"red",0,5055.05,303303,0
 -15,8.5,3.3,"red",0,-127.5,-420.75,0
 18.8,-6,55.5,"green",0,-112.8,-6260.4,0
