@@ -270,7 +270,9 @@ Use this template as a starting point:
    - Write data: `mod$data[new_column] <- transformed_values`
 
 7. **Track Output Columns**: Append each new column name to `output_columns`
-   so the pipeline knows which columns this step produced.
+   so the pipeline knows which columns this step produced. This might include
+   columns that already existed in the data (eg. an existing column has been
+   overwritten).
 
 8. **Return a List**: Always return a named list with `mod` and
    `output_columns` so the pipeline can chain steps together.
