@@ -281,15 +281,21 @@ run_model_pipeline <- function(mod, dat) {
   }
 
   # Rename the output columns to "output"/"output_#"
-  res <- .rename_columns(
-    mod$data,
-    mod$steps_info[[length(mod$steps_info)]]$output_columns,
-    prefix = "output",
-    suffix = "_#"
-  )
-  mod$data <- res$dat
-  mod$steps_info[[length(mod$steps_info)]]$output_columns <-
-    res$new_column_names
+  # If we decide we want to rename the output columns, then the code below
+  # will do that. If we only want to rename the output columns when
+  # get_pipeline_output is called with mode = "output", then we can
+  # move this code to get_pipeline_output
+  # nolint start
+  # res <- .rename_columns(
+  #   mod$data,
+  #   mod$steps_info[[length(mod$steps_info)]]$output_columns,
+  #   prefix = "output",
+  #   suffix = "_#"
+  # )
+  # mod$data <- res$dat
+  # mod$steps_info[[length(mod$steps_info)]]$output_columns <-
+  #   res$new_column_names
+  # nolint end
 
   mod
 }
