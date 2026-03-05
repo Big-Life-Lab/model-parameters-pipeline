@@ -265,7 +265,7 @@
 <li>Write data: <code>mod$data[new_column] &lt;- transformed_values</code>
 </li>
 </ul></li>
-<li><p><strong>Track Output Columns</strong>: Append each new column name to <code>output_columns</code> so the pipeline knows which columns this step produced.</p></li>
+<li><p><strong>Track Output Columns</strong>: Append each new column name to <code>output_columns</code> so the pipeline knows which columns this step produced. This might include columns that already existed in the data (eg. an existing column has been overwritten).</p></li>
 <li><p><strong>Return a List</strong>: Always return a named list with <code>mod</code> and <code>output_columns</code> so the pipeline can chain steps together.</p></li>
 </ol></div>
 <div class="section level4">

@@ -288,7 +288,8 @@ Use this template as a starting point:
 
 7.  **Track Output Columns**: Append each new column name to
     `output_columns` so the pipeline knows which columns this step
-    produced.
+    produced. This might include columns that already existed in the
+    data (eg. an existing column has been overwritten).
 
 8.  **Return a List**: Always return a named list with `mod` and
     `output_columns` so the pipeline can chain steps together.
