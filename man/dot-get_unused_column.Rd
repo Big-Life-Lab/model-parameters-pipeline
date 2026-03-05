@@ -2,12 +2,14 @@
 % Please edit documentation in R/model_parameters_pipeline_utils.R
 \name{.get_unused_column}
 \alias{.get_unused_column}
-\title{Find an unused column name in the data}
+\title{Generate a column name that does not already exist in a list of columns}
 \usage{
-.get_unused_column(data, column_prefix, column_suffix = "_#")
+.get_unused_column(existing_columns, column_prefix, column_suffix = "_#")
 }
 \arguments{
-\item{data}{Data to check for existing column names.}
+\item{existing_columns}{Existing character vector/list of columns. We
+want a column name that does not already exist among these column
+names.}
 
 \item{column_prefix}{Character prefix for the column name}
 
