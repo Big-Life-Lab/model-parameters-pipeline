@@ -72,7 +72,7 @@ run_step_on_test_data <- function(step) {
   model_export_file <-
     testthat::test_path(root_dir, step, "model-export.csv")
   mod <- prepare_model_pipeline(model_export_file)
-  output_data <- run_model_pipeline(mod, dat = data_file, mode = "full")
+  output_data <- run_model_pipeline(mod, x = data_file, mode = "full")
 
   # Compare the pipeline output to the expected output
   valid_data_file <-

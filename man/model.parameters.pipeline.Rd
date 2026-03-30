@@ -36,18 +36,18 @@ The pipeline requires the following CSV files:
 \dontrun{
 # Basic usage
 mod <- prepare_model_pipeline("path/to/model-export.csv")
-result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+result <- run_model_pipeline(mod, x = "path/to/input-data.csv")
 
 # Processing multiple datasets with the same model
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 for (data_file in data_files) {
-  result <- run_model_pipeline(mod, dat = data_file)
+  result <- run_model_pipeline(mod, x = data_file)
   # Process result (a data frame)
 }
 
 # Pass a data frame to run_model_pipeline
 input_data <- read.csv("path/to/input-data.csv")
-result <- run_model_pipeline(mod, dat = input_data)
+result <- run_model_pipeline(mod, x = input_data)
 }
 
 }

@@ -4,12 +4,12 @@
 \alias{run_model_pipeline}
 \title{Run Model Pipeline}
 \usage{
-run_model_pipeline(mod, dat, mode = "output")
+run_model_pipeline(mod, x, mode = "output")
 }
 \arguments{
 \item{mod}{A model object created by \code{\link{prepare_model_pipeline}}.}
 
-\item{dat}{Either a file path (character) to a CSV file containing the
+\item{x}{Either a file path (character) to a CSV file containing the
 input data, or a data frame. The data must contain all columns specified
 as predictors in the variables file.}
 
@@ -37,12 +37,12 @@ sequence, modifying the data accordingly.
 \dontrun{
 # Prepare and run pipeline
 mod <- prepare_model_pipeline("path/to/model-export.csv")
-output <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+output <- run_model_pipeline(mod, x = "path/to/input-data.csv")
 head(output)
 
 # Run on data frame
 input_data <- read.csv("path/to/data.csv")
-mod <- run_model_pipeline(mod, dat = input_data)
+mod <- run_model_pipeline(mod, x = input_data)
 }
 
 }

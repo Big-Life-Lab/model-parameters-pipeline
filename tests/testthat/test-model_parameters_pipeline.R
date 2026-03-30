@@ -6,7 +6,7 @@ test_that("model pipeline matches predicted risk with HTNPoRT", {
     paths <- get_htnport_paths(sex)
 
     mod <- prepare_model_pipeline(paths$model_export_file)
-    output_data <- run_model_pipeline(mod, dat = paths$data_file)
+    output_data <- run_model_pipeline(mod, x = paths$data_file)
 
     validation_data <- utils::read.csv(paths$data_file)
 
@@ -28,7 +28,7 @@ test_that("model pipeline works with dataframes (instead of files)", {
     mod <- prepare_model_pipeline(paths$model_export_file)
     output_data <- run_model_pipeline(
       mod,
-      dat = utils::read.csv(paths$data_file),
+      x = utils::read.csv(paths$data_file),
       mode = "full"
     )
 
@@ -36,7 +36,7 @@ test_that("model pipeline works with dataframes (instead of files)", {
     mod2 <- prepare_model_pipeline(paths$model_export_file)
     output_data2 <-  run_model_pipeline(
       mod2,
-      dat = paths$data_file,
+      x = paths$data_file,
       mode = "full"
     )
 

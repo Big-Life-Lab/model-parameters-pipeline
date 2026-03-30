@@ -28,18 +28,18 @@
 #' \dontrun{
 #' # Basic usage
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
-#' result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+#' result <- run_model_pipeline(mod, x = "path/to/input-data.csv")
 #'
 #' # Processing multiple datasets with the same model
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
 #' for (data_file in data_files) {
-#'   result <- run_model_pipeline(mod, dat = data_file)
+#'   result <- run_model_pipeline(mod, x = data_file)
 #'   # Process result (a data frame)
 #' }
 #'
 #' # Pass a data frame to run_model_pipeline
 #' input_data <- read.csv("path/to/input-data.csv")
-#' result <- run_model_pipeline(mod, dat = input_data)
+#' result <- run_model_pipeline(mod, x = input_data)
 #' }
 #'
 #' @seealso
@@ -181,7 +181,7 @@ prepare_model_pipeline <- function(
 #' sequence, modifying the data accordingly.
 #'
 #' @param mod A model object created by \code{\link{prepare_model_pipeline}}.
-#' @param dat Either a file path (character) to a CSV file containing the
+#' @param x Either a file path (character) to a CSV file containing the
 #'   input data, or a data frame. The data must contain all columns specified
 #'   as predictors in the variables file.
 #' @param mode A character string specifying what data to return. Can be one
@@ -202,26 +202,26 @@ prepare_model_pipeline <- function(
 #' \dontrun{
 #' # Prepare and run pipeline
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
-#' output <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+#' output <- run_model_pipeline(mod, x = "path/to/input-data.csv")
 #' head(output)
 #'
 #' # Run on data frame
 #' input_data <- read.csv("path/to/data.csv")
-#' mod <- run_model_pipeline(mod, dat = input_data)
+#' mod <- run_model_pipeline(mod, x = input_data)
 #' }
 #'
 #' @seealso \code{\link{prepare_model_pipeline}} to prepare the model object
 #' @export
-run_model_pipeline <- function(mod, dat, mode = "output") {
+run_model_pipeline <- function(mod, x, mode = "output") {
   # Load data if it is a file
-  if (is.character(dat)) {
-    dat <- normalizePath(dat, mustWork = TRUE)
-    dat <- utils::read.csv(dat)
+  if (is.character(x)) {
+    x <- normalizePath(x, mustWork = TRUE)
+    x <- utils::read.csv(x)
   }
 
   # Stop if there are predictors that do not exist in the data
   missing_variable_columns <-
-    mod$predictor_variables[!(mod$predictor_variables %in% colnames(dat))]
+    mod$predictor_variables[!(mod$predictor_variables %in% colnames(x))]
   if (length(missing_variable_columns)) {
     missing_variable_columns <- paste0("'", missing_variable_columns, "'",
       collapse = ", "
@@ -232,7 +232,7 @@ run_model_pipeline <- function(mod, dat, mode = "output") {
       missing_variable_columns
     ))
   }
-  mod$data <- dat[mod$predictor_variables]
+  mod$data <- x[mod$predictor_variables]
 
   # We will store information from each step as a named list in mod$steps_info,
   # for example:
