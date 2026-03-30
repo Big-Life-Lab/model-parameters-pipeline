@@ -159,7 +159,12 @@ prepare_model_pipeline <- function(
 
     file_path <- step$filePath
     if (is.null(file_path) || stringr::str_length(file_path) == 0) {
-      next
+      stop(paste0(
+        "File path is empty for step #",
+        i,
+        ": ",
+        step$step
+      ))
     }
     file_path <- file.path(mod$root_dir, file_path)
 
