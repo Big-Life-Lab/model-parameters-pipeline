@@ -98,14 +98,6 @@ tracker](https://github.com/Big-Life-Lab/model-parameters-pipeline/issues).
 This package is developed by Big Life Lab for use with their predictive
 health models.
 
-## Authors
-
-Martin Wellman (<mwellman@ohri.ca>)
-
-## Version
-
-0.1.0 (2026-01-08)
-
 # Package index
 
 ## All functions
