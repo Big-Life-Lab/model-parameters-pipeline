@@ -19,9 +19,20 @@ If you find a bug, please open an issue on
 with:
 
 - A clear description of the problem
+
 - A minimal reproducible example
-- Your R version and package version
-  (`packageVersion("model.parameters.pipeline")`)
+
+- Your package version (`packageVersion("model.parameters.pipeline")`)
+
+- Your session information from the
+  [`sessioninfo::session_info()`](https://sessioninfo.r-lib.org/reference/session_info.html)
+  function (this includes your R version, OS, system architecture, and
+  additional information):
+
+  ``` r
+  install.packages("sessioninfo")
+  sessioninfo::session_info()
+  ```
 
 ### Suggesting Features
 
@@ -58,6 +69,11 @@ lintr::lint_package()
 Key style conventions:
 
 - Use `snake_case` for variable and function names
+- Use `snake_case` for file names, with unit test source files starting
+  with `test-` (eg. `test-model_parameters_pipeline.R`) and Model
+  Parameters step files starting with `step-` and named after the step
+  name as found in the Model Parameters specification (eg.
+  `step-logistic-regression.R`)
 - Internal (non-exported) functions are prefixed with `.` (e.g.,
   `.run_step_center`)
 - Keep lines to a maximum of 80 characters where practical
@@ -113,34 +129,18 @@ to add a new conditional block for your step.
 
 #### Location
 
-Find the `if-else` chain in `run_model_pipeline`:
+Find the `if-else` chain in `run_model_pipeline` where each step
+function gets called. The `if-else` chain can be found by searching for
+the string `[add-step-here]` in `R/model_parameters_pipeline.R`. Its
+general format is shown below:
 
 ``` r
+# [add-step-here]
 if (step_name == "center") {
-  res <- .run_step_center(mod, file_path)
+  # Execute "center" step
 } else if (step_name == "dummy") {
-  res <- .run_step_dummy(mod, file_path)
-} else if (step_name == "interaction") {
-  res <- .run_step_interaction(mod, file_path)
-} else if (step_name == "logistic-regression") {
-  res <- .run_step_logistic_regression(mod, file_path)
-} else if (step_name == "rcs") {
-  res <- .run_step_rcs(mod, file_path)
-} else {
-  stop(paste0(
-    "Unrecognized or unimplemented step type for step #",
-    i,
-    ": ",
-    step_name
-  ))
-}
-```
-
-After each step call, the pipeline extracts the results:
-
-``` r
-mod <- res$mod
-output_columns <- res$output_columns
+  # Execute "dummy" step
+} # ...
 ```
 
 #### Add Your Step
@@ -152,12 +152,7 @@ clause:
 } else if (step_name == "your-step-name") {
   res <- .run_step_your_step_name(mod, file_path)
 } else {
-  stop(paste0(
-    "Unrecognized or unimplemented step type for step #",
-    i,
-    ": ",
-    step_name
-  ))
+  # Handle unknown step name
 }
 ```
 

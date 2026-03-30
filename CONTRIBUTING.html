@@ -33,7 +33,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Contributing to Model Parameters Pipeline</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/v0.2.3-alpha/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/first/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
     </div>
 
 <div id="contributing-to-model-parameters-pipeline" class="section level1">
@@ -48,9 +48,15 @@
 <div class="section level3">
 <h3 id="reporting-bugs">Reporting Bugs<a class="anchor" aria-label="anchor" href="#reporting-bugs"></a></h3>
 <p>If you find a bug, please open an issue on <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/issues" class="external-link">GitHub</a> with:</p>
-<ul><li>A clear description of the problem</li>
-<li>A minimal reproducible example</li>
-<li>Your R version and package version (<code>packageVersion("model.parameters.pipeline")</code>)</li>
+<ul><li><p>A clear description of the problem</p></li>
+<li><p>A minimal reproducible example</p></li>
+<li><p>Your package version (<code>packageVersion("model.parameters.pipeline")</code>)</p></li>
+<li>
+<p>Your session information from the <code><a href="https://sessioninfo.r-lib.org/reference/session_info.html" class="external-link">sessioninfo::session_info()</a></code> function (this includes your R version, OS, system architecture, and additional information):</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"sessioninfo"</span><span class="op">)</span></span>
+<span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://sessioninfo.r-lib.org/reference/session_info.html" class="external-link">session_info</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</li>
 </ul></div>
 <div class="section level3">
 <h3 id="suggesting-features">Suggesting Features<a class="anchor" aria-label="anchor" href="#suggesting-features"></a></h3>
@@ -74,20 +80,21 @@
 <div class="section level2">
 <h2 id="code-style">Code Style<a class="anchor" aria-label="anchor" href="#code-style"></a></h2>
 <p>This project uses <a href="https://lintr.r-lib.org/" class="external-link"><code>lintr</code></a> to enforce consistent code style. Before submitting a pull request, check your code with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">lintr</span><span class="fu">::</span><span class="fu">lint_package</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">lintr</span><span class="fu">::</span><span class="fu"><a href="https://lintr.r-lib.org/reference/lint.html" class="external-link">lint_package</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Key style conventions:</p>
 <ul><li>Use <code>snake_case</code> for variable and function names</li>
+<li>Use <code>snake_case</code> for file names, with unit test source files starting with <code>test-</code> (eg. <code>test-model_parameters_pipeline.R</code>) and Model Parameters step files starting with <code>step-</code> and named after the step name as found in the Model Parameters specification (eg. <code>step-logistic-regression.R</code>)</li>
 <li>Internal (non-exported) functions are prefixed with <code>.</code> (e.g., <code>.run_step_center</code>)</li>
 <li>Keep lines to a maximum of 80 characters where practical</li>
 <li>Document all exported functions using <a href="https://roxygen2.r-lib.org/" class="external-link">roxygen2</a> comments</li>
 </ul></div>
 <div class="section level2">
 <h2 id="running-tests">Running Tests<a class="anchor" aria-label="anchor" href="#running-tests"></a></h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>To regenerate expected test outputs after changing a step’s behaviour:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"tests/testthat/generate_step_tests_expected.R"</span><span class="op">)</span></span>
 <span><span class="fu">generate_step_tests_expected</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -121,30 +128,14 @@
 <p>The <code>run_model_pipeline</code> function in <code>R/model_parameters_pipeline.R</code> processes each step defined in the model steps specification. You need to add a new conditional block for your step.</p>
 <div class="section level4">
 <h4 id="location">Location<a class="anchor" aria-label="anchor" href="#location"></a></h4>
-<p>Find the <code>if-else</code> chain in <code>run_model_pipeline</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_center.html">.run_step_center</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"dummy"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_dummy.html">.run_step_dummy</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"interaction"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_interaction.html">.run_step_interaction</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"logistic-regression"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_logistic_regression.html">.run_step_logistic_regression</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"rcs"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dot-run_step_rcs.html">.run_step_rcs</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">file_path</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Unrecognized or unimplemented step type for step #"</span>,</span>
-<span>    <span class="va">i</span>,</span>
-<span>    <span class="st">": "</span>,</span>
-<span>    <span class="va">step_name</span></span>
-<span>  <span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>After each step call, the pipeline extracts the results:</p>
+<p>Find the <code>if-else</code> chain in <code>run_model_pipeline</code> where each step function gets called. The <code>if-else</code> chain can be found by searching for the string <code>[add-step-here]</code> in <code>R/model_parameters_pipeline.R</code>. Its general format is shown below:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">mod</span></span>
-<span><span class="va">output_columns</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">output_columns</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># [add-step-here]</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Execute "center" step</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">step_name</span> <span class="op">==</span> <span class="st">"dummy"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Execute "dummy" step</span></span>
+<span><span class="op">}</span> <span class="co"># ...</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="add-your-step">Add Your Step<a class="anchor" aria-label="anchor" href="#add-your-step"></a></h4>
@@ -152,13 +143,8 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="er">}</span> <span class="cf">else</span> <span class="cf">if</span> (step_name <span class="sc">==</span> <span class="st">"your-step-name"</span>) {</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">.run_step_your_step_name</span>(mod, file_path)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="fu">paste0</span>(</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="st">"Unrecognized or unimplemented step type for step #"</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    i,</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>    <span class="st">": "</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    step_name</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  ))</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="co"># Handle unknown step name</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>}</span></code></pre></div>
 <p><strong>Important:</strong></p>
 <ul><li>Replace <code>"your-step-name"</code> with the exact step name as it appears in the Model Parameters specification</li>
 <li>Replace <code>your_step_name</code> with an underscored version for the function name</li>
