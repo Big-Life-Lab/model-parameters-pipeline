@@ -54,12 +54,6 @@ devtools::install_local("/path/to/model-parameters-pipeline")
 # devtools::install_github("Big-Life-Lab/model-parameters-pipeline")
 ```
 
-### Install Required Dependencies
-
-``` r
-install.packages(c("stringr"))
-```
-
 ## Usage
 
 For usage details and examples, view the documentation at [Introduction
@@ -96,4 +90,4 @@ tracker](https://github.com/Big-Life-Lab/model-parameters-pipeline/issues).
 ## License
 
 This package is developed by Big Life Lab for use with their predictive
-health models.
+health models. It is licensed under the terms of the MIT license.
