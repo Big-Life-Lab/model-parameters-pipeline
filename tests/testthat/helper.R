@@ -53,8 +53,6 @@ get_htnport_paths <- function(sex) {
 #'
 #' @param dir_name Character string specifying the test directory name
 #'   within "data/tests/steps"
-#' @param input_data_file Character string specifying the input data file name
-#'   to be used for the test
 #'
 #' @return NULL (invisibly). Function is called for side effect of
 #'   running testthat expectations.
@@ -67,10 +65,10 @@ get_htnport_paths <- function(sex) {
 #'   }
 #'
 #' @keywords internal
-run_test_data <- function(dir_name, input_data_file) {
+run_test_data <- function(dir_name) {
   # Run the pipeline to get the output
   root_dir <- "testdata/steps"
-  data_file <- testthat::test_path(root_dir, input_data_file)
+  data_file <- testthat::test_path(root_dir, "data.csv")
   model_export_file <-
     testthat::test_path(root_dir, dir_name, "model-export.csv")
   mod <- prepare_model_pipeline(model_export_file)

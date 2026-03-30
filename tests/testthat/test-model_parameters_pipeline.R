@@ -50,7 +50,7 @@ test_that("model pipeline works with dataframes (instead of files)", {
 test_that("transformation steps work", {
   root_dir <- testthat::test_path("testdata/steps")
   for (cur_dir in list.dirs(root_dir, recursive = FALSE)) {
-    run_test_data(basename(cur_dir), "data.csv")
+    run_test_data(basename(cur_dir))
   }
 })
 
