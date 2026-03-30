@@ -74,6 +74,7 @@ for details on each step's required parameters.
 After creating your test files, generate the expected output by running:
 
 ```r
+devtools::load_all()
 source("tests/testthat/generate_step_tests_expected.R")
 
 # Generate expected output for all tests
