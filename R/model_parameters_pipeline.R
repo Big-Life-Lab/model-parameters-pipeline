@@ -215,7 +215,7 @@ prepare_model_pipeline <- function(
 run_model_pipeline <- function(mod, x, mode = "output") {
   # Load data if it is a file
   if (is.character(x)) {
-    x <- normalizePath(x, mustWork = TRUE)
+    x <- .expand_and_normalize_path(x)
     x <- utils::read.csv(x)
   }
 
