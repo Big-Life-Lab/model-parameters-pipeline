@@ -263,6 +263,11 @@ run_model_pipeline <- function(mod, dat) {
     }
     file_path <- file.path(mod$root_dir, file_path)
 
+    # Call the appropriate step function
+    # Keep the [add-step-here] tag in the comments, as it is referenced
+    # in the documentation and allows contributors to easily find where
+    # to add a call to their new step function.
+    # [add-step-here]
     if (step_name == "center") {
       res <- .run_step_center(mod, file_path)
     } else if (step_name == "dummy") {
@@ -274,6 +279,7 @@ run_model_pipeline <- function(mod, dat) {
     } else if (step_name == "rcs") {
       res <- .run_step_rcs(mod, file_path)
     } else {
+      # Handle unknown step name
       stop(paste0(
         "Unrecognized or unimplemented step type for step #",
         i,
