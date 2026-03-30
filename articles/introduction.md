@@ -84,11 +84,8 @@ workflow:
 # Step 1: Prepare the model pipeline
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 
-# Step 2: Run the pipeline on your data (returns the mod object)
-mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
-
-# Step 3: Extract the output as a data frame
-result <- get_pipeline_output(mod)
+# Step 2: Run the pipeline on your data (returns the output)
+result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 
 # View the first few rows
 head(result)
@@ -105,11 +102,8 @@ mod <- prepare_model_pipeline("path/to/model-export.csv")
 # Load and preprocess your data
 input_data <- read.csv("path/to/input-data.csv")
 
-# Run pipeline with data frame (returns the mod object)
-mod <- run_model_pipeline(mod, dat = input_data)
-
-# Extract the output as a data frame
-result <- get_pipeline_output(mod)
+# Run pipeline with data frame (returns the output)
+result <- run_model_pipeline(mod, dat = input_data)
 ```
 
 This is useful when your data is already loaded or needs preprocessing.
@@ -125,9 +119,9 @@ performance:
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 
 # Run on multiple datasets and extract output from each
-result1 <- get_pipeline_output(run_model_pipeline(mod, dat = "batch1_data.csv"))
-result2 <- get_pipeline_output(run_model_pipeline(mod, dat = "batch2_data.csv"))
-result3 <- get_pipeline_output(run_model_pipeline(mod, dat = "batch3_data.csv"))
+result1 <- run_model_pipeline(mod, dat = "batch1_data.csv")
+result2 <- run_model_pipeline(mod, dat = "batch2_data.csv")
+result3 <- run_model_pipeline(mod, dat = "batch3_data.csv")
 ```
 
 This avoids re-reading and parsing the configuration files for each
@@ -177,10 +171,9 @@ It does, however, affect the model export file passed to
 ## Working with Results
 
 [`run_model_pipeline()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md)
-returns a model object. Use
-[`get_pipeline_output()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
-to extract a data frame from it. The `mode` argument of
-[`get_pipeline_output()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
+applies the pipeline’s transformations and returns the results. The
+`mode` argument of
+[`run_model_pipeline()`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md)
 (default `"output"`) controls what columns are returned:
 
 - `"output"`: only the columns produced by the final transformation step
@@ -188,18 +181,17 @@ to extract a data frame from it. The `mode` argument of
   and output column
 
 ``` r
-mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
-
 # Default mode: only the final step's output columns
-output <- get_pipeline_output(mod)
+output <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 
 # Full mode: all columns including intermediate transformation variables
-output_full <- get_pipeline_output(mod, mode = "full")
+output_full <- run_model_pipeline(
+  mod,
+  dat = "path/to/input-data.csv",
+  mode = "full"
+)
 
 # View column names to see what transformations were created
-# The last transformation step will have column names "output", "output_2",
-# "output_3" etc. for each of its output columns. There will typically just
-# be one output column
 colnames(output_full)
 ```
 
@@ -238,15 +230,10 @@ model_export_file <- file.path(
 # Prepare the model pipeline
 mod <- prepare_model_pipeline(model_export_file)
 
-# Run the pipeline and extract full output to keep all intermediate columns
-mod <- run_model_pipeline(mod, dat = data)
-result_full <- get_pipeline_output(mod, mode = "full")
+# Run the pipeline
+result <- run_model_pipeline(mod, dat = data)
 
-# View the transformed data with all intermediate steps
-head(result_full)
-
-# Extract logistic predictions (hypertension risk probabilities)
-predictions <- result_full[, grep("^output", names(result_full))]
+# View the logistic predictions (hypertension risk probabilities)
 head(predictions)
 
 # Summary statistics of predictions

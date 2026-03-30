@@ -172,11 +172,8 @@ data</li>
 <code class="sourceCode R"><span><span class="co"># Step 1: Prepare the model pipeline</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Step 2: Run the pipeline on your data (returns the mod object)</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Step 3: Extract the output as a data frame</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
+<span><span class="co"># Step 2: Run the pipeline on your data (returns the output)</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># View the first few rows</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
@@ -194,11 +191,8 @@ data:</p>
 <span><span class="co"># Load and preprocess your data</span></span>
 <span><span class="va">input_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Run pipeline with data frame (returns the mod object)</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">input_data</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Extract the output as a data frame</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Run pipeline with data frame (returns the output)</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">input_data</span><span class="op">)</span></span></code></pre></div>
 <p>This is useful when your data is already loaded or needs
 preprocessing.</p>
 </div>
@@ -213,9 +207,9 @@ performance:</p>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run on multiple datasets and extract output from each</span></span>
-<span><span class="va">result1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"batch1_data.csv"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">result2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"batch2_data.csv"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">result3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"batch3_data.csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">result1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"batch1_data.csv"</span><span class="op">)</span></span>
+<span><span class="va">result2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"batch2_data.csv"</span><span class="op">)</span></span>
+<span><span class="va">result3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"batch3_data.csv"</span><span class="op">)</span></span></code></pre></div>
 <p>This avoids re-reading and parsing the configuration files for each
 batch.</p>
 </div>
@@ -259,10 +253,10 @@ restriction.</li>
 <div class="section level2">
 <h2 id="working-with-results">Working with Results<a class="anchor" aria-label="anchor" href="#working-with-results"></a>
 </h2>
-<p><code><a href="../reference/run_model_pipeline.html">run_model_pipeline()</a></code> returns a model object. Use
-<code><a href="../reference/get_pipeline_output.html">get_pipeline_output()</a></code> to extract a data frame from it. The
-<code>mode</code> argument of <code><a href="../reference/get_pipeline_output.html">get_pipeline_output()</a></code>
-(default <code>"output"</code>) controls what columns are returned:</p>
+<p><code><a href="../reference/run_model_pipeline.html">run_model_pipeline()</a></code> applies the pipeline’s
+transformations and returns the results. The <code>mode</code> argument
+of <code><a href="../reference/run_model_pipeline.html">run_model_pipeline()</a></code> (default <code>"output"</code>)
+controls what columns are returned:</p>
 <ul>
 <li>
 <code>"output"</code>: only the columns produced by the final
@@ -272,18 +266,17 @@ transformation step</li>
 intermediate and output column</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Default mode: only the final step's output columns</span></span>
-<span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Default mode: only the final step's output columns</span></span>
+<span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Full mode: all columns including intermediate transformation variables</span></span>
-<span><span class="va">output_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span>, mode <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span>
+<span><span class="va">output_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span></span>
+<span>  <span class="va">mod</span>,</span>
+<span>  dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"full"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># View column names to see what transformations were created</span></span>
-<span><span class="co"># The last transformation step will have column names "output", "output_2",</span></span>
-<span><span class="co"># "output_3" etc. for each of its output columns. There will typically just</span></span>
-<span><span class="co"># be one output column</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">output_full</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -321,15 +314,10 @@ with HTNPoRT:</p>
 <span><span class="co"># Prepare the model pipeline</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="va">model_export_file</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Run the pipeline and extract full output to keep all intermediate columns</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
-<span><span class="va">result_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span>, mode <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span>
+<span><span class="co"># Run the pipeline</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># View the transformed data with all intermediate steps</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">result_full</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Extract logistic predictions (hypertension risk probabilities)</span></span>
-<span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="va">result_full</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"^output"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">result_full</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co"># View the logistic predictions (hypertension risk probabilities)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Summary statistics of predictions</span></span>

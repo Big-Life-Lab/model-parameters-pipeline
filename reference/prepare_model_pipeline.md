@@ -37,16 +37,12 @@ prepare_model_pipeline(model_export, sandbox_path = NULL)
 ## Value
 
 A model object (list) that can be used to pass to
-[`run_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md)
-and
-[`get_pipeline_output`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md).
+[`run_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md).
 
 ## See also
 
 [`run_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md)
-to execute the pipeline and
-[`get_pipeline_output`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
-to retrieve the output of the pipeline.
+to execute the pipeline.
 
 ## Examples
 

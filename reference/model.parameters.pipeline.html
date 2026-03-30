@@ -52,13 +52,12 @@ Model Parameters specification developed by Big Life Lab.</p>
     <h2 id="workflow">Workflow<a class="anchor" aria-label="anchor" href="#workflow"></a></h2>
 
 
-<p>The typical workflow involves three steps:</p><ol><li><p><code><a href="prepare_model_pipeline.html">prepare_model_pipeline()</a></code>: Load and validate model
+<p>The typical workflow involves two steps:</p><ol><li><p><code><a href="prepare_model_pipeline.html">prepare_model_pipeline()</a></code>: Load and validate model
     configuration</p></li>
-<li><p><code><a href="run_model_pipeline.html">run_model_pipeline()</a></code>: Apply transformations to data</p></li>
-<li><p><code><a href="get_pipeline_output.html">get_pipeline_output()</a></code>: Retrieve the output of the
-    model pipeline. The output is the results of the last
-    transformation step. Depending on the step, this may include
-    multiple columns.</p></li>
+<li><p><code><a href="run_model_pipeline.html">run_model_pipeline()</a></code>: Apply transformations to data
+    and retrieve the output of the model pipeline. The output is the
+    results of the last transformation step. Depending on the step,
+    this may include multiple columns.</p></li>
 </ol></div>
     <div class="section level2">
     <h2 id="required-files">Required Files<a class="anchor" aria-label="anchor" href="#required-files"></a></h2>
@@ -93,20 +92,18 @@ Model Parameters specification developed by Big Life Lab.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># Basic usage</span></span></span>
 <span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span>, mode <span class="op">=</span> <span class="st">"output"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Processing multiple datasets with the same model</span></span></span>
 <span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">data_file</span> <span class="kw">in</span> <span class="va">data_files</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">data_file</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_pipeline_output.html">get_pipeline_output</a></span><span class="op">(</span><span class="va">mod</span>, mode <span class="op">=</span> <span class="st">"output"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">data_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="co"># Process result (a data frame)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Pass a data frame to run_model_pipeline</span></span></span>
 <span class="r-in"><span><span class="va">input_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">input_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">input_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

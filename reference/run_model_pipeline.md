@@ -1,13 +1,13 @@
 # Run Model Pipeline
 
-Executes the transformation pipeline on input data. Applies each
-transformation step defined in the model steps file in sequence,
-modifying the data accordingly.
+Executes the transformation pipeline on input data and retrieve the
+output. Applies each transformation step defined in the model steps file
+in sequence, modifying the data accordingly.
 
 ## Usage
 
 ``` r
-run_model_pipeline(mod, dat)
+run_model_pipeline(mod, dat, mode = "output")
 ```
 
 ## Arguments
@@ -23,19 +23,28 @@ run_model_pipeline(mod, dat)
   data, or a data frame. The data must contain all columns specified as
   predictors in the variables file.
 
+- mode:
+
+  A character string specifying what data to return. Can be one of:
+
+  - "output": Only return the final output of the model. These are the
+    values of all variables calculated in the final step found in the
+    model export file.
+
+  - "full": Return all data, which includes the input data, all
+    intermediate variables, and the final output of the model.
+
+  Default is "output".
+
 ## Value
 
-A model object (list) with all transformation results stored in
-`mod$data`. Pass the returned object to
-[`get_pipeline_output`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
-to extract a data frame.
+A model object created from a call to
+[`prepare_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.md).
 
 ## See also
 
 [`prepare_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.md)
-to prepare the model object,
-[`get_pipeline_output`](https://big-life-lab.github.io/model-parameters-pipeline/reference/get_pipeline_output.md)
-to extract the output of the pipeline
+to prepare the model object
 
 ## Examples
 
@@ -43,14 +52,8 @@ to extract the output of the pipeline
 if (FALSE) { # \dontrun{
 # Prepare and run pipeline
 mod <- prepare_model_pipeline("path/to/model-export.csv")
-mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
-
-# Extract final output columns as a data frame
-output <- get_pipeline_output(mod, mode = "output")
+output <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 head(output)
-
-# Get all columns including intermediate transformation variables
-output_full <- get_pipeline_output(mod, mode = "full")
 
 # Run on data frame
 input_data <- read.csv("path/to/data.csv")
