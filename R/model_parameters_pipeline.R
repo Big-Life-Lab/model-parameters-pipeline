@@ -144,7 +144,7 @@ prepare_model_pipeline <- function(
   #   2) Trim whitespace from each split value
   #   3) Make each value lowercase
   #   4) Find "predictor" within each row
-  predictor_filt <- unname(mod$variables$role) |>
+  predictor_filt <- mod$variables$role |>
     stringr::str_split(",") |>
     lapply(stringr::str_trim) |>
     lapply(stringr::str_to_lower) |>
@@ -221,13 +221,11 @@ run_model_pipeline <- function(mod, dat, mode = "output") {
     missing_variable_columns <- paste0("'", missing_variable_columns, "'",
       collapse = ", "
     )
-    stop(
-      paste(
-        "The following columns specified in the",
-        "variables file are missing in the data:",
-        missing_variable_columns
-      )
-    )
+    stop(paste(
+      "The following columns specified in the",
+      "variables file are missing in the data:",
+      missing_variable_columns
+    ))
   }
   mod$data <- dat[mod$predictor_variables]
 
