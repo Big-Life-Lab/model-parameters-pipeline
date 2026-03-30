@@ -2,63 +2,11 @@
 
 ## Overview
 
-The Model Parameters Pipeline is an R package for applying
-transformations to data according to the [Model
-Parameters](https://github.com/Big-Life-Lab/model-parameters)
-specification developed by Big Life Lab. This package implements a
-pipeline for sequential data transformations that are commonly used in
-predictive health models.
-
 This vignette will walk you through:
 
-1.  Understanding the Model Parameters specification
-2.  Setting up your model configuration files
-3.  Running the transformation pipeline
-4.  Working with the results
-
-## What is the Model Parameters Specification?
-
-The Model Parameters specification is a standardized way to define and
-apply data transformations used in predictive algorithms. It was
-developed by Big Life Lab for their predictive health models such as:
-
-- **HTNPoRT**: Hypertension Population Risk Tool
-- **DemPoRT**: Dementia Population Risk Tool
-- **CVDPoRT**: Cardiovascular Disease Population Risk Tool
-- **MPoRT**: Mortality Population Risk Tool
-
-The specification uses CSV files to define transformations, making
-algorithms:
-
-- **Transparent**: All parameters and transformations are documented in
-  human-readable files
-- **Portable**: The same model can be deployed across different
-  platforms and programming languages
-- **Reproducible**: Transformations are applied consistently
-
-## Supported Transformations
-
-The pipeline supports five types of transformations:
-
-1.  **Center**: Subtracts a constant value from variables (e.g., age -
-    50)
-2.  **Dummy**: Creates binary indicator variables for categorical values
-3.  **Interaction**: Multiplies variables together to create interaction
-    terms
-4.  **RCS**: Applies restricted cubic spline transformations for
-    non-linear relationships
-5.  **Logistic Regression**: Applies logistic regression to generate
-    predictions
-
-## Installation
-
-``` r
-# Install from GitHub (if published)
-devtools::install_github("Big-Life-Lab/model-parameters-pipeline")
-
-# Or install from local source
-devtools::install_local("/path/to/model-parameters-pipeline")
-```
+1.  Running the transformation pipeline on your own data
+2.  Running the transformation pipeline on the [Hypertension Population
+    Risk Tool (HTNPoRT)](https://github.com/Big-Life-Lab/htnport)
 
 ## Basic Usage
 
@@ -231,7 +179,7 @@ model_export_file <- file.path(
 mod <- prepare_model_pipeline(model_export_file)
 
 # Run the pipeline
-result <- run_model_pipeline(mod, dat = data)
+predictions <- run_model_pipeline(mod, dat = data)
 
 # View the logistic predictions (hypertension risk probabilities)
 head(predictions)

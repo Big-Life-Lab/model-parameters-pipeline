@@ -68,82 +68,13 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The Model Parameters Pipeline is an R package for applying
-transformations to data according to the <a href="https://github.com/Big-Life-Lab/model-parameters" class="external-link">Model
-Parameters</a> specification developed by Big Life Lab. This package
-implements a pipeline for sequential data transformations that are
-commonly used in predictive health models.</p>
 <p>This vignette will walk you through:</p>
 <ol style="list-style-type: decimal">
-<li>Understanding the Model Parameters specification</li>
-<li>Setting up your model configuration files</li>
-<li>Running the transformation pipeline</li>
-<li>Working with the results</li>
+<li>Running the transformation pipeline on your own data</li>
+<li>Running the transformation pipeline on the <a href="https://github.com/Big-Life-Lab/htnport" class="external-link">Hypertension Population
+Risk Tool (HTNPoRT)</a>
+</li>
 </ol>
-</div>
-<div class="section level2">
-<h2 id="what-is-the-model-parameters-specification">What is the Model Parameters Specification?<a class="anchor" aria-label="anchor" href="#what-is-the-model-parameters-specification"></a>
-</h2>
-<p>The Model Parameters specification is a standardized way to define
-and apply data transformations used in predictive algorithms. It was
-developed by Big Life Lab for their predictive health models such
-as:</p>
-<ul>
-<li>
-<strong>HTNPoRT</strong>: Hypertension Population Risk Tool</li>
-<li>
-<strong>DemPoRT</strong>: Dementia Population Risk Tool</li>
-<li>
-<strong>CVDPoRT</strong>: Cardiovascular Disease Population Risk
-Tool</li>
-<li>
-<strong>MPoRT</strong>: Mortality Population Risk Tool</li>
-</ul>
-<p>The specification uses CSV files to define transformations, making
-algorithms:</p>
-<ul>
-<li>
-<strong>Transparent</strong>: All parameters and transformations are
-documented in human-readable files</li>
-<li>
-<strong>Portable</strong>: The same model can be deployed across
-different platforms and programming languages</li>
-<li>
-<strong>Reproducible</strong>: Transformations are applied
-consistently</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="supported-transformations">Supported Transformations<a class="anchor" aria-label="anchor" href="#supported-transformations"></a>
-</h2>
-<p>The pipeline supports five types of transformations:</p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>Center</strong>: Subtracts a constant value from variables
-(e.g., age - 50)</li>
-<li>
-<strong>Dummy</strong>: Creates binary indicator variables for
-categorical values</li>
-<li>
-<strong>Interaction</strong>: Multiplies variables together to
-create interaction terms</li>
-<li>
-<strong>RCS</strong>: Applies restricted cubic spline
-transformations for non-linear relationships</li>
-<li>
-<strong>Logistic Regression</strong>: Applies logistic regression to
-generate predictions</li>
-</ol>
-</div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install from GitHub (if published)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Big-Life-Lab/model-parameters-pipeline"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Or install from local source</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_local</a></span><span class="op">(</span><span class="st">"/path/to/model-parameters-pipeline"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
@@ -152,7 +83,7 @@ generate predictions</li>
 <h3 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h3>
 <p>First, load the package:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Big-Life-Lab/model-parameters-pipeline" class="external-link">model.parameters.pipeline</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -168,7 +99,7 @@ configuration files</li>
 <code><a href="../reference/run_model_pipeline.html">run_model_pipeline()</a></code> - Apply transformations to
 data</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 1: Prepare the model pipeline</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span>
 <span></span>
@@ -184,7 +115,7 @@ data</li>
 </h2>
 <p>You can pass a data frame instead of a file path for the input
 data:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prepare the model</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span>
 <span></span>
@@ -202,7 +133,7 @@ preprocessing.</p>
 <p>If you need to apply the same model to multiple datasets (e.g.,
 processing batches), reuse the prepared model object for better
 performance:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prepare the model once - configuration files are loaded and cached</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="st">"path/to/model-export.csv"</span><span class="op">)</span></span>
 <span></span>
@@ -220,7 +151,7 @@ batch.</p>
 configuration files can reference arbitrary paths on the filesystem. Use
 the <code>sandbox_path</code> parameter to restrict which files the
 pipeline is allowed to read.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span></span>
 <span>  <span class="st">"path/to/model-files/model-export.csv"</span>,</span>
 <span>  sandbox_path <span class="op">=</span> <span class="st">"path/to/model-files/"</span></span>
@@ -265,7 +196,7 @@ transformation step</li>
 <code>"full"</code>: all columns — original predictors plus every
 intermediate and output column</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Default mode: only the final step's output columns</span></span>
 <span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="st">"path/to/input-data.csv"</span><span class="op">)</span></span>
 <span></span>
@@ -285,7 +216,7 @@ intermediate and output column</li>
 <p>The HTNPoRT (Hypertension Population Risk Tool) is a validated
 predictive model for hypertension risk. Here’s how to use this package
 with HTNPoRT:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Clone the HTNPoRT repository to get model parameters and validation data</span></span>
 <span><span class="co"># In your terminal:</span></span>
 <span><span class="co"># git clone https://github.com/Big-Life-Lab/htnport.git</span></span>
@@ -315,7 +246,7 @@ with HTNPoRT:</p>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_model_pipeline.html">prepare_model_pipeline</a></span><span class="op">(</span><span class="va">model_export_file</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the pipeline</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model_pipeline.html">run_model_pipeline</a></span><span class="op">(</span><span class="va">mod</span>, dat <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># View the logistic predictions (hypertension risk probabilities)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
