@@ -46,12 +46,6 @@ generate_step_tests_expected <- function(steps = NULL) {
   root_dir <- testthat::test_path("testdata/steps")
   data <- utils::read.csv(file.path(root_dir, "data.csv"))
 
-  if (!is.null(steps)) {
-    if (is.character(steps)) {
-      steps <- c(steps)
-    }
-  }
-
   for (cur_dir in list.dirs(root_dir, recursive = FALSE)) {
     if (!is.null(steps) && !(basename(cur_dir) %in% steps)) {
       next
