@@ -46,13 +46,13 @@ get_htnport_paths <- function(sex) {
   )
 }
 
-#' Run test data through model pipeline and validate output
+#' Run test input data (found on disk) through a model pipeline for a Model
+#' Parameters step and validate the output.
 #'
-#' Executes the model pipeline with test data and compares the output
-#' against expected validation data using testthat expectations.
-#'
-#' @param dir_name Character string specifying the test directory name
-#'   within "data/tests/steps"
+#' @param step Character string specifying the step name to test. There must
+#'   be a directory with the same name as the step, within
+#'   "tests/testthat/testdata/steps". See the CONTRIBUTING.md document for
+#'   instructions on how to set up this directory with the required files.
 #'
 #' @return NULL (invisibly). Function is called for side effect of
 #'   running testthat expectations.
@@ -65,22 +65,22 @@ get_htnport_paths <- function(sex) {
 #'   }
 #'
 #' @keywords internal
-run_test_data <- function(dir_name) {
+run_step_on_test_data <- function(step) {
   # Run the pipeline to get the output
   root_dir <- "testdata/steps"
   data_file <- testthat::test_path(root_dir, "data.csv")
   model_export_file <-
-    testthat::test_path(root_dir, dir_name, "model-export.csv")
+    testthat::test_path(root_dir, step, "model-export.csv")
   mod <- prepare_model_pipeline(model_export_file)
   output_data <- run_model_pipeline(mod, dat = data_file, mode = "full")
 
   # Compare the pipeline output to the expected output
   valid_data_file <-
-    testthat::test_path(root_dir, dir_name, "expected.csv")
+    testthat::test_path(root_dir, step, "expected.csv")
   valid_data <- utils::read.csv(valid_data_file)
   expect_equal(
     output_data,
     valid_data,
-    info = paste("Failed on transformation step", dir_name)
+    info = paste("Failed on transformation step", step)
   )
 }
