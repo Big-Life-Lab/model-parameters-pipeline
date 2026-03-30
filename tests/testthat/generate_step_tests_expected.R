@@ -46,19 +46,33 @@ generate_step_tests_expected <- function(steps = NULL) {
   root_dir <- testthat::test_path("testdata/steps")
   data <- utils::read.csv(file.path(root_dir, "data.csv"))
 
-  for (cur_dir in list.dirs(root_dir, recursive = FALSE)) {
-    if (!is.null(steps) && !(basename(cur_dir) %in% steps)) {
+  # Get all recognized steps (ie. directory names in root_dir)
+  recognized_steps <- list.dirs(
+    root_dir,
+    recursive = FALSE,
+    full.names = FALSE
+  )
+
+  if (is.null(steps)) {
+    steps <- recognized_steps
+  }
+
+  for (step in steps) {
+    if (!(step %in% recognized_steps)) {
+      warning(paste("Unrecognized step:", step))
       next
     }
 
+    step_dir <- file.path(root_dir, step)
+
     # Run the pipeline on the current directory
-    model_export_file <- file.path(cur_dir, "model-export.csv")
+    model_export_file <- file.path(step_dir, "model-export.csv")
     mod <- prepare_model_pipeline(model_export_file)
     output_data <- run_model_pipeline(mod, dat = data, mode = "full")
 
     # Save the results as the expected output
-    cat("Saving expected output for", basename(cur_dir), "\n")
-    output_file <- file.path(cur_dir, "expected.csv")
+    cat("Saving expected output for", step, "\n")
+    output_file <- file.path(step_dir, "expected.csv")
     write.csv(output_data, output_file, row.names = FALSE)
   }
 }
