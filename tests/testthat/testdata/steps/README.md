@@ -57,8 +57,7 @@ step,fileType,filePath,notes
 {stepname},N/A,./{stepname}.csv,
 ```
 
-Replace `{stepname}` with your step name. If the step doesn't require a
-separate file, use `N/A` for `fileType` and `filePath`.
+Replace `{stepname}` with your step name.
 
 #### `{stepname}.csv`
 
