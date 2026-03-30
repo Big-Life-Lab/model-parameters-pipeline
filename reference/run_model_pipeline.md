@@ -7,7 +7,7 @@ in sequence, modifying the data accordingly.
 ## Usage
 
 ``` r
-run_model_pipeline(mod, dat, mode = "output")
+run_model_pipeline(mod, x, mode = "output")
 ```
 
 ## Arguments
@@ -17,7 +17,7 @@ run_model_pipeline(mod, dat, mode = "output")
   A model object created by
   [`prepare_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.md).
 
-- dat:
+- x:
 
   Either a file path (character) to a CSV file containing the input
   data, or a data frame. The data must contain all columns specified as
@@ -52,11 +52,11 @@ to prepare the model object
 if (FALSE) { # \dontrun{
 # Prepare and run pipeline
 mod <- prepare_model_pipeline("path/to/model-export.csv")
-output <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+output <- run_model_pipeline(mod, x = "path/to/input-data.csv")
 head(output)
 
 # Run on data frame
 input_data <- read.csv("path/to/data.csv")
-mod <- run_model_pipeline(mod, dat = input_data)
+mod <- run_model_pipeline(mod, x = input_data)
 } # }
 ```

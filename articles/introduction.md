@@ -33,7 +33,7 @@ workflow:
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 
 # Step 2: Run the pipeline on your data (returns the output)
-result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+result <- run_model_pipeline(mod, x = "path/to/input-data.csv")
 
 # View the first few rows
 head(result)
@@ -51,7 +51,7 @@ mod <- prepare_model_pipeline("path/to/model-export.csv")
 input_data <- read.csv("path/to/input-data.csv")
 
 # Run pipeline with data frame (returns the output)
-result <- run_model_pipeline(mod, dat = input_data)
+result <- run_model_pipeline(mod, x = input_data)
 ```
 
 This is useful when your data is already loaded or needs preprocessing.
@@ -67,9 +67,9 @@ performance:
 mod <- prepare_model_pipeline("path/to/model-export.csv")
 
 # Run on multiple datasets and extract output from each
-result1 <- run_model_pipeline(mod, dat = "batch1_data.csv")
-result2 <- run_model_pipeline(mod, dat = "batch2_data.csv")
-result3 <- run_model_pipeline(mod, dat = "batch3_data.csv")
+result1 <- run_model_pipeline(mod, x = "batch1_data.csv")
+result2 <- run_model_pipeline(mod, x = "batch2_data.csv")
+result3 <- run_model_pipeline(mod, x = "batch3_data.csv")
 ```
 
 This avoids re-reading and parsing the configuration files for each
@@ -130,12 +130,12 @@ applies the pipeline’s transformations and returns the results. The
 
 ``` r
 # Default mode: only the final step's output columns
-output <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
+output <- run_model_pipeline(mod, x = "path/to/input-data.csv")
 
 # Full mode: all columns including intermediate transformation variables
 output_full <- run_model_pipeline(
   mod,
-  dat = "path/to/input-data.csv",
+  x = "path/to/input-data.csv",
   mode = "full"
 )
 
@@ -179,7 +179,7 @@ model_export_file <- file.path(
 mod <- prepare_model_pipeline(model_export_file)
 
 # Run the pipeline
-predictions <- run_model_pipeline(mod, dat = data)
+predictions <- run_model_pipeline(mod, x = data)
 
 # View the logistic predictions (hypertension risk probabilities)
 head(predictions)
