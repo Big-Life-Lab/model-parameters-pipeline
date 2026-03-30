@@ -117,7 +117,7 @@ test_that("Utility function .get_string_parts works", {
 
   # Basic test with one part
   expected_parts <- c("part1")
-  str_parts <- paste(expected_parts, collpse = ";")
+  str_parts <- paste(expected_parts, collapse = ";")
   expect_equal(
     .get_string_parts(str_parts, split = ";"),
     expected_parts,
