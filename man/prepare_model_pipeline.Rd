@@ -26,7 +26,7 @@ restriction does not apply to data files passed to
 }
 \value{
 A model object (list) that can be used to pass to
-  \code{\link{run_model_pipeline}} and \code{\link{get_pipeline_output}}.
+  \code{\link{run_model_pipeline}}.
 }
 \description{
 Loads and validates model configuration files, preparing the pipeline for
@@ -41,6 +41,5 @@ mod <- prepare_model_pipeline("path/to/model-export.csv")
 
 }
 \seealso{
-\code{\link{run_model_pipeline}} to execute the pipeline and
-  \code{\link{get_pipeline_output}} to retrieve the output of the pipeline.
+\code{\link{run_model_pipeline}} to execute the pipeline.
 }

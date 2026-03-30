@@ -5,15 +5,14 @@
 #' Model Parameters specification developed by Big Life Lab.
 #'
 #' @section Workflow:
-#' The typical workflow involves three steps:
+#' The typical workflow involves two steps:
 #' \enumerate{
 #'   \item \code{prepare_model_pipeline()}: Load and validate model
 #'     configuration
 #'   \item \code{run_model_pipeline()}: Apply transformations to data
-#'   \item \code{get_pipeline_output()}: Retrieve the output of the
-#'     model pipeline. The output is the results of the last
-#'     transformation step. Depending on the step, this may include
-#'     multiple columns.
+#'     and retrieve the output of the model pipeline. The output is the
+#'     results of the last transformation step. Depending on the step,
+#'     this may include multiple columns.
 #' }
 #'
 #' @section Required Files:
@@ -29,20 +28,18 @@
 #' \dontrun{
 #' # Basic usage
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
-#' mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
-#' result <- get_pipeline_output(mod, mode = "output")
+#' result <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 #'
 #' # Processing multiple datasets with the same model
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
 #' for (data_file in data_files) {
-#'   mod <- run_model_pipeline(mod, dat = data_file)
-#'   result <- get_pipeline_output(mod, mode = "output")
+#'   result <- run_model_pipeline(mod, dat = data_file)
 #'   # Process result (a data frame)
 #' }
 #'
 #' # Pass a data frame to run_model_pipeline
 #' input_data <- read.csv("path/to/input-data.csv")
-#' mod <- run_model_pipeline(mod, dat = input_data)
+#' result <- run_model_pipeline(mod, dat = input_data)
 #' }
 #'
 #' @seealso
@@ -81,15 +78,14 @@ NULL
 #'   \code{\link{run_model_pipeline}}. Defaults to \code{NULL} (no restriction).
 #'
 #' @return A model object (list) that can be used to pass to
-#'   \code{\link{run_model_pipeline}} and \code{\link{get_pipeline_output}}.
+#'   \code{\link{run_model_pipeline}}.
 #'
 #' @examples
 #' \dontrun{
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
 #' }
 #'
-#' @seealso \code{\link{run_model_pipeline}} to execute the pipeline and
-#'   \code{\link{get_pipeline_output}} to retrieve the output of the pipeline.
+#' @seealso \code{\link{run_model_pipeline}} to execute the pipeline.
 #' @export
 prepare_model_pipeline <- function(
   model_export,
@@ -175,41 +171,43 @@ prepare_model_pipeline <- function(
 
 #' Run Model Pipeline
 #'
-#' Executes the transformation pipeline on input data. Applies each
-#' transformation step defined in the model steps file in sequence,
-#' modifying the data accordingly.
+#' Executes the transformation pipeline on input data and retrieve the output.
+#' Applies each transformation step defined in the model steps file in
+#' sequence, modifying the data accordingly.
 #'
 #' @param mod A model object created by \code{\link{prepare_model_pipeline}}.
 #' @param dat Either a file path (character) to a CSV file containing the
 #'   input data, or a data frame. The data must contain all columns specified
 #'   as predictors in the variables file.
+#' @param mode A character string specifying what data to return. Can be one
+#'   of:
+#'   \itemize{
+#'      \item "output": Only return the final output of the model. These are the
+#'        values of all variables calculated in the final step found in the
+#'        model export file.
+#'      \item "full": Return all data, which includes the input data, all
+#'        intermediate variables, and the final output of the model.
+#'   }
+#'   Default is "output".
 #'
-#' @return A model object (list) with all transformation results stored in
-#'   \code{mod$data}. Pass the returned object to
-#'   \code{\link{get_pipeline_output}} to extract a data frame.
+#' @return A model object created from a call to
+#'   \code{\link{prepare_model_pipeline}}.
 #'
 #' @examples
 #' \dontrun{
 #' # Prepare and run pipeline
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
-#' mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
-#'
-#' # Extract final output columns as a data frame
-#' output <- get_pipeline_output(mod, mode = "output")
+#' output <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 #' head(output)
-#'
-#' # Get all columns including intermediate transformation variables
-#' output_full <- get_pipeline_output(mod, mode = "full")
 #'
 #' # Run on data frame
 #' input_data <- read.csv("path/to/data.csv")
 #' mod <- run_model_pipeline(mod, dat = input_data)
 #' }
 #'
-#' @seealso \code{\link{prepare_model_pipeline}} to prepare the model object,
-#'   \code{\link{get_pipeline_output}} to extract the output of the pipeline
+#' @seealso \code{\link{prepare_model_pipeline}} to prepare the model object
 #' @export
-run_model_pipeline <- function(mod, dat) {
+run_model_pipeline <- function(mod, dat, mode = "output") {
   # Load data if it is a file
   if (is.character(dat)) {
     dat <- normalizePath(dat, mustWork = TRUE)
@@ -297,69 +295,6 @@ run_model_pipeline <- function(mod, dat) {
     )
   }
 
-  # Rename the output columns to "output"/"output_#"
-  # If we decide we want to rename the output columns, then the code below
-  # will do that. If we only want to rename the output columns when
-  # get_pipeline_output is called with mode = "output", then we can
-  # move this code to get_pipeline_output
-  # nolint start
-  # res <- .rename_columns(
-  #   mod$data,
-  #   mod$steps_info[[length(mod$steps_info)]]$output_columns,
-  #   prefix = "output",
-  #   suffix = "_#"
-  # )
-  # mod$data <- res$dat
-  # mod$steps_info[[length(mod$steps_info)]]$output_columns <-
-  #   res$new_column_names
-  # nolint end
-
-  mod
-}
-
-#' Get Model Output
-#'
-#' Extracts a data frame from the model object returned by
-#' \code{\link{run_model_pipeline}}. If multiple calls to
-#' \code{\link{run_model_pipeline}} have been made then only the results
-#' of the last call will be returned.
-#'
-#' @param mod A model object returned by \code{\link{run_model_pipeline}}.
-#' @param mode A character string specifying what data to return. Can be one
-#'   of:
-#'      "output": Only return the final output of the model. These are the
-#'        values of all variables calculated in the final step found in the
-#'        model export file.
-#'      "full": Return all data, which includes the input data, all intermediate
-#'        variables, and the final output of the model.
-#'   Default is "output".
-#'
-#' @return A data frame containing the transformed data. Its contents depend
-#'   on \code{mode}:
-#' \itemize{
-#'   \item \code{"output"}: Only the output columns produced by the final
-#'     transformation step (e.g., the logistic prediction column when the
-#'     last step is logistic-regression)
-#'   \item \code{"full"}: All columns — the original predictor columns plus
-#'     every new column created by each transformation step (centered
-#'     variables, dummy variables, interaction terms, spline terms, etc.)
-#' }
-#'
-#' @examples
-#' \dontrun{
-#' mod <- prepare_model_pipeline("path/to/model-export.csv")
-#' mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
-#'
-#' # Default: only the final step's output columns
-#' output <- get_pipeline_output(mod)
-#'
-#' # Full: all columns including intermediate transformation variables
-#' output_full <- get_pipeline_output(mod, mode = "full")
-#' }
-#'
-#' @seealso \code{\link{run_model_pipeline}} to run the pipeline
-#' @export
-get_pipeline_output <- function(mod, mode = "output") {
   if (mode == "output") {
     output_columns <- mod$steps_info[[length(mod$steps_info)]]$output_columns
     mod$data[output_columns]
@@ -367,7 +302,7 @@ get_pipeline_output <- function(mod, mode = "output") {
     mod$data
   } else {
     stop(paste0(
-      "Unrecognized value for \"mode\" in get_pipeline_output. ",
+      "Unrecognized value for \"mode\" in run_model_pipeline. ",
       "Must be one of \"output\" or \"full\", instead found \"",
       mode,
       "\""

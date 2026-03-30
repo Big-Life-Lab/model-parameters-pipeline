@@ -4,7 +4,7 @@
 \alias{run_model_pipeline}
 \title{Run Model Pipeline}
 \usage{
-run_model_pipeline(mod, dat)
+run_model_pipeline(mod, dat, mode = "output")
 }
 \arguments{
 \item{mod}{A model object created by \code{\link{prepare_model_pipeline}}.}
@@ -12,29 +12,33 @@ run_model_pipeline(mod, dat)
 \item{dat}{Either a file path (character) to a CSV file containing the
 input data, or a data frame. The data must contain all columns specified
 as predictors in the variables file.}
+
+\item{mode}{A character string specifying what data to return. Can be one
+of:
+\itemize{
+   \item "output": Only return the final output of the model. These are the
+     values of all variables calculated in the final step found in the
+     model export file.
+   \item "full": Return all data, which includes the input data, all
+     intermediate variables, and the final output of the model.
+}
+Default is "output".}
 }
 \value{
-A model object (list) with all transformation results stored in
-  \code{mod$data}. Pass the returned object to
-  \code{\link{get_pipeline_output}} to extract a data frame.
+A model object created from a call to
+  \code{\link{prepare_model_pipeline}}.
 }
 \description{
-Executes the transformation pipeline on input data. Applies each
-transformation step defined in the model steps file in sequence,
-modifying the data accordingly.
+Executes the transformation pipeline on input data and retrieve the output.
+Applies each transformation step defined in the model steps file in
+sequence, modifying the data accordingly.
 }
 \examples{
 \dontrun{
 # Prepare and run pipeline
 mod <- prepare_model_pipeline("path/to/model-export.csv")
-mod <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
-
-# Extract final output columns as a data frame
-output <- get_pipeline_output(mod, mode = "output")
+output <- run_model_pipeline(mod, dat = "path/to/input-data.csv")
 head(output)
-
-# Get all columns including intermediate transformation variables
-output_full <- get_pipeline_output(mod, mode = "full")
 
 # Run on data frame
 input_data <- read.csv("path/to/data.csv")
@@ -43,6 +47,5 @@ mod <- run_model_pipeline(mod, dat = input_data)
 
 }
 \seealso{
-\code{\link{prepare_model_pipeline}} to prepare the model object,
-  \code{\link{get_pipeline_output}} to extract the output of the pipeline
+\code{\link{prepare_model_pipeline}} to prepare the model object
 }
