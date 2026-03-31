@@ -203,7 +203,7 @@ prepare_model_pipeline <- function(
 #'   \itemize{
 #'      \item "output": Only return the final output of the model. These are the
 #'        values of all variables calculated in the final step found in the
-#'        model export file.
+#'        model steps file.
 #'      \item "full": Return all data, which includes the input data, all
 #'        intermediate variables, and the final output of the model.
 #'   }
