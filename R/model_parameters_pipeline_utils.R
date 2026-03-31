@@ -14,7 +14,7 @@ NULL
 #' @return Character vector of trimmed string parts
 #' @keywords internal
 .get_string_parts <- function(s, split = ";") {
-  parts <- strsplit(s, split = split) |>
+  parts <- strsplit(s, split = split, fixed = TRUE) |>
     unlist() |>
     stringr::str_trim()
 
