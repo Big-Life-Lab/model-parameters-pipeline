@@ -55,7 +55,7 @@ NULL
   col_i <- 1
   while (TRUE) {
     if (col_i == 1) {
-      cur_col = column_prefix
+      cur_col <- column_prefix
     } else {
       cur_col <- paste0(
         column_prefix,
