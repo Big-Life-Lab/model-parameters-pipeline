@@ -109,13 +109,27 @@ prepare_model_pipeline <- function(
     model_export
   )
 
-  # Get the variables and model_steps files from the model export
-  variables_file <-
-    mod$model_export[mod$model_export$fileType == "variables", ][["filePath"]]
-  variables_file <- file.path(mod$root_dir, variables_file)
-  model_steps_file <-
-    mod$model_export[mod$model_export$fileType == "model-steps", ][["filePath"]]
-  model_steps_file <- file.path(mod$root_dir, model_steps_file)
+  # Get the variables file from the model export
+  variables_row <-
+    mod$model_export[mod$model_export$fileType == "variables", ]
+  if (nrow(variables_row) != 1) {
+    stop(
+      "Model export file must have exactly one row where ",
+      "fileType equals \"variables\""
+    )
+  }
+  variables_file <- file.path(mod$root_dir, variables_row[["filePath"]])
+
+  # Get the model-steps file from the model export
+  model_steps_row <-
+    mod$model_export[mod$model_export$fileType == "model-steps", ]
+  if (nrow(model_steps_row) != 1) {
+    stop(
+      "Model export file must have exactly one row where ",
+      "fileType equals \"model-steps\""
+    )
+  }
+  model_steps_file <- file.path(mod$root_dir, model_steps_row[["filePath"]])
 
   # Load and validate variables
   mod <- .add_file(mod, variables_file)
