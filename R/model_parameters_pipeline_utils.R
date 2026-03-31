@@ -87,20 +87,20 @@ NULL
   missing_columns <- columns[!(columns %in% colnames(data))]
   if (length(missing_columns) > 0) {
     missing_columns <- paste0("'", missing_columns, "'", collapse = ", ")
-    message <- paste0(
+    msg <- paste0(
       "The following columns are missing in the ",
       data_description,
       ": ",
       missing_columns
     )
     if (is.character(file) && stringr::str_length(file)) {
-      message <- paste(
-        message,
+      msg <- paste(
+        msg,
         "in file",
         basename(file)
       )
     }
-    stop(message)
+    stop(msg)
   }
 }
 
