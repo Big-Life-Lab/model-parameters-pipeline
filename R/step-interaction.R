@@ -34,9 +34,9 @@
 
     # Iteratively create the interaction variables
     mod$data[interaction_variable] <- 1
-    for (i in seq_along(interacting_variables)) {
+    for (j in seq_along(interacting_variables)) {
       mod$data[interaction_variable] <- mod$data[interaction_variable] *
-        mod$data[interacting_variables[i]]
+        mod$data[interacting_variables[j]]
     }
     output_columns <- c(output_columns, interaction_variable)
   }
