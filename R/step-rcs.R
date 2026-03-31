@@ -58,6 +58,15 @@
 #' @keywords internal
 .get_rcs <- function(x, knots) {
   k <- length(knots)
+  if (k < 3) {
+    stop(
+      "At least 3 knots are required for an RCS step, instead ",
+      k,
+      " were given: ",
+      paste0(knots, collapse = ", ")
+    )
+  }
+
   res <- data.frame(rcs.1 = x)
 
   for (j in 1:(k - 2)) {
