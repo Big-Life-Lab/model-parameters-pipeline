@@ -297,6 +297,17 @@ Here's a real example from the existing codebase
     center_value <- info[["centerValue"]]
     centered_variable <- info[["centeredVariable"]]
 
+    # Make sure origVariable exists
+    if (!orig_variable %in% colnames(mod$data)) {
+      stop(
+        "Variable \"",
+        orig_variable,
+        "\" specified as origVariable does not exist in data ",
+        "when performing center step in ",
+        basename(file)
+      )
+    }
+
     # Center the variable
     mod$data[centered_variable] <- mod$data[orig_variable] - center_value
     output_columns <- c(output_columns, centered_variable)

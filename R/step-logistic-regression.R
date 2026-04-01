@@ -39,6 +39,17 @@
       # Intercepts get added to the output
       logistic_data[logistic_col] <- logistic_data[logistic_col] + coefficient
     } else {
+      # Make sure variable exists in data
+      if (!variable %in% colnames(mod$data)) {
+        stop(
+          "Variable \"",
+          variable,
+          "\" does not exist in data when performing ",
+          "logistic-regression step in ",
+          basename(file)
+        )
+      }
+
       # Coefficients get multiplied by the variable then added to the output
       logistic_data[logistic_col] <- logistic_data[logistic_col] +
         mod$data[variable] * coefficient

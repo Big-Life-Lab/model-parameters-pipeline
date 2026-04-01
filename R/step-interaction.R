@@ -34,9 +34,19 @@
 
     # Iteratively create the interaction variables
     mod$data[interaction_variable] <- 1
-    for (j in seq_along(interacting_variables)) {
+    for (interacting_variable in interacting_variables) {
+      # Make sure the interacting variable exists
+      if (!interacting_variable %in% colnames(mod$data)) {
+        stop(
+          "Interacting variable \"",
+          interacting_variable,
+          "\" does not exist in data when performing interaction step in ",
+          basename(file)
+        )
+      }
+
       mod$data[interaction_variable] <- mod$data[interaction_variable] *
-        mod$data[interacting_variables[j]]
+        mod$data[interacting_variable]
     }
     output_columns <- c(output_columns, interaction_variable)
   }

@@ -38,9 +38,9 @@
       stop(
         "Variable \"",
         orig_variable,
-        "\" specified as origVariable in center step file ",
-        basename(file),
-        " does not exist in data"
+        "\" specified as origVariable does not exist in data ",
+        "when performing center step in ",
+        basename(file)
       )
     }
 

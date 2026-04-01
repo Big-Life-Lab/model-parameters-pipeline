@@ -33,6 +33,16 @@
     rcs_variables <- .get_string_parts(info[["rcsVariables"]])
     knots <- as.double(.get_string_parts(info[["knots"]]))
 
+    # Make sure the variable exists in the data
+    if (!variable %in% colnames(mod$data)) {
+      stop(
+        "RCS variable \"",
+        variable,
+        "\" does not exist in data when performing rcs step in ",
+        basename(file)
+      )
+    }
+
     # Calculate and create the new RCS variable
     vals <- .get_rcs(mod$data[[variable]], knots)
     mod$data[rcs_variables] <- vals

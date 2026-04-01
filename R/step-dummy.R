@@ -34,6 +34,17 @@
     cat_value <- info[["catValue"]]
     dummy_variable <- info[["dummyVariable"]]
 
+    # Make sure orig_variable exists in data
+    if (!orig_variable %in% colnames(mod$data)) {
+      stop(
+        "Variable \"",
+        orig_variable,
+        "\" specified as origVariable does not exist in data ",
+        "when performing dummy step in ",
+        basename(file)
+      )
+    }
+
     # Create the dummy variable
     mod$data[dummy_variable] <- as.integer(mod$data[orig_variable] == cat_value)
     output_columns <- c(output_columns, dummy_variable)
