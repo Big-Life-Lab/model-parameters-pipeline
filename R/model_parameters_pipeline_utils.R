@@ -288,6 +288,8 @@ NULL
 #' attackers cannot gather information about the system's directory structure.
 #' Usually, the relative_to_path parameter would be the sandbox path.
 #'
+#' The returned value should not be used for actual file access.
+#'
 #' @param file The file path to format.
 #' @param relative_to_path The path that we want the file to be
 #'   relative to.
