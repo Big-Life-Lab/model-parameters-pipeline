@@ -297,12 +297,19 @@ NULL
 #' @keywords internal
 .file_relative_to_path <- function(file, relative_to_path) {
   if (!is.null(relative_to_path)) {
+    # Expand relative_to_path and add a trailing slash.
+    # relative_to_path will be NULL if the path is invalid or
+    # does not exist
     relative_to_path <- .expand_and_normalize_path(
       relative_to_path,
       add_trailing_slash = TRUE
     )
     if (!is.null(relative_to_path)) {
+      # Expand the file path
       norm_file <- .expand_and_normalize_path(file)
+
+      # If the normalized file path begins with relative_to_path, then
+      # remove relative_to_path from the file and return it.
       if (!is.null(norm_file) && startsWith(norm_file, relative_to_path)) {
         rel_start <- nchar(relative_to_path) + 1
         return(substr(norm_file, rel_start, nchar(norm_file)))
