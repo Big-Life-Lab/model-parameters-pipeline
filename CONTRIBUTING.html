@@ -310,6 +310,7 @@
 </li>
 <li>Loads the center specification file</li>
 <li>Verifies it has the required columns (<code>origVariable</code>, <code>centerValue</code>, <code>centeredVariable</code>)</li>
+<li>For each row, make sure that the column specified under <code>origVariable</code> exists in the data at <code>mod$data</code>, and raise an exception if it does not exist.</li>
 <li>For each row, creates a new centered variable by subtracting <code>centerValue</code> from the original variable in <code>mod$data</code>
 </li>
 <li>Returns a list with the updated model object and the names of the new columns</li>
