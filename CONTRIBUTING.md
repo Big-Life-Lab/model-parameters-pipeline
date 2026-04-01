@@ -328,6 +328,8 @@ This function:
 - Loads the center specification file
 - Verifies it has the required columns (`origVariable`, `centerValue`,
   `centeredVariable`)
+- For each row, make sure that the column specified under `origVariable` exists
+  in the data at `mod$data`, and raise an exception if it does not exist.
 - For each row, creates a new centered variable by subtracting `centerValue`
   from the original variable in `mod$data`
 - Returns a list with the updated model object and the names of the new columns
