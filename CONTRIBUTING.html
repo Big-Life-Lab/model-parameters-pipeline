@@ -281,6 +281,17 @@
 <span>    <span class="va">center_value</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"centerValue"</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="va">centered_variable</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"centeredVariable"</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
+<span>    <span class="co"># Make sure origVariable exists</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">orig_variable</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span></span>
+<span>        <span class="st">"Variable \""</span>,</span>
+<span>        <span class="va">orig_variable</span>,</span>
+<span>        <span class="st">"\" specified as origVariable does not exist in data "</span>,</span>
+<span>        <span class="st">"when performing center step in "</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span></span>
 <span>    <span class="co"># Center the variable</span></span>
 <span>    <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="va">centered_variable</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="va">orig_variable</span><span class="op">]</span> <span class="op">-</span> <span class="va">center_value</span></span>
 <span>    <span class="va">output_columns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">output_columns</span>, <span class="va">centered_variable</span><span class="op">)</span></span>
