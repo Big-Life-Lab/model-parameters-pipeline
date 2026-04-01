@@ -159,8 +159,7 @@ prepare_model_pipeline <- function(
   #   3) Make each value lowercase
   #   4) Find "predictor" within each row
   predictor_filt <- mod$variables$role |>
-    stringr::str_split(",") |>
-    lapply(stringr::str_trim) |>
+    lapply(function(x) .get_string_parts(x, split = ",")) |>
     lapply(stringr::str_to_lower) |>
     lapply(function(row_values) "predictor" %in% row_values) |>
     unlist()
