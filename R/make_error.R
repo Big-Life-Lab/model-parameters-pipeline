@@ -14,10 +14,9 @@
 #' @return A condition object of class `c(error_class, "error", "condition")`.
 #'
 #' @examples
-#' # Raise a typed error
 #' \dontrun{
+#' # Raise a typed error
 #' stop(.make_error("validation_error", "Value must be positive"))
-#' }
 #'
 #' # Test that a specific error class was raised
 #' tryCatch(
@@ -28,7 +27,6 @@
 #' )
 #'
 #' # In testthat, assert that the correct error class is thrown
-#' \dontrun{
 #' testthat::expect_error(
 #'   stop(.make_error("validation_error", "Value must be positive")),
 #'   class = "validation_error"
