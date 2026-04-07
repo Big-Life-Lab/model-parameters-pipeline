@@ -34,7 +34,8 @@ test_that(".add_file and .get_file work", {
 
   expect_error(
     .add_file(mod, "___unused_name___.csv"),
-    info = "Expected error adding invalid file name with .add_file"
+    info = "Expected error adding invalid file name with .add_file",
+    class = "inaccessible_file"
   )
 
   # Add already added file
@@ -45,7 +46,8 @@ test_that(".add_file and .get_file work", {
   mod2 <- list()
   expect_error(
     .get_file(mod2, female_data_file),
-    info = "Expected error calling .get_file with file not added by .add_file"
+    info = "Expected error calling .get_file with file not added by .add_file",
+    class = "file_not_added"
   )
 })
 
@@ -67,12 +69,14 @@ test_that("Utility function .verify_columns works", {
 
   expect_error(
     .verify_columns(test_data, c("missing"), "test data"),
-    info = "Expected error testing for a single missing column"
+    info = "Expected error testing for a single missing column",
+    class = "missing_columns",
   )
 
   expect_error(
     .verify_columns(test_data, c("col_1", "col_2", "bad"), "test data"),
-    info = "Expected error testing for multiple missing columns"
+    info = "Expected error testing for multiple missing columns",
+    class = "missing_columns",
   )
 })
 

@@ -22,4 +22,11 @@ where the data originated from). For example: "model steps file" or
 Checks that all required columns are present in the data and stops
 with an informative error message if any are missing.
 }
+\section{Errors}{
+
+  * `missing_columns`: Raised when one or more entries in `columns` are not
+    present in `colnames(data)`. The error message lists the missing column
+    names and, if `file` is provided, the basename of the file.
+}
+
 \keyword{internal}

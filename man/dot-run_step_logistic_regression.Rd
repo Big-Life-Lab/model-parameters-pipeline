@@ -19,7 +19,7 @@ A list containing: \code{mod} (the updated model object with the
 \description{
 Applies logistic regression by multiplying variables by
 coefficients, summing, and applying the logistic function
-(1 / (1 + exp(-x))). Implements the 'logistic' transformation step
-from the Model Parameters pipeline.
+(1 / (1 + exp(-x))). Implements the 'logistic-regression' transformation
+step from the Model Parameters pipeline.
 }
 \keyword{internal}

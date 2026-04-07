@@ -38,6 +38,12 @@ NULL
 #'   column name is found.
 #' @return Character string of an unused column name
 #'   (e.g., "prefix_2", "prefix_3")
+#'
+#' @section Errors:
+#'   * `missing_tag`: Raised when `column_suffix` does not contain the `"#"`
+#'     placeholder character, which is required for generating numbered column
+#'     name variants.
+#'
 #' @keywords internal
 .get_unused_column <- function(
   existing_columns,
@@ -45,9 +51,10 @@ NULL
   column_suffix = "_#"
 ) {
   if (!stringr::str_detect(column_suffix, "#")) {
-    stop(paste(
-      "The column_suffix passed to .get_unused_column must contain",
-      "the number sign '#':",
+    stop(.make_error(
+      error_class = "missing_tag",
+      "The column_suffix passed to .get_unused_column must contain ",
+      "the number sign '#': ",
       column_suffix
     ))
   }
@@ -81,6 +88,12 @@ NULL
 #' @param file Optional file path to include in error message (to indicate
 #'   where the data originated from). For example: "model steps file" or
 #'   "model steps data".
+#'
+#' @section Errors:
+#'   * `missing_columns`: Raised when one or more entries in `columns` are not
+#'     present in `colnames(data)`. The error message lists the missing column
+#'     names and, if `file` is provided, the basename of the file.
+#'
 #' @keywords internal
 .verify_columns <- function(data, columns, data_description, file = NULL) {
   # Make sure all the columns exist in the data
@@ -100,7 +113,7 @@ NULL
         basename(file)
       )
     }
-    stop(msg)
+    stop(.make_error(error_class = "missing_columns", msg))
   }
 }
 
@@ -135,6 +148,15 @@ NULL
 #' @param mod Model object
 #' @param file Path to CSV file to load
 #' @return Updated model object with file in cache
+#'
+#' @section Errors:
+#'   * `inaccessible_file`: Raised when `file` does not exist, or when
+#'     `mod$sandbox_path` is set and `file` is not a descendant of that
+#'     directory. In the sandbox case the error message deliberately avoids
+#'     revealing whether the file exists, to prevent directory enumeration.
+#'   * `invalid_file_format`: Raised when `file` exists and is within the
+#'     sandbox but cannot be read as a CSV by [utils::read.csv()].
+#'
 #' @keywords internal
 .add_file <- function(mod, file) {
   # If an error occurs, we display this file to the user. If mod$sandbox_path is
@@ -155,12 +177,16 @@ NULL
   file <- .expand_and_normalize_path(file)
   if (is.null(file)) {
     if (is.null(mod$sandbox_path)) {
-      stop(paste(
-        "The file does not exist:",
+      stop(.make_error(
+        error_class = "inaccessible_file",
+        "The file does not exist: ",
         reportable_file
       ))
     } else {
-      stop(general_error_message)
+      stop(.make_error(
+        error_class = "inaccessible_file",
+        general_error_message
+      ))
     }
   }
 
@@ -172,7 +198,10 @@ NULL
     if (!is.null(mod$sandbox_path) &&
         !.is_file_descendant_of(file, mod$sandbox_path)
     ) {
-      stop(general_error_message)
+      stop(.make_error(
+        error_class = "inaccessible_file",
+        general_error_message
+      ))
     }
 
     # Load and add file contents to the file cache, so we can retrieve
@@ -181,8 +210,9 @@ NULL
       data <- utils::read.csv(file)
       mod$files[[file]] <- data
     }, error = function(e) {
-      stop(paste(
-        "Could not load the file",
+      stop(.make_error(
+        error_class = "invalid_file_format",
+        "Could not load the file ",
         reportable_file
       ))
     })
@@ -199,14 +229,21 @@ NULL
 #' @param mod Model object
 #' @param file Path to file to retrieve
 #' @return Data from the file cache (eg. a dataframe)
+#'
+#' @section Errors:
+#'   * `file_not_added`: Raised when `file` has not been previously loaded into
+#'     the model cache via [`.add_file()`], indicating the caller did not add
+#'     the file before attempting to retrieve it.
+#'
 #' @keywords internal
 .get_file <- function(mod, file) {
   # The file should have already been added by calling .add_file
   file <- .expand_and_normalize_path(file)
   if (!(file %in% names(mod$files))) {
-    stop(paste(
-      "The file must be added by calling",
-      ".add_file before calling .get_file:",
+    stop(.make_error(
+      error_class = "file_not_added",
+      "The file must be added by calling ",
+      ".add_file before calling .get_file: ",
       .reportable_file(mod, file)
     ))
   }

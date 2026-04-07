@@ -23,4 +23,7 @@ meant to hide the full paths of files on the system from a user so that
 attackers cannot gather information about the system's directory structure.
 Usually, the relative_to_path parameter would be the sandbox path.
 }
+\details{
+The returned value should not be used for actual file access.
+}
 \keyword{internal}

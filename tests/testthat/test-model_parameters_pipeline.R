@@ -71,7 +71,8 @@ test_that("sandbox_path raises an error for files outside the sandbox", {
     prepare_model_pipeline(
       paths$model_export_file,
       sandbox_path = tempdir()
-    )
+    ),
+    class = "inaccessible_file"
   )
 })
 
@@ -115,6 +116,7 @@ test_that("sandbox_path prefix match without trailing slash is rejected", {
   dir.create(sandbox_dir)
 
   expect_error(
-    prepare_model_pipeline(model_export_file, sandbox_path = sandbox_dir)
+    prepare_model_pipeline(model_export_file, sandbox_path = sandbox_dir),
+    class = "inaccessible_file"
   )
 })
