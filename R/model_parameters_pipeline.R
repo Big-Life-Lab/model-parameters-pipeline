@@ -80,6 +80,23 @@ NULL
 #' @return A model object (list) that can be used to pass to
 #'   \code{\link{run_model_pipeline}}.
 #'
+#' @section Errors:
+#' \itemize{
+#'   \item \code{inaccessible_file}: Raised when any of the model export,
+#'     variables, model steps, or step parameter files does not exist or, if
+#'     `sandbox_path` is set, is not a descendant of that directory.
+#'   \item \code{invalid_file_format}: Raised when any of the model export,
+#'     variables, model steps, or step parameter files exists but cannot be
+#'     parsed as a CSV.
+#'   \item \code{missing_columns}: Raised when any of the Model Parameters
+#'     files is missing a required column.
+#'   \item \code{file_not_added}: Raised indirectly via the step functions if
+#'     a file was not successfully added to the model cache; should not occur
+#'     in normal use.
+#'   \item \code{error}: Any other error occurred that is not classified in
+#'     the above errors.
+#' }
+#'
 #' @examples
 #' \dontrun{
 #' mod <- prepare_model_pipeline("path/to/model-export.csv")
@@ -208,8 +225,24 @@ prepare_model_pipeline <- function(
 #'   }
 #'   Default is "output".
 #'
-#' @return A model object created from a call to
-#'   \code{\link{prepare_model_pipeline}}.
+#' @return A data frame containing the pipeline output (when `mode = "output"`)
+#'   or all data including intermediate columns (when `mode = "full"`).
+#'
+#' @section Errors:
+#' \itemize{
+#'   \item \code{inaccessible_file}: Raised if a step specification file does
+#'     not exist or, if `mod$sandbox_path` is set, is not a descendant of that
+#'     directory.
+#'   \item \code{invalid_file_format}: Raised if a step specification file
+#'     cannot be parsed as a CSV.
+#'   \item \code{missing_columns}: Raised when a step specification file is
+#'     missing required columns.
+#'   \item \code{file_not_added}: Raised indirectly via the step functions if
+#'     a file was not successfully added to the model cache; should not occur
+#'     in normal use.
+#'   \item \code{error}: Any other error occurred that is not classified in
+#'     the above errors.
+#' }
 #'
 #' @examples
 #' \dontrun{
