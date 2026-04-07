@@ -29,3 +29,10 @@ an informative error message if any are missing.
   Optional file path to include in error message (to indicate where the
   data originated from). For example: "model steps file" or "model steps
   data".
+
+## Errors
+
+\* \`missing_columns\`: Raised when one or more entries in \`columns\`
+are not present in \`colnames(data)\`. The error message lists the
+missing column names and, if \`file\` is provided, the basename of the
+file.

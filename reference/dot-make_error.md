@@ -1,0 +1,56 @@
+# Create a classed error condition
+
+Constructs an error condition object with a custom class, suitable for
+use with \[stop()\] to raise typed exceptions that can be caught
+selectively with \[tryCatch()\] or \[withCallingHandlers()\].
+
+## Usage
+
+``` r
+.make_error(error_class, ...)
+```
+
+## Arguments
+
+- error_class:
+
+  A character string naming the error class (e.g.
+  \`"my_package_error"\`). This is prepended to \`c("error",
+  "condition")\` so that the condition inherits from the base error
+  class.
+
+- ...:
+
+  Character strings that are concatenated (with no separator) to form
+  the human-readable error message, analogous to the \`...\` argument of
+  \[stop()\].
+
+## Value
+
+A condition object of class \`c(error_class, "error", "condition")\`.
+
+## Examples
+
+``` r
+# Raise a typed error
+if (FALSE) { # \dontrun{
+stop(.make_error("validation_error", "Value must be positive"))
+} # }
+
+# Test that a specific error class was raised
+tryCatch(
+  stop(.make_error("validation_error", "Value must be ", "positive")),
+  validation_error = function(e) {
+    message("Caught a validation_error: ", conditionMessage(e))
+  }
+)
+#> Error in .make_error("validation_error", "Value must be ", "positive"): could not find function ".make_error"
+
+# In testthat, assert that the correct error class is thrown
+if (FALSE) { # \dontrun{
+testthat::expect_error(
+  stop(.make_error("validation_error", "Value must be positive")),
+  class = "validation_error"
+)
+} # }
+```

@@ -22,3 +22,9 @@ model's cache.
 ## Value
 
 Data from the file cache (eg. a dataframe)
+
+## Errors
+
+\* \`file_not_added\`: Raised when \`file\` has not been previously
+loaded into the model cache via \[\`.add_file()\`\], indicating the
+caller did not add the file before attempting to retrieve it.

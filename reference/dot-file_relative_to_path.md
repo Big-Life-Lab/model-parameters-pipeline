@@ -27,3 +27,7 @@ path.
 The formatted file path. If either \`file\` or \`relative_to_path\` do
 not exist, or if \`file\` is not a descendant of \`relative_to_path\`
 then simply the basename of \`file\` is returned.
+
+## Details
+
+The returned value should not be used for actual file access.

@@ -31,3 +31,9 @@ Generates a unique column name by appending an integer to a prefix.
 ## Value
 
 Character string of an unused column name (e.g., "prefix_2", "prefix_3")
+
+## Errors
+
+\* \`missing_tag\`: Raised when \`column_suffix\` does not contain the
+\`"#"\` placeholder character, which is required for generating numbered
+column name variants.

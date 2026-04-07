@@ -2,8 +2,8 @@
 
 Applies logistic regression by multiplying variables by coefficients,
 summing, and applying the logistic function (1 / (1 + exp(-x))).
-Implements the 'logistic' transformation step from the Model Parameters
-pipeline.
+Implements the 'logistic-regression' transformation step from the Model
+Parameters pipeline.
 
 ## Usage
 
