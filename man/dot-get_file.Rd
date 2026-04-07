@@ -20,9 +20,11 @@ model's cache.
 }
 \section{Errors}{
 
-  * `file_not_added`: Raised when `file` has not been previously loaded into
-    the model cache via [`.add_file()`], indicating the caller did not add
-    the file before attempting to retrieve it.
+\itemize{
+  \item \code{file_not_added}: Raised when `file` has not been previously
+    loaded into the model cache via [`.add_file()`], indicating the caller
+    did not add the file before attempting to retrieve it.
+}
 }
 
 \keyword{internal}

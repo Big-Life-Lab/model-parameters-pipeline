@@ -34,6 +34,25 @@ execution. This function reads the model export file, variables file, and
 model steps file, and preloads all transformation parameter files into
 a cached model object.
 }
+\section{Errors}{
+
+\itemize{
+  \item \code{inaccessible_file}: Raised when any of the model export,
+    variables, model steps, or step parameter files does not exist or, if
+    `sandbox_path` is set, is not a descendant of that directory.
+  \item \code{invalid_file_format}: Raised when any of the model export,
+    variables, model steps, or step parameter files exists but cannot be
+    parsed as a CSV.
+  \item \code{missing_columns}: Raised when any of the Model Parameters
+    files is missing a required column.
+  \item \code{file_not_added}: Raised indirectly via the step functions if
+    a file was not successfully added to the model cache; should not occur
+    in normal use.
+  \item \code{error}: Any other error occurred that is not classified in
+    the above errors.
+}
+}
+
 \examples{
 \dontrun{
 mod <- prepare_model_pipeline("path/to/model-export.csv")

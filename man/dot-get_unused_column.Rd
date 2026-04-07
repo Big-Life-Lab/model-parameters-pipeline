@@ -30,9 +30,11 @@ Generates a unique column name by appending an integer to a prefix.
 }
 \section{Errors}{
 
-  * `missing_tag`: Raised when `column_suffix` does not contain the `"#"`
-    placeholder character, which is required for generating numbered column
-    name variants.
+\itemize{
+  \item \code{missing_tag}: Raised when `column_suffix` does not contain the
+    `"#"` placeholder character, which is required for generating numbered
+    column name variants.
+}
 }
 
 \keyword{internal}

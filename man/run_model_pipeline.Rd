@@ -25,14 +25,32 @@ of:
 Default is "output".}
 }
 \value{
-A model object created from a call to
-  \code{\link{prepare_model_pipeline}}.
+A data frame containing the pipeline output (when `mode = "output"`)
+  or all data including intermediate columns (when `mode = "full"`).
 }
 \description{
 Executes the transformation pipeline on input data and retrieve the output.
 Applies each transformation step defined in the model steps file in
 sequence, modifying the data accordingly.
 }
+\section{Errors}{
+
+\itemize{
+  \item \code{inaccessible_file}: Raised if a step specification file does
+    not exist or, if `mod$sandbox_path` is set, is not a descendant of that
+    directory.
+  \item \code{invalid_file_format}: Raised if a step specification file
+    cannot be parsed as a CSV.
+  \item \code{missing_columns}: Raised when a step specification file is
+    missing required columns.
+  \item \code{file_not_added}: Raised indirectly via the step functions if
+    a file was not successfully added to the model cache; should not occur
+    in normal use.
+  \item \code{error}: Any other error occurred that is not classified in
+    the above errors.
+}
+}
+
 \examples{
 \dontrun{
 # Prepare and run pipeline

@@ -24,10 +24,9 @@ with [stop()] to raise typed exceptions that can be caught selectively with
 [tryCatch()] or [withCallingHandlers()].
 }
 \examples{
-# Raise a typed error
 \dontrun{
+# Raise a typed error
 stop(.make_error("validation_error", "Value must be positive"))
-}
 
 # Test that a specific error class was raised
 tryCatch(
@@ -38,7 +37,6 @@ tryCatch(
 )
 
 # In testthat, assert that the correct error class is thrown
-\dontrun{
 testthat::expect_error(
   stop(.make_error("validation_error", "Value must be positive")),
   class = "validation_error"
