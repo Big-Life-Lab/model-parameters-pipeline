@@ -40,9 +40,11 @@ NULL
 #'   (e.g., "prefix_2", "prefix_3")
 #'
 #' @section Errors:
-#'   * `missing_tag`: Raised when `column_suffix` does not contain the `"#"`
-#'     placeholder character, which is required for generating numbered column
-#'     name variants.
+#' \itemize{
+#'   \item \code{missing_tag}: Raised when `column_suffix` does not contain the
+#'     `"#"` placeholder character, which is required for generating numbered
+#'     column name variants.
+#' }
 #'
 #' @keywords internal
 .get_unused_column <- function(
@@ -90,9 +92,11 @@ NULL
 #'   "model steps data".
 #'
 #' @section Errors:
-#'   * `missing_columns`: Raised when one or more entries in `columns` are not
-#'     present in `colnames(data)`. The error message lists the missing column
-#'     names and, if `file` is provided, the basename of the file.
+#' \itemize{
+#'   \item \code{missing_columns}: Raised when one or more entries in `columns`
+#'     are not present in `colnames(data)`. The error message lists the missing
+#'     column names and, if `file` is provided, the basename of the file.
+#' }
 #'
 #' @keywords internal
 .verify_columns <- function(data, columns, data_description, file = NULL) {
@@ -150,12 +154,14 @@ NULL
 #' @return Updated model object with file in cache
 #'
 #' @section Errors:
-#'   * `inaccessible_file`: Raised when `file` does not exist, or when
+#' \itemize{
+#'   \item \code{inaccessible_file}: Raised when `file` does not exist, or when
 #'     `mod$sandbox_path` is set and `file` is not a descendant of that
 #'     directory. In the sandbox case the error message deliberately avoids
 #'     revealing whether the file exists, to prevent directory enumeration.
-#'   * `invalid_file_format`: Raised when `file` exists and is within the
-#'     sandbox but cannot be read as a CSV by [utils::read.csv()].
+#'   \item \code{invalid_file_format}: Raised when `file` exists and is within
+#'     the sandbox but cannot be read as a CSV by [utils::read.csv()].
+#' }
 #'
 #' @keywords internal
 .add_file <- function(mod, file) {
@@ -231,9 +237,11 @@ NULL
 #' @return Data from the file cache (eg. a dataframe)
 #'
 #' @section Errors:
-#'   * `file_not_added`: Raised when `file` has not been previously loaded into
-#'     the model cache via [`.add_file()`], indicating the caller did not add
-#'     the file before attempting to retrieve it.
+#' \itemize{
+#'   \item \code{file_not_added}: Raised when `file` has not been previously
+#'     loaded into the model cache via [`.add_file()`], indicating the caller
+#'     did not add the file before attempting to retrieve it.
+#' }
 #'
 #' @keywords internal
 .get_file <- function(mod, file) {
