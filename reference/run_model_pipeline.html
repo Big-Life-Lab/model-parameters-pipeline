@@ -78,9 +78,26 @@ of:</p><ul><li><p>"output": Only return the final output of the model. These are
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A model object created from a call to
-  <code><a href="prepare_model_pipeline.html">prepare_model_pipeline</a></code>.</p>
+    <p>A data frame containing the pipeline output (when `mode = "output"`)
+  or all data including intermediate columns (when `mode = "full"`).</p>
     </div>
+    <div class="section level2">
+    <h2 id="errors">Errors<a class="anchor" aria-label="anchor" href="#errors"></a></h2>
+
+
+<ul><li><p><code>inaccessible_file</code>: Raised if a step specification file does
+    not exist or, if `mod$sandbox_path` is set, is not a descendant of that
+    directory.</p></li>
+<li><p><code>invalid_file_format</code>: Raised if a step specification file
+    cannot be parsed as a CSV.</p></li>
+<li><p><code>missing_columns</code>: Raised when a step specification file is
+    missing required columns.</p></li>
+<li><p><code>file_not_added</code>: Raised indirectly via the step functions if
+    a file was not successfully added to the model cache; should not occur
+    in normal use.</p></li>
+<li><p><code>error</code>: Any other error occurred that is not classified in
+    the above errors.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="prepare_model_pipeline.html">prepare_model_pipeline</a></code> to prepare the model object</p></div>

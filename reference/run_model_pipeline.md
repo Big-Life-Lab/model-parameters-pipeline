@@ -38,8 +38,27 @@ run_model_pipeline(mod, x, mode = "output")
 
 ## Value
 
-A model object created from a call to
-[`prepare_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/prepare_model_pipeline.md).
+A data frame containing the pipeline output (when \`mode = "output"\`)
+or all data including intermediate columns (when \`mode = "full"\`).
+
+## Errors
+
+- `inaccessible_file`: Raised if a step specification file does not
+  exist or, if \`mod\$sandbox_path\` is set, is not a descendant of that
+  directory.
+
+- `invalid_file_format`: Raised if a step specification file cannot be
+  parsed as a CSV.
+
+- `missing_columns`: Raised when a step specification file is missing
+  required columns.
+
+- `file_not_added`: Raised indirectly via the step functions if a file
+  was not successfully added to the model cache; should not occur in
+  normal use.
+
+- `error`: Any other error occurred that is not classified in the above
+  errors.
 
 ## See also
 

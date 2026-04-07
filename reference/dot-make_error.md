@@ -32,10 +32,9 @@ A condition object of class \`c(error_class, "error", "condition")\`.
 ## Examples
 
 ``` r
-# Raise a typed error
 if (FALSE) { # \dontrun{
+# Raise a typed error
 stop(.make_error("validation_error", "Value must be positive"))
-} # }
 
 # Test that a specific error class was raised
 tryCatch(
@@ -44,10 +43,8 @@ tryCatch(
     message("Caught a validation_error: ", conditionMessage(e))
   }
 )
-#> Error in .make_error("validation_error", "Value must be ", "positive"): could not find function ".make_error"
 
 # In testthat, assert that the correct error class is thrown
-if (FALSE) { # \dontrun{
 testthat::expect_error(
   stop(.make_error("validation_error", "Value must be positive")),
   class = "validation_error"

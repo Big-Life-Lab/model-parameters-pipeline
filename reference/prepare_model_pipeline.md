@@ -39,6 +39,26 @@ prepare_model_pipeline(model_export, sandbox_path = NULL)
 A model object (list) that can be used to pass to
 [`run_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md).
 
+## Errors
+
+- `inaccessible_file`: Raised when any of the model export, variables,
+  model steps, or step parameter files does not exist or, if
+  \`sandbox_path\` is set, is not a descendant of that directory.
+
+- `invalid_file_format`: Raised when any of the model export, variables,
+  model steps, or step parameter files exists but cannot be parsed as a
+  CSV.
+
+- `missing_columns`: Raised when any of the Model Parameters files is
+  missing a required column.
+
+- `file_not_added`: Raised indirectly via the step functions if a file
+  was not successfully added to the model cache; should not occur in
+  normal use.
+
+- `error`: Any other error occurred that is not classified in the above
+  errors.
+
 ## See also
 
 [`run_model_pipeline`](https://big-life-lab.github.io/model-parameters-pipeline/reference/run_model_pipeline.md)

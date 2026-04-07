@@ -32,7 +32,6 @@ an informative error message if any are missing.
 
 ## Errors
 
-\* \`missing_columns\`: Raised when one or more entries in \`columns\`
-are not present in \`colnames(data)\`. The error message lists the
-missing column names and, if \`file\` is provided, the basename of the
-file.
+- `missing_columns`: Raised when one or more entries in \`columns\` are
+  not present in \`colnames(data)\`. The error message lists the missing
+  column names and, if \`file\` is provided, the basename of the file.

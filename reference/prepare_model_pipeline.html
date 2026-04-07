@@ -86,6 +86,24 @@ restriction does not apply to data files passed to
   <code><a href="run_model_pipeline.html">run_model_pipeline</a></code>.</p>
     </div>
     <div class="section level2">
+    <h2 id="errors">Errors<a class="anchor" aria-label="anchor" href="#errors"></a></h2>
+
+
+<ul><li><p><code>inaccessible_file</code>: Raised when any of the model export,
+    variables, model steps, or step parameter files does not exist or, if
+    `sandbox_path` is set, is not a descendant of that directory.</p></li>
+<li><p><code>invalid_file_format</code>: Raised when any of the model export,
+    variables, model steps, or step parameter files exists but cannot be
+    parsed as a CSV.</p></li>
+<li><p><code>missing_columns</code>: Raised when any of the Model Parameters
+    files is missing a required column.</p></li>
+<li><p><code>file_not_added</code>: Raised indirectly via the step functions if
+    a file was not successfully added to the model cache; should not occur
+    in normal use.</p></li>
+<li><p><code>error</code>: Any other error occurred that is not classified in
+    the above errors.</p></li>
+</ul></div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="run_model_pipeline.html">run_model_pipeline</a></code> to execute the pipeline.</p></div>
     </div>

@@ -69,13 +69,13 @@ cache.</p>
     <h2 id="errors">Errors<a class="anchor" aria-label="anchor" href="#errors"></a></h2>
 
 
-<p>* `inaccessible_file`: Raised when `file` does not exist, or when
+<ul><li><p><code>inaccessible_file</code>: Raised when `file` does not exist, or when
     `mod$sandbox_path` is set and `file` is not a descendant of that
     directory. In the sandbox case the error message deliberately avoids
-    revealing whether the file exists, to prevent directory enumeration.
-  * `invalid_file_format`: Raised when `file` exists and is within the
-    sandbox but cannot be read as a CSV by [utils::read.csv()].</p>
-    </div>
+    revealing whether the file exists, to prevent directory enumeration.</p></li>
+<li><p><code>invalid_file_format</code>: Raised when `file` exists and is within
+    the sandbox but cannot be read as a CSV by [utils::read.csv()].</p></li>
+</ul></div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
