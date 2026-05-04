@@ -9,6 +9,13 @@
 #' @return A list containing: \code{mod} (the updated model object with
 #'   centered variables added to \code{mod$data}), and \code{output_columns}
 #'   (character vector of output columns of this step)
+#'
+#' @section Errors:
+#' \itemize{
+#'   \item \code{missing_variable}: Raised when a variable specified as
+#'     \code{origVariable} in the step file does not exist in \code{mod$data}.
+#' }
+#'
 #' @keywords internal
 .run_step_center <- function(mod, file) {
   # Load the step specification file
@@ -35,13 +42,14 @@
 
     # Make sure origVariable exists
     if (!orig_variable %in% colnames(mod$data)) {
-      stop(
+      stop(.make_error(
+        error_class = "missing_variable",
         "Variable \"",
         orig_variable,
         "\" specified as origVariable does not exist in data ",
         "when performing center step in ",
         basename(file)
-      )
+      ))
     }
 
     # Center the variable

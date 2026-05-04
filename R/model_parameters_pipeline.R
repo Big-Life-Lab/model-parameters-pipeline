@@ -88,8 +88,13 @@ NULL
 #'   \item \code{invalid_file_format}: Raised when any of the model export,
 #'     variables, model steps, or step parameter files exists but cannot be
 #'     parsed as a CSV.
+#'   \item \code{invalid_model_export}: Raised when the model export file does
+#'     not have exactly one row where \code{fileType} equals \code{"variables"}
+#'     or exactly one row where \code{fileType} equals \code{"model-steps"}.
 #'   \item \code{missing_columns}: Raised when any of the Model Parameters
 #'     files is missing a required column.
+#'   \item \code{empty_step_file_path}: Raised when a row in the model steps
+#'     file has an empty \code{filePath}.
 #'   \item \code{file_not_added}: Raised indirectly via the step functions if
 #'     a file was not successfully added to the model cache; should not occur
 #'     in normal use.
@@ -130,10 +135,11 @@ prepare_model_pipeline <- function(
   variables_row <-
     mod$model_export[mod$model_export$fileType == "variables", ]
   if (nrow(variables_row) != 1) {
-    stop(
+    stop(.make_error(
+      error_class = "invalid_model_export",
       "Model export file must have exactly one row where ",
       "fileType equals \"variables\""
-    )
+    ))
   }
   variables_file <- file.path(mod$root_dir, variables_row[["filePath"]])
 
@@ -141,10 +147,11 @@ prepare_model_pipeline <- function(
   model_steps_row <-
     mod$model_export[mod$model_export$fileType == "model-steps", ]
   if (nrow(model_steps_row) != 1) {
-    stop(
+    stop(.make_error(
+      error_class = "invalid_model_export",
       "Model export file must have exactly one row where ",
       "fileType equals \"model-steps\""
-    )
+    ))
   }
   model_steps_file <- file.path(mod$root_dir, model_steps_row[["filePath"]])
 
@@ -189,7 +196,8 @@ prepare_model_pipeline <- function(
 
     file_path <- step$filePath
     if (is.null(file_path) || stringr::str_length(file_path) == 0) {
-      stop(paste0(
+      stop(.make_error(
+        error_class = "empty_step_file_path",
         "File path is empty for step #",
         i,
         ": ",
@@ -237,6 +245,14 @@ prepare_model_pipeline <- function(
 #'     cannot be parsed as a CSV.
 #'   \item \code{missing_columns}: Raised when a step specification file is
 #'     missing required columns.
+#'   \item \code{missing_data_columns}: Raised when predictor variable columns
+#'     listed in the variables file are absent from the input data.
+#'   \item \code{empty_step_file_path}: Raised when a row in the model steps
+#'     file has an empty \code{filePath}.
+#'   \item \code{unknown_step}: Raised when a step name in the model steps file
+#'     is not a recognized transformation type.
+#'   \item \code{invalid_mode}: Raised when the \code{mode} argument is not one
+#'     of \code{"output"} or \code{"full"}.
 #'   \item \code{file_not_added}: Raised indirectly via the step functions if
 #'     a file was not successfully added to the model cache; should not occur
 #'     in normal use.
@@ -272,9 +288,10 @@ run_model_pipeline <- function(mod, x, mode = "output") {
     missing_variable_columns <- paste0("'", missing_variable_columns, "'",
       collapse = ", "
     )
-    stop(paste(
+    stop(.make_error(
+      error_class = "missing_data_columns",
       "The following columns specified in the",
-      "variables file are missing in the data:",
+      " variables file are missing in the data: ",
       missing_variable_columns
     ))
   }
@@ -301,7 +318,8 @@ run_model_pipeline <- function(mod, x, mode = "output") {
 
     file_path <- step$filePath
     if (is.null(file_path) || stringr::str_length(file_path) == 0) {
-      stop(paste0(
+      stop(.make_error(
+        error_class = "empty_step_file_path",
         "File path is empty for step #",
         i,
         ": ",
@@ -327,7 +345,8 @@ run_model_pipeline <- function(mod, x, mode = "output") {
       res <- .run_step_rcs(mod, file_path)
     } else {
       # Handle unknown step name
-      stop(paste0(
+      stop(.make_error(
+        error_class = "unknown_step",
         "Unrecognized or unimplemented step type for step #",
         i,
         ": ",
@@ -350,7 +369,8 @@ run_model_pipeline <- function(mod, x, mode = "output") {
   } else if (mode == "full") {
     mod$data
   } else {
-    stop(paste0(
+    stop(.make_error(
+      error_class = "invalid_mode",
       "Unrecognized value for \"mode\" in run_model_pipeline. ",
       "Must be one of \"output\" or \"full\", instead found \"",
       mode,

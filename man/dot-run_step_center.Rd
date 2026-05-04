@@ -21,4 +21,12 @@ Centers variables by subtracting a specified center value from original
 variables. Implements the 'center' transformation step from the Model
 Parameters pipeline.
 }
+\section{Errors}{
+
+\itemize{
+  \item \code{missing_variable}: Raised when a variable specified as
+    \code{origVariable} in the step file does not exist in \code{mod$data}.
+}
+}
+
 \keyword{internal}

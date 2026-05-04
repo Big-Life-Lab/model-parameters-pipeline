@@ -10,6 +10,13 @@
 #' @return A list containing: \code{mod} (the updated model object with the
 #'   logistic prediction column added to \code{mod$data}), and
 #'   \code{output_columns} (character vector of output columns of this step)
+#'
+#' @section Errors:
+#' \itemize{
+#'   \item \code{missing_variable}: Raised when a non-intercept variable
+#'     specified in the step file does not exist in \code{mod$data}.
+#' }
+#'
 #' @keywords internal
 .run_step_logistic_regression <- function(mod, file) {
   # Load the step specification file
@@ -41,13 +48,14 @@
     } else {
       # Make sure variable exists in data
       if (!variable %in% colnames(mod$data)) {
-        stop(
+        stop(.make_error(
+          error_class = "missing_variable",
           "Variable \"",
           variable,
           "\" does not exist in data when performing ",
           "logistic-regression step in ",
           basename(file)
-        )
+        ))
       }
 
       # Coefficients get multiplied by the variable then added to the output

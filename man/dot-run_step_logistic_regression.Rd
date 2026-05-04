@@ -22,4 +22,12 @@ coefficients, summing, and applying the logistic function
 (1 / (1 + exp(-x))). Implements the 'logistic-regression' transformation
 step from the Model Parameters pipeline.
 }
+\section{Errors}{
+
+\itemize{
+  \item \code{missing_variable}: Raised when a non-intercept variable
+    specified in the step file does not exist in \code{mod$data}.
+}
+}
+
 \keyword{internal}

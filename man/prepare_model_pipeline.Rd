@@ -43,8 +43,13 @@ a cached model object.
   \item \code{invalid_file_format}: Raised when any of the model export,
     variables, model steps, or step parameter files exists but cannot be
     parsed as a CSV.
+  \item \code{invalid_model_export}: Raised when the model export file does
+    not have exactly one row where \code{fileType} equals \code{"variables"}
+    or exactly one row where \code{fileType} equals \code{"model-steps"}.
   \item \code{missing_columns}: Raised when any of the Model Parameters
     files is missing a required column.
+  \item \code{empty_step_file_path}: Raised when a row in the model steps
+    file has an empty \code{filePath}.
   \item \code{file_not_added}: Raised indirectly via the step functions if
     a file was not successfully added to the model cache; should not occur
     in normal use.

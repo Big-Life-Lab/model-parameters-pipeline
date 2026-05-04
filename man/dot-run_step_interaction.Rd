@@ -21,4 +21,12 @@ Creates interaction terms by multiplying specified variables together.
 Implements the 'interaction' transformation step from the Model
 Parameters pipeline.
 }
+\section{Errors}{
+
+\itemize{
+  \item \code{missing_variable}: Raised when a variable listed in
+    \code{interactingVariables} does not exist in \code{mod$data}.
+}
+}
+
 \keyword{internal}

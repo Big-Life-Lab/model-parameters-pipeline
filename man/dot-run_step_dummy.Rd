@@ -22,4 +22,12 @@ original variable equals the specified category value, 0 otherwise.
 Implements the 'dummy' transformation step from the Model
 Parameters pipeline.
 }
+\section{Errors}{
+
+\itemize{
+  \item \code{missing_variable}: Raised when a variable specified as
+    \code{origVariable} in the step file does not exist in \code{mod$data}.
+}
+}
+
 \keyword{internal}

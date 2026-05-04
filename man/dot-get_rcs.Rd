@@ -19,4 +19,12 @@ Computes restricted cubic spline (RCS) basis functions for a given vector
 and knot positions. This implementation follows the algorithm from
 Hmisc::rcspline.eval.
 }
+\section{Errors}{
+
+\itemize{
+  \item \code{insufficient_knots}: Raised when fewer than 3 knots are
+    provided; at least 3 are required for RCS calculations.
+}
+}
+
 \keyword{internal}

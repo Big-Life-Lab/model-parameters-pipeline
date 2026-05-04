@@ -43,6 +43,14 @@ sequence, modifying the data accordingly.
     cannot be parsed as a CSV.
   \item \code{missing_columns}: Raised when a step specification file is
     missing required columns.
+  \item \code{missing_data_columns}: Raised when predictor variable columns
+    listed in the variables file are absent from the input data.
+  \item \code{empty_step_file_path}: Raised when a row in the model steps
+    file has an empty \code{filePath}.
+  \item \code{unknown_step}: Raised when a step name in the model steps file
+    is not a recognized transformation type.
+  \item \code{invalid_mode}: Raised when the \code{mode} argument is not one
+    of \code{"output"} or \code{"full"}.
   \item \code{file_not_added}: Raised indirectly via the step functions if
     a file was not successfully added to the model cache; should not occur
     in normal use.

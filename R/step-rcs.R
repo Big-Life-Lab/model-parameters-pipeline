@@ -9,6 +9,13 @@
 #' @return A list containing: \code{mod} (the updated model object with
 #'   RCS variables added to \code{mod$data}), and \code{output_columns}
 #'   (character vector of output columns of this step)
+#'
+#' @section Errors:
+#' \itemize{
+#'   \item \code{missing_variable}: Raised when a variable specified in the
+#'     step file does not exist in \code{mod$data}.
+#' }
+#'
 #' @keywords internal
 .run_step_rcs <- function(mod, file) {
   # Load the step specification file
@@ -35,12 +42,13 @@
 
     # Make sure the variable exists in the data
     if (!variable %in% colnames(mod$data)) {
-      stop(
+      stop(.make_error(
+        error_class = "missing_variable",
         "RCS variable \"",
         variable,
         "\" does not exist in data when performing rcs step in ",
         basename(file)
-      )
+      ))
     }
 
     # Calculate and create the new RCS variable
@@ -65,16 +73,24 @@
 #' @param x Numeric vector of values to transform
 #' @param knots Numeric vector of knot positions
 #' @return Matrix with RCS basis functions as columns
+#'
+#' @section Errors:
+#' \itemize{
+#'   \item \code{insufficient_knots}: Raised when fewer than 3 knots are
+#'     provided; at least 3 are required for RCS calculations.
+#' }
+#'
 #' @keywords internal
 .get_rcs <- function(x, knots) {
   k <- length(knots)
   if (k < 3) {
-    stop(
+    stop(.make_error(
+      error_class = "insufficient_knots",
       "At least 3 knots are required for an RCS step, instead ",
       k,
       " were given: ",
       paste0(knots, collapse = ", ")
-    )
+    ))
   }
 
   res <- data.frame(rcs.1 = x)

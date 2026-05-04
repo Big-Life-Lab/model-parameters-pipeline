@@ -9,6 +9,13 @@
 #' @return A list containing: \code{mod} (the updated model object with
 #'   interaction variables added to \code{mod$data}), and \code{output_columns}
 #'   (character vector of output columns of this step)
+#'
+#' @section Errors:
+#' \itemize{
+#'   \item \code{missing_variable}: Raised when a variable listed in
+#'     \code{interactingVariables} does not exist in \code{mod$data}.
+#' }
+#'
 #' @keywords internal
 .run_step_interaction <- function(mod, file) {
   # Load the step specification file
@@ -37,12 +44,13 @@
     for (interacting_variable in interacting_variables) {
       # Make sure the interacting variable exists
       if (!interacting_variable %in% colnames(mod$data)) {
-        stop(
+        stop(.make_error(
+          error_class = "missing_variable",
           "Interacting variable \"",
           interacting_variable,
           "\" does not exist in data when performing interaction step in ",
           basename(file)
-        )
+        ))
       }
 
       mod$data[interaction_variable] <- mod$data[interaction_variable] *
