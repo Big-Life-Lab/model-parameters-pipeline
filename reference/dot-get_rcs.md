@@ -23,3 +23,8 @@ from Hmisc::rcspline.eval.
 ## Value
 
 Matrix with RCS basis functions as columns
+
+## Errors
+
+- `insufficient_knots`: Raised when fewer than 3 knots are provided; at
+  least 3 are required for RCS calculations.

@@ -26,3 +26,8 @@ Parameters pipeline.
 A list containing: `mod` (the updated model object with the logistic
 prediction column added to `mod$data`), and `output_columns` (character
 vector of output columns of this step)
+
+## Errors
+
+- `missing_variable`: Raised when a non-intercept variable specified in
+  the step file does not exist in `mod$data`.

@@ -26,3 +26,8 @@ pipeline.
 A list containing: `mod` (the updated model object with dummy variables
 added to `mod$data`), and `output_columns` (character vector of output
 columns of this step)
+
+## Errors
+
+- `missing_variable`: Raised when a variable specified as `origVariable`
+  in the step file does not exist in `mod$data`.

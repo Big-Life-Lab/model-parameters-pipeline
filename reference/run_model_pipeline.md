@@ -53,6 +53,18 @@ or all data including intermediate columns (when \`mode = "full"\`).
 - `missing_columns`: Raised when a step specification file is missing
   required columns.
 
+- `missing_data_columns`: Raised when predictor variable columns listed
+  in the variables file are absent from the input data.
+
+- `empty_step_file_path`: Raised when a row in the model steps file has
+  an empty `filePath`.
+
+- `unknown_step`: Raised when a step name in the model steps file is not
+  a recognized transformation type.
+
+- `invalid_mode`: Raised when the `mode` argument is not one of
+  `"output"` or `"full"`.
+
 - `file_not_added`: Raised indirectly via the step functions if a file
   was not successfully added to the model cache; should not occur in
   normal use.

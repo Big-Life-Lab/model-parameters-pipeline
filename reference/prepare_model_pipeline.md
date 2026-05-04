@@ -49,8 +49,15 @@ A model object (list) that can be used to pass to
   model steps, or step parameter files exists but cannot be parsed as a
   CSV.
 
+- `invalid_model_export`: Raised when the model export file does not
+  have exactly one row where `fileType` equals `"variables"` or exactly
+  one row where `fileType` equals `"model-steps"`.
+
 - `missing_columns`: Raised when any of the Model Parameters files is
   missing a required column.
+
+- `empty_step_file_path`: Raised when a row in the model steps file has
+  an empty `filePath`.
 
 - `file_not_added`: Raised indirectly via the step functions if a file
   was not successfully added to the model cache; should not occur in
