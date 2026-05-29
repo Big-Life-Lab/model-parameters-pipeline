@@ -257,8 +257,8 @@ Use this template as a starting point:
    file. Each row typically defines one transformation to apply.
 
 6. **Access and Write Data**:
-   - Read data: `mod$data[column_name]` or `mod$data[[column_name]]`
-   - Write data: `mod$data[new_column] <- transformed_values`
+   - Read data: `mod$data[[column_name]]`
+   - Write data: `mod$data[[new_column]] <- transformed_values`
 
 7. **Track Output Columns**: Append each new column name to `output_columns`
    so the pipeline knows which columns this step produced. This might include
@@ -288,29 +288,44 @@ Here's a real example from the existing codebase
   )
 
   # Track which columns are produced by this step
-  output_columns <- c()
+  output_columns <- character(nrow(step_data))
 
   # Process each row in the step specification
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
-    center_value <- info[["centerValue"]]
+    center_value <- suppressWarnings(as.double(info[["centerValue"]]))
     centered_variable <- info[["centeredVariable"]]
+
+    # Make sure centerValue parsed to a number
+    if (is.na(center_value)) {
+      stop(.make_error(
+        error_class = "non_numeric_center_value",
+        "The centerValue for origVariable \"",
+        orig_variable,
+        "\" in the center step in ",
+        basename(file),
+        " must be numeric: ",
+        info[["centerValue"]]
+      ))
+    }
 
     # Make sure origVariable exists
     if (!orig_variable %in% colnames(mod$data)) {
-      stop(
+      stop(.make_error(
+        error_class = "missing_variable",
         "Variable \"",
         orig_variable,
         "\" specified as origVariable does not exist in data ",
         "when performing center step in ",
         basename(file)
-      )
+      ))
     }
 
-    # Center the variable
-    mod$data[centered_variable] <- mod$data[orig_variable] - center_value
-    output_columns <- c(output_columns, centered_variable)
+    # Center the variable. Index columns with [[ ]] so the arithmetic runs on
+    # plain vectors rather than dispatching to the much slower Ops.data.frame.
+    mod$data[[centered_variable]] <- mod$data[[orig_variable]] - center_value
+    output_columns[i] <- centered_variable
   }
 
   # Return the updated model object and output column names
