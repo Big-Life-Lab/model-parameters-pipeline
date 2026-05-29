@@ -14,6 +14,13 @@
 #' \itemize{
 #'   \item \code{missing_variable}: Raised when a variable specified in the
 #'     step file does not exist in \code{mod$data}.
+#'   \item \code{rcs_variable_count_mismatch}: Raised when the number of
+#'     \code{rcsVariables} for a row does not equal the number of knots minus
+#'     one (the number of restricted cubic spline basis terms).
+#'   \item \code{non_numeric_knots}: Raised when one or more \code{knots} for a
+#'     row cannot be parsed as a number.
+#'   \item \code{insufficient_knots}: Raised (via \code{\link{.get_rcs}}) when
+#'     fewer than 3 knots are provided for a row.
 #' }
 #'
 #' @keywords internal
@@ -38,7 +45,21 @@
     info <- step_data[i, ]
     variable <- info[["variable"]]
     rcs_variables <- .get_string_parts(info[["rcsVariables"]])
-    knots <- as.double(.get_string_parts(info[["knots"]]))
+    knots <- suppressWarnings(as.double(.get_string_parts(info[["knots"]])))
+
+    # Make sure all knots parsed to numbers. as.double() turns a non-numeric
+    # value into NA, which would otherwise silently propagate to NaN outputs.
+    if (any(is.na(knots))) {
+      stop(.make_error(
+        error_class = "non_numeric_knots",
+        "The knots for variable \"",
+        variable,
+        "\" in the rcs step in ",
+        basename(file),
+        " must all be numeric: ",
+        info[["knots"]]
+      ))
+    }
 
     # Make sure the variable exists in the data
     if (!variable %in% colnames(mod$data)) {
@@ -48,6 +69,26 @@
         variable,
         "\" does not exist in data when performing rcs step in ",
         basename(file)
+      ))
+    }
+
+    # The number of RCS output columns must equal the number of spline basis
+    # terms, which is (number of knots - 1). We only check this once there are
+    # enough knots; .get_rcs raises insufficient_knots for fewer than 3.
+    if (length(knots) >= 3 && length(rcs_variables) != length(knots) - 1) {
+      stop(.make_error(
+        error_class = "rcs_variable_count_mismatch",
+        "The rcs step in ",
+        basename(file),
+        " specifies ",
+        length(rcs_variables),
+        " rcsVariables for variable \"",
+        variable,
+        "\" but ",
+        length(knots),
+        " knots require ",
+        length(knots) - 1,
+        " rcsVariables."
       ))
     }
 
