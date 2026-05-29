@@ -31,3 +31,6 @@ vector of output columns of this step)
 
 - `missing_variable`: Raised when a non-intercept variable specified in
   the step file does not exist in `mod$data`.
+
+- `non_numeric_coefficient`: Raised when a `coefficient` in the step
+  file cannot be parsed as a number.

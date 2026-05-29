@@ -30,3 +30,14 @@ columns of this step)
 
 - `missing_variable`: Raised when a variable specified in the step file
   does not exist in `mod$data`.
+
+- `rcs_variable_count_mismatch`: Raised when the number of
+  `rcsVariables` for a row does not equal the number of knots minus one
+  (the number of restricted cubic spline basis terms).
+
+- `non_numeric_knots`: Raised when one or more `knots` for a row cannot
+  be parsed as a number.
+
+- `insufficient_knots`: Raised (via
+  [`.get_rcs`](https://big-life-lab.github.io/model-parameters-pipeline/reference/dot-get_rcs.md))
+  when fewer than 3 knots are provided for a row.

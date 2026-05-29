@@ -30,3 +30,6 @@ of output columns of this step)
 
 - `missing_variable`: Raised when a variable specified as `origVariable`
   in the step file does not exist in `mod$data`.
+
+- `non_numeric_center_value`: Raised when a `centerValue` in the step
+  file cannot be parsed as a number.

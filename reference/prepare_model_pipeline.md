@@ -59,10 +59,6 @@ A model object (list) that can be used to pass to
 - `empty_step_file_path`: Raised when a row in the model steps file has
   an empty `filePath`.
 
-- `file_not_added`: Raised indirectly via the step functions if a file
-  was not successfully added to the model cache; should not occur in
-  normal use.
-
 - `error`: Any other error occurred that is not classified in the above
   errors.
 

@@ -31,8 +31,11 @@ run_model_pipeline(mod, x, mode = "output")
     values of all variables calculated in the final step found in the
     model steps file.
 
-  - "full": Return all data, which includes the input data, all
-    intermediate variables, and the final output of the model.
+  - "full": Return all predictor and derived columns, which includes the
+    predictor columns from the input data (as listed in the variables
+    file), all intermediate variables created by the pipeline steps, and
+    the final output of the model. Note that input columns which are not
+    listed as predictors in the variables file are not included.
 
   Default is "output".
 
@@ -59,15 +62,14 @@ or all data including intermediate columns (when \`mode = "full"\`).
 - `empty_step_file_path`: Raised when a row in the model steps file has
   an empty `filePath`.
 
+- `empty_pipeline`: Raised when the model steps file defines no
+  transformation steps, so the pipeline would produce no output.
+
 - `unknown_step`: Raised when a step name in the model steps file is not
   a recognized transformation type.
 
 - `invalid_mode`: Raised when the `mode` argument is not one of
   `"output"` or `"full"`.
-
-- `file_not_added`: Raised indirectly via the step functions if a file
-  was not successfully added to the model cache; should not occur in
-  normal use.
 
 - `error`: Any other error occurred that is not classified in the above
   errors.
