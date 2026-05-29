@@ -100,6 +100,95 @@ test_that("Utility function .get_unused_column works", {
   )
 })
 
+test_that(".run_step_rcs validates the rcsVariables count against the knots", {
+  base_tmp <- tempfile("rcs_count_test_")
+  dir.create(base_tmp)
+  on.exit(unlink(base_tmp, recursive = TRUE), add = TRUE)
+
+  mod <- list(data = data.frame(var_a = c(1, 2, 3, 4)))
+
+  # 4 knots require 3 rcsVariables, but only 2 are specified -> mismatch
+  too_few_file <- file.path(base_tmp, "rcs-too-few.csv")
+  write.csv(
+    data.frame(
+      variable = "var_a",
+      rcsVariables = "var_a_rcs_1;var_a_rcs_2",
+      knots = "-150;20;100;350"
+    ),
+    too_few_file,
+    row.names = FALSE
+  )
+  expect_error(
+    .run_step_rcs(mod, too_few_file),
+    class = "rcs_variable_count_mismatch"
+  )
+
+  # The matching count (3 rcsVariables for 4 knots) must not error
+  correct_file <- file.path(base_tmp, "rcs-correct.csv")
+  write.csv(
+    data.frame(
+      variable = "var_a",
+      rcsVariables = "var_a_rcs_1;var_a_rcs_2;var_a_rcs_3",
+      knots = "-150;20;100;350"
+    ),
+    correct_file,
+    row.names = FALSE
+  )
+  expect_no_error(.run_step_rcs(mod, correct_file))
+})
+
+test_that("step functions reject non-numeric parameters", {
+  base_tmp <- tempfile("non_numeric_test_")
+  dir.create(base_tmp)
+  on.exit(unlink(base_tmp, recursive = TRUE), add = TRUE)
+
+  mod <- list(data = data.frame(var_a = c(1, 2, 3, 4)))
+
+  # rcs: a non-numeric knot
+  rcs_file <- file.path(base_tmp, "rcs.csv")
+  write.csv(
+    data.frame(
+      variable = "var_a",
+      rcsVariables = "var_a_rcs_1;var_a_rcs_2",
+      knots = "-150;abc;350"
+    ),
+    rcs_file,
+    row.names = FALSE
+  )
+  expect_error(.run_step_rcs(mod, rcs_file), class = "non_numeric_knots")
+
+  # center: a non-numeric centerValue
+  center_file <- file.path(base_tmp, "center.csv")
+  write.csv(
+    data.frame(
+      origVariable = "var_a",
+      centerValue = "not_a_number",
+      centeredVariable = "var_a_C"
+    ),
+    center_file,
+    row.names = FALSE
+  )
+  expect_error(
+    .run_step_center(mod, center_file),
+    class = "non_numeric_center_value"
+  )
+
+  # logistic-regression: a non-numeric coefficient
+  logistic_file <- file.path(base_tmp, "logistic.csv")
+  write.csv(
+    data.frame(
+      variable = "var_a",
+      coefficient = "oops"
+    ),
+    logistic_file,
+    row.names = FALSE
+  )
+  expect_error(
+    .run_step_logistic_regression(mod, logistic_file),
+    class = "non_numeric_coefficient"
+  )
+})
+
 test_that("Utility function .get_string_parts works", {
   # Basic test with 3 parts
   expected_parts <- c("part1", "part2", "part3")
