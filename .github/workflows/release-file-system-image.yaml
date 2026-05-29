@@ -5,7 +5,7 @@ on:
     # Must republish release to update assets
     types: [ published ]
 
-name: Build and deploy wasm R package image
+name: Wasm Package
 
 jobs:
   release-file-system-image:
