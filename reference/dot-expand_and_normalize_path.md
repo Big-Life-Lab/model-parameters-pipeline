@@ -5,7 +5,7 @@ Symbolic links and ".." will be followed and expanded.
 ## Usage
 
 ``` r
-.expand_and_normalize_path(p, add_trailing_slash = FALSE, cache = NULL)
+.expand_and_normalize_path(p, add_trailing_slash = FALSE)
 ```
 
 ## Arguments
@@ -19,18 +19,6 @@ Symbolic links and ".." will be followed and expanded.
   Logical. If \`TRUE\`, a trailing slash is appended to the normalized
   path if it does not already have one. This is useful if the path is
   known to be a directory. Defaults to \`FALSE\`.
-
-- cache:
-
-  Optional environment used to memoize successful normalizations.
-  \`normalizePath()\` touches the file system, so resolving the same
-  path repeatedly (e.g. step files on every pipeline run) is wasteful.
-  When an environment is supplied, the resolved path is read from /
-  written to it, keyed by \`p\` and \`add_trailing_slash\`. Only
-  successful normalizations are cached, so a path that does not yet
-  exist is always re-checked. Callers should scope the cache to a single
-  model object so it is bounded and released with the model. Defaults to
-  \`NULL\` (no caching).
 
 ## Value
 
