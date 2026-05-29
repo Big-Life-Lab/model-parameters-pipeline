@@ -27,6 +27,8 @@ step from the Model Parameters pipeline.
 \itemize{
   \item \code{missing_variable}: Raised when a non-intercept variable
     specified in the step file does not exist in \code{mod$data}.
+  \item \code{non_numeric_coefficient}: Raised when a \code{coefficient} in
+    the step file cannot be parsed as a number.
 }
 }
 

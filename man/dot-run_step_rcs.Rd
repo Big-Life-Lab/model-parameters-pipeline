@@ -26,6 +26,13 @@ from the Model Parameters pipeline.
 \itemize{
   \item \code{missing_variable}: Raised when a variable specified in the
     step file does not exist in \code{mod$data}.
+  \item \code{rcs_variable_count_mismatch}: Raised when the number of
+    \code{rcsVariables} for a row does not equal the number of knots minus
+    one (the number of restricted cubic spline basis terms).
+  \item \code{non_numeric_knots}: Raised when one or more \code{knots} for a
+    row cannot be parsed as a number.
+  \item \code{insufficient_knots}: Raised (via \code{\link{.get_rcs}}) when
+    fewer than 3 knots are provided for a row.
 }
 }
 

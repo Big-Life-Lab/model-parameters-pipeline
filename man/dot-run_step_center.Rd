@@ -26,6 +26,8 @@ Parameters pipeline.
 \itemize{
   \item \code{missing_variable}: Raised when a variable specified as
     \code{origVariable} in the step file does not exist in \code{mod$data}.
+  \item \code{non_numeric_center_value}: Raised when a \code{centerValue} in
+    the step file cannot be parsed as a number.
 }
 }
 
