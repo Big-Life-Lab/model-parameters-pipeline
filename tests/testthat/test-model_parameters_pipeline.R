@@ -47,6 +47,47 @@ test_that("model pipeline works with dataframes (instead of files)", {
   }
 })
 
+test_that("a model with no transformation steps raises empty_pipeline", {
+  # Build a minimal model whose model-steps file defines no steps. The
+  # pipeline has no output to return, so it should raise a classified
+  # error rather than failing with a cryptic subscript error.
+  base_tmp <- tempfile("empty_pipeline_test_")
+  dir.create(base_tmp)
+  on.exit(unlink(base_tmp, recursive = TRUE), add = TRUE)
+
+  write.csv(
+    data.frame(role = "Predictor", variable = "var_a"),
+    file.path(base_tmp, "variables.csv"),
+    row.names = FALSE
+  )
+  # Model steps file with the required columns but no rows
+  write.csv(
+    data.frame(step = character(0), filePath = character(0)),
+    file.path(base_tmp, "model-steps.csv"),
+    row.names = FALSE
+  )
+  write.csv(
+    data.frame(
+      fileType = c("variables", "model-steps"),
+      filePath = c("./variables.csv", "./model-steps.csv")
+    ),
+    file.path(base_tmp, "model-export.csv"),
+    row.names = FALSE
+  )
+
+  mod <- prepare_model_pipeline(file.path(base_tmp, "model-export.csv"))
+  input_data <- data.frame(var_a = c(1, 2, 3))
+
+  expect_error(
+    run_model_pipeline(mod, x = input_data),
+    class = "empty_pipeline"
+  )
+  expect_error(
+    run_model_pipeline(mod, x = input_data, mode = "full"),
+    class = "empty_pipeline"
+  )
+})
+
 test_that("transformation steps work", {
   root_dir <- testthat::test_path("testdata/steps")
   for (cur_dir in list.dirs(root_dir, recursive = FALSE)) {
