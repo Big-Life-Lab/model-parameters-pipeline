@@ -180,7 +180,7 @@ NULL
     reportable_file
   )
 
-  file <- .expand_and_normalize_path(file)
+  file <- .expand_and_normalize_path(file, cache = mod$path_cache)
   if (is.null(file)) {
     if (is.null(mod$sandbox_path)) {
       stop(.make_error(
@@ -246,7 +246,7 @@ NULL
 #' @keywords internal
 .get_file <- function(mod, file) {
   # The file should have already been added by calling .add_file
-  file <- .expand_and_normalize_path(file)
+  file <- .expand_and_normalize_path(file, cache = mod$path_cache)
   if (!(file %in% names(mod$files))) {
     stop(.make_error(
       error_class = "file_not_added",
@@ -266,10 +266,30 @@ NULL
 #' @param add_trailing_slash Logical. If `TRUE`, a trailing slash is appended to
 #'   the normalized path if it does not already have one. This is useful if the
 #'   path is known to be a directory. Defaults to `FALSE`.
+#' @param cache Optional environment used to memoize successful normalizations.
+#'   `normalizePath()` touches the file system, so resolving the same path
+#'   repeatedly (e.g. step files on every pipeline run) is wasteful. When an
+#'   environment is supplied, the resolved path is read from / written to it,
+#'   keyed by `p` and `add_trailing_slash`. Only successful normalizations are
+#'   cached, so a path that does not yet exist is always re-checked. Callers
+#'   should scope the cache to a single model object so it is bounded and
+#'   released with the model. Defaults to `NULL` (no caching).
 #' @return Character. The normalized path, or `NULL` if the path is invalid or
 #'   does not exist.
 #' @keywords internal
-.expand_and_normalize_path <- function(p, add_trailing_slash = FALSE) {
+.expand_and_normalize_path <- function(p, add_trailing_slash = FALSE,
+                                       cache = NULL) {
+  # Return a previously cached result if available. Only successful
+  # normalizations are cached, so this never masks a now-existing file.
+  cache_key <- NULL
+  if (!is.null(cache)) {
+    cache_key <- paste0(add_trailing_slash, "\n", p)
+    cached <- cache[[cache_key]]
+    if (!is.null(cached)) {
+      return(cached)
+    }
+  }
+
   # Try to normalize the path. If the path does not exist then
   # we return NULL
   normalized <- NULL
@@ -293,6 +313,10 @@ NULL
     if (len > 0 && substr(normalized, len, len) != .Platform$file.sep) {
       normalized <- paste0(normalized, .Platform$file.sep)
     }
+  }
+
+  if (!is.null(cache_key)) {
+    cache[[cache_key]] <- normalized
   }
 
   normalized

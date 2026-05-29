@@ -115,6 +115,14 @@ prepare_model_pipeline <- function(
   # Allow/disallow path traversals in .add_file
   mod$sandbox_path <- sandbox_path
 
+  # Memoizes successful path normalizations for this model. normalizePath()
+  # touches the file system, and the same config-file paths are resolved on
+  # every pipeline run, so caching avoids repeated file system access. The
+  # cache is scoped to this model object, so it stays bounded (only the model's
+  # config files) and is released when the model is. Data file paths passed to
+  # run_model_pipeline() are deliberately not cached, as they vary per run.
+  mod$path_cache <- new.env(parent = emptyenv())
+
   # Get the root dir from the model_export path
   mod$root_dir <- .expand_and_normalize_path(dirname(model_export))
 
