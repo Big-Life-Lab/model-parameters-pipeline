@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">model.parameters.pipeline</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Contributing to Model Parameters Pipeline</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/first/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Big-Life-Lab/model-parameters-pipeline/blob/v0.2.5-perf-alpha/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
     </div>
 
 <div id="contributing-to-model-parameters-pipeline" class="section level1">
@@ -246,9 +246,9 @@
 <li><p><strong>Process Each Row</strong>: The <code>for</code> loop processes each row in the specification file. Each row typically defines one transformation to apply.</p></li>
 <li>
 <p><strong>Access and Write Data</strong>:</p>
-<ul><li>Read data: <code>mod$data[column_name]</code> or <code>mod$data[[column_name]]</code>
+<ul><li>Read data: <code>mod$data[[column_name]]</code>
 </li>
-<li>Write data: <code>mod$data[new_column] &lt;- transformed_values</code>
+<li>Write data: <code>mod$data[[new_column]] &lt;- transformed_values</code>
 </li>
 </ul></li>
 <li><p><strong>Track Output Columns</strong>: Append each new column name to <code>output_columns</code> so the pipeline knows which columns this step produced. This might include columns that already existed in the data (eg. an existing column has been overwritten).</p></li>
@@ -272,29 +272,44 @@
 <span>  <span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Track which columns are produced by this step</span></span>
-<span>  <span class="va">output_columns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">output_columns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">step_data</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Process each row in the step specification</span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">step_data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">info</span> <span class="op">&lt;-</span> <span class="va">step_data</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span></span>
 <span>    <span class="va">orig_variable</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"origVariable"</span><span class="op">]</span><span class="op">]</span></span>
-<span>    <span class="va">center_value</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"centerValue"</span><span class="op">]</span><span class="op">]</span></span>
+<span>    <span class="va">center_value</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">info</span><span class="op">[[</span><span class="st">"centerValue"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">centered_variable</span> <span class="op">&lt;-</span> <span class="va">info</span><span class="op">[[</span><span class="st">"centeredVariable"</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span>    <span class="co"># Make sure centerValue parsed to a number</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">center_value</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="reference/dot-make_error.html">.make_error</a></span><span class="op">(</span></span>
+<span>        error_class <span class="op">=</span> <span class="st">"non_numeric_center_value"</span>,</span>
+<span>        <span class="st">"The centerValue for origVariable \""</span>,</span>
+<span>        <span class="va">orig_variable</span>,</span>
+<span>        <span class="st">"\" in the center step in "</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span>,</span>
+<span>        <span class="st">" must be numeric: "</span>,</span>
+<span>        <span class="va">info</span><span class="op">[[</span><span class="st">"centerValue"</span><span class="op">]</span><span class="op">]</span></span>
+<span>      <span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
 <span></span>
 <span>    <span class="co"># Make sure origVariable exists</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">orig_variable</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="fu"><a href="reference/dot-make_error.html">.make_error</a></span><span class="op">(</span></span>
+<span>        error_class <span class="op">=</span> <span class="st">"missing_variable"</span>,</span>
 <span>        <span class="st">"Variable \""</span>,</span>
 <span>        <span class="va">orig_variable</span>,</span>
 <span>        <span class="st">"\" specified as origVariable does not exist in data "</span>,</span>
 <span>        <span class="st">"when performing center step in "</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
+<span>      <span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span></span>
-<span>    <span class="co"># Center the variable</span></span>
-<span>    <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="va">centered_variable</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="va">orig_variable</span><span class="op">]</span> <span class="op">-</span> <span class="va">center_value</span></span>
-<span>    <span class="va">output_columns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">output_columns</span>, <span class="va">centered_variable</span><span class="op">)</span></span>
+<span>    <span class="co"># Center the variable. Index columns with [[ ]] so the arithmetic runs on</span></span>
+<span>    <span class="co"># plain vectors rather than dispatching to the much slower Ops.data.frame.</span></span>
+<span>    <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[[</span><span class="va">centered_variable</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">data</span><span class="op">[[</span><span class="va">orig_variable</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="va">center_value</span></span>
+<span>    <span class="va">output_columns</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">centered_variable</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
 <span>  <span class="co"># Return the updated model object and output column names</span></span>
