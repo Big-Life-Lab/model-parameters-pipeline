@@ -14,6 +14,8 @@
 #' \itemize{
 #'   \item \code{missing_variable}: Raised when a variable specified as
 #'     \code{origVariable} in the step file does not exist in \code{mod$data}.
+#'   \item \code{non_numeric_center_value}: Raised when a \code{centerValue} in
+#'     the step file cannot be parsed as a number.
 #' }
 #'
 #' @keywords internal
@@ -37,8 +39,21 @@
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     orig_variable <- info[["origVariable"]]
-    center_value <- info[["centerValue"]]
+    center_value <- suppressWarnings(as.double(info[["centerValue"]]))
     centered_variable <- info[["centeredVariable"]]
+
+    # Make sure centerValue parsed to a number
+    if (is.na(center_value)) {
+      stop(.make_error(
+        error_class = "non_numeric_center_value",
+        "The centerValue for origVariable \"",
+        orig_variable,
+        "\" in the center step in ",
+        basename(file),
+        " must be numeric: ",
+        info[["centerValue"]]
+      ))
+    }
 
     # Make sure origVariable exists
     if (!orig_variable %in% colnames(mod$data)) {
