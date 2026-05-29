@@ -1,5 +1,6 @@
 ^\.vscode$
 ^\.claude$
+^\.markdownlint\.json$
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
