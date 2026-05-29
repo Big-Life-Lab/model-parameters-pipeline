@@ -15,6 +15,8 @@
 #' \itemize{
 #'   \item \code{missing_variable}: Raised when a non-intercept variable
 #'     specified in the step file does not exist in \code{mod$data}.
+#'   \item \code{non_numeric_coefficient}: Raised when a \code{coefficient} in
+#'     the step file cannot be parsed as a number.
 #' }
 #'
 #' @keywords internal
@@ -40,7 +42,20 @@
   for (i in seq_len(nrow(step_data))) {
     info <- step_data[i, ]
     variable <- info[["variable"]]
-    coefficient <- info[["coefficient"]]
+    coefficient <- suppressWarnings(as.double(info[["coefficient"]]))
+
+    # Make sure the coefficient parsed to a number
+    if (is.na(coefficient)) {
+      stop(.make_error(
+        error_class = "non_numeric_coefficient",
+        "The coefficient for variable \"",
+        variable,
+        "\" in the logistic-regression step in ",
+        basename(file),
+        " must be numeric: ",
+        info[["coefficient"]]
+      ))
+    }
 
     if (variable == "Intercept") {
       # Intercepts get added to the output
