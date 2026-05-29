@@ -9,7 +9,7 @@ name: Wasm Package
 
 jobs:
   release-file-system-image:
-    uses: r-wasm/actions/.github/workflows/release-file-system-image.yml@93a4362f850615b3cf89dcb8c0bc8d328d3331e7 # v2
+    uses: r-wasm/actions/.github/workflows/release-file-system-image.yml@v2 # v2
     permissions:
       # For publishing artifact files to the release
       contents: write
