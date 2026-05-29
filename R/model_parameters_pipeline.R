@@ -225,8 +225,11 @@ prepare_model_pipeline <- function(
 #'      \item "output": Only return the final output of the model. These are the
 #'        values of all variables calculated in the final step found in the
 #'        model steps file.
-#'      \item "full": Return all data, which includes the input data, all
-#'        intermediate variables, and the final output of the model.
+#'      \item "full": Return all predictor and derived columns, which includes
+#'        the predictor columns from the input data (as listed in the variables
+#'        file), all intermediate variables created by the pipeline steps, and
+#'        the final output of the model. Note that input columns which are not
+#'        listed as predictors in the variables file are not included.
 #'   }
 #'   Default is "output".
 #'
@@ -246,13 +249,12 @@ prepare_model_pipeline <- function(
 #'     listed in the variables file are absent from the input data.
 #'   \item \code{empty_step_file_path}: Raised when a row in the model steps
 #'     file has an empty \code{filePath}.
+#'   \item \code{empty_pipeline}: Raised when the model steps file defines no
+#'     transformation steps, so the pipeline would produce no output.
 #'   \item \code{unknown_step}: Raised when a step name in the model steps file
 #'     is not a recognized transformation type.
 #'   \item \code{invalid_mode}: Raised when the \code{mode} argument is not one
 #'     of \code{"output"} or \code{"full"}.
-#'   \item \code{file_not_added}: Raised indirectly via the step functions if
-#'     a file was not successfully added to the model cache; should not occur
-#'     in normal use.
 #'   \item \code{error}: Any other error occurred that is not classified in
 #'     the above errors.
 #' }
@@ -358,6 +360,17 @@ run_model_pipeline <- function(mod, x, mode = "output") {
       step_name = step_name,
       output_columns = res$output_columns
     )
+  }
+
+  # A model with no transformation steps has no output. Without this guard,
+  # "output" mode would index mod$steps_info[[0]] and fail with a cryptic
+  # "attempt to select less than one element" error.
+  if (length(mod$steps_info) == 0) {
+    stop(.make_error(
+      error_class = "empty_pipeline",
+      "The model steps file defines no transformation steps, so the ",
+      "pipeline produced no output."
+    ))
   }
 
   if (mode == "output") {
