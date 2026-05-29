@@ -18,6 +18,38 @@ test_that("model pipeline matches predicted risk with HTNPoRT", {
   }
 })
 
+test_that("model pipeline matches all intermediate columns with HTNPoRT", {
+  # The predicted-risk test above only checks the final output. The HTNPoRT
+  # validation data also stores every intermediate column produced along the
+  # way (the rcs, interaction, and centered "_C" columns), so here we run the
+  # pipeline in "full" mode and compare each produced column against its
+  # reference column. This guards the entire pipeline against regressions, not
+  # just the final risk.
+  for (sex in c("female", "male")) {
+    paths <- get_htnport_paths(sex)
+
+    mod <- prepare_model_pipeline(paths$model_export_file)
+    full_data <- run_model_pipeline(mod, x = paths$data_file, mode = "full")
+
+    validation_data <- utils::read.csv(paths$data_file)
+
+    # Compare every produced column that also appears in the reference data.
+    # Columns the reference does not carry (unused dummy levels and the
+    # internal logistic output name) are not part of the published outputs.
+    shared_columns <- intersect(colnames(full_data), colnames(validation_data))
+    expect_true(length(shared_columns) > 0)
+
+    for (column in shared_columns) {
+      expect_equal(
+        full_data[[column]],
+        validation_data[[column]],
+        tolerance = 1e-6,
+        info = paste0("sex = ", sex, ", column = ", column)
+      )
+    }
+  }
+})
+
 test_that("model pipeline works with dataframes (instead of files)", {
   # Run the pipeline by passing in already-loaded dataframes (instead of
   # file names) vs running by specifying a file name for the model_export file
