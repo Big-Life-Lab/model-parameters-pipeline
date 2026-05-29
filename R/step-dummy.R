@@ -32,7 +32,7 @@
   )
 
   # Track which columns are produced by this step
-  output_columns <- c()
+  output_columns <- character(nrow(step_data))
 
   # Process each row in the step specification
   for (i in seq_len(nrow(step_data))) {
@@ -53,9 +53,11 @@
       ))
     }
 
-    # Create the dummy variable
-    mod$data[dummy_variable] <- as.integer(mod$data[orig_variable] == cat_value)
-    output_columns <- c(output_columns, dummy_variable)
+    # Create the dummy variable. Index columns with [[ ]] so the comparison runs
+    # on plain vectors rather than the much slower Ops.data.frame dispatch.
+    mod$data[[dummy_variable]] <-
+      as.integer(mod$data[[orig_variable]] == cat_value)
+    output_columns[i] <- dummy_variable
   }
 
   # Return the updated model object and output column names
