@@ -10,6 +10,10 @@ name: Wasm Package
 jobs:
   release-file-system-image:
     uses: r-wasm/actions/.github/workflows/release-file-system-image.yml@0f8493df20b6b47d3621f16be81218926a09dad1 # v3.0.2
+    with:
+      # Pin to pre-regression image: pkgdepends 0.9.1 in :main breaks package
+      # resolution (res_one_row_df nrow != 1) as of ~April 21 2026.
+      webr-image: "ghcr.io/r-wasm/webr:v0.5.9"
     permissions:
       # For publishing artifact files to the release
       contents: write
