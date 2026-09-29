@@ -346,6 +346,8 @@ run_model_pipeline <- function(mod, x, mode = "output") {
       res <- .run_step_dummy(mod, file_path)
     } else if (step_name == "interaction") {
       res <- .run_step_interaction(mod, file_path)
+    } else if (step_name == "fine-and-gray") {
+      res <- .run_step_fine_gray(mod, file_path)
     } else if (step_name == "logistic-regression") {
       res <- .run_step_logistic_regression(mod, file_path)
     } else if (step_name == "rcs") {
