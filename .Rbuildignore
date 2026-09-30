@@ -1,0 +1,11 @@
+^\.vscode$
+^\.claude$
+^\.markdownlint\.json$
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^.*\.Rproj$
+^\.Rproj\.user$
+^doc$
+^Meta$
