@@ -109,9 +109,7 @@
     }
   }
 
-  # Apply the Fine and Gray cumulative incidence function:
-  # F(t) = 1 - exp(-H0(t))^exp(LP)
-  #       = 1 - exp(-H0(t) * exp(LP))
+  # Apply the Fine and Gray cumulative incidence function
   mod$data[[fg_col]] <- 1 - exp(-h0 * exp(linear_predictor))
 
   output_columns <- c(fg_col)
