@@ -33,10 +33,11 @@
     file
   )
 
-  # Create the initial logistic output (initialize to 0)
+  # Determine the output column name and accumulate the linear predictor in a
+  # plain numeric vector. Working on a vector keeps each multiply/add off the
+  # slower Ops.data.frame path; the result is written to the data frame once.
   logistic_col <- .get_unused_column(colnames(mod$data), "logistic")
-  logistic_data <- data.frame(rep(0, nrow(mod$data)))
-  colnames(logistic_data) <- c(logistic_col)
+  linear_predictor <- numeric(nrow(mod$data))
 
   # Process each row in the step specification
   for (i in seq_len(nrow(step_data))) {
@@ -59,7 +60,7 @@
 
     if (variable == "Intercept") {
       # Intercepts get added to the output
-      logistic_data[logistic_col] <- logistic_data[logistic_col] + coefficient
+      linear_predictor <- linear_predictor + coefficient
     } else {
       # Make sure variable exists in data
       if (!variable %in% colnames(mod$data)) {
@@ -74,18 +75,15 @@
       }
 
       # Coefficients get multiplied by the variable then added to the output
-      logistic_data[logistic_col] <- logistic_data[logistic_col] +
-        mod$data[variable] * coefficient
+      linear_predictor <- linear_predictor +
+        mod$data[[variable]] * coefficient
     }
   }
 
-  # Apply the logistic function to the output
-  logistic_data[logistic_col] <- 1 / (1 + exp(-logistic_data[logistic_col]))
+  # Apply the logistic function to the output and add it to mod$data
+  mod$data[[logistic_col]] <- 1 / (1 + exp(-linear_predictor))
 
   output_columns <- c(logistic_col)
-
-  # Add the new logistic_data column to mod$data
-  mod$data <- cbind(mod$data, logistic_data)
 
   # Return the updated model object and output column names
   list(

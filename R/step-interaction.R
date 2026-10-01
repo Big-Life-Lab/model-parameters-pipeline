@@ -31,7 +31,7 @@
   )
 
   # Track which columns are produced by this step
-  output_columns <- c()
+  output_columns <- character(nrow(step_data))
 
   # Process each row in the step specification
   for (i in seq_len(nrow(step_data))) {
@@ -39,8 +39,10 @@
     interacting_variables <- .get_string_parts(info[["interactingVariables"]])
     interaction_variable <- info[["interactionVariable"]]
 
-    # Iteratively create the interaction variables
-    mod$data[interaction_variable] <- 1
+    # Accumulate the product in a plain vector so each multiplication runs on
+    # vectors (not the slower Ops.data.frame) and the data frame is written
+    # only once, after the loop.
+    product <- rep(1, nrow(mod$data))
     for (interacting_variable in interacting_variables) {
       # Make sure the interacting variable exists
       if (!interacting_variable %in% colnames(mod$data)) {
@@ -53,10 +55,10 @@
         ))
       }
 
-      mod$data[interaction_variable] <- mod$data[interaction_variable] *
-        mod$data[interacting_variable]
+      product <- product * mod$data[[interacting_variable]]
     }
-    output_columns <- c(output_columns, interaction_variable)
+    mod$data[[interaction_variable]] <- product
+    output_columns[i] <- interaction_variable
   }
 
   # Return the updated model object and output column names

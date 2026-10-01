@@ -1,8 +1,10 @@
 # Model Parameters Pipeline
 
 <!-- badges: start -->
-[![R-CMD-check.yaml](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/R-CMD-check.yaml)
-[![lint.yaml](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/lint.yaml/badge.svg)](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/lint.yaml)
+[![R CMD check](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/R-CMD-check.yaml)
+[![lintr](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/lint.yaml/badge.svg)](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/lint.yaml)
+[![pkgdown](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/pkgdown.yaml)
+[![Wasm Package](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/release-file-system-image.yaml/badge.svg)](https://github.com/Big-Life-Lab/model-parameters-pipeline/actions/workflows/release-file-system-image.yaml)
 <!-- badges: end -->
 
 The Model Parameters Pipeline is an R package for applying transformations to

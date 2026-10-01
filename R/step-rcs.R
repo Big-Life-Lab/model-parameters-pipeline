@@ -134,32 +134,31 @@
     ))
   }
 
-  res <- data.frame(rcs.1 = x)
+  # Preallocate the result matrix (one column per spline basis term) rather
+  # than growing a data frame column-by-column, which is far slower. The first
+  # basis term is the untransformed variable.
+  res <- matrix(0, nrow = length(x), ncol = k - 1)
+  res[, 1] <- x
+
+  # These terms do not depend on the loop index j, so compute them once.
+  kd <- (knots[k] - knots[1])^(2 / 3) # (knot_k-knot_1)^(2/3) # nolint
+  val4 <- knots[k] - knots[k - 1] # knot_k-knot_{k-1}
+  term_k <- pmax((x - knots[k]) / kd, 0)^3 # X-knot_k contribution
+  term_km1 <- pmax((x - knots[k - 1]) / kd, 0)^3 # X-knot_{k-1} contribution
 
   for (j in 1:(k - 2)) {
-    kd <- (knots[k] - knots[1])^(2 / 3) # (knot_k-knot_1)^(2/3) # nolint
-
-    vec1 <- x - knots[j] # X-knot_j
-
     val2 <- knots[k - 1] - knots[j] # knot_{k-1}-knot_j
-    vec2 <- x - knots[k] # X-knot_k
-
     val3 <- knots[k] - knots[j] # knot_k-knot_j
-    vec3 <- x - knots[k - 1] # X-knot_{k-1}
-    val4 <- knots[k] - knots[k - 1] # knot_k-knot_{k-1}
 
     # View(Hmisc::rcspline.eval): line 111-114
     # vec_j <- pmax((x - knots[j])/kd, 0)^3 +
     #   ((knots[k-1] - knots[j]) * pmax((x - knots[k])/kd, 0)^3 -
     #      (knots[k] - knots[j]) * (pmax((x - knots[k-1])/kd, 0)^power))/(knots[k] - knots[k-1]) # nolint
 
-    vec_j <- pmax(vec1 / kd, 0)^3 +
-      (val2 * pmax(vec2 / kd, 0)^3) / val4 -
-      (val3 * pmax(vec3 / kd, 0)^3) / val4
-
-    res[paste0("rcs.", j + 1)] <- vec_j
+    res[, j + 1] <- pmax((x - knots[j]) / kd, 0)^3 +
+      (val2 * term_k) / val4 -
+      (val3 * term_km1) / val4
   }
-  res <- as.matrix(res)
 
   res
 }

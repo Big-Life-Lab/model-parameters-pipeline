@@ -33,7 +33,7 @@
   )
 
   # Track which columns are produced by this step
-  output_columns <- c()
+  output_columns <- character(nrow(step_data))
 
   # Process each row in the step specification
   for (i in seq_len(nrow(step_data))) {
@@ -67,9 +67,10 @@
       ))
     }
 
-    # Center the variable
-    mod$data[centered_variable] <- mod$data[orig_variable] - center_value
-    output_columns <- c(output_columns, centered_variable)
+    # Center the variable. Index columns with [[ ]] so the arithmetic runs on
+    # plain vectors rather than dispatching to the much slower Ops.data.frame.
+    mod$data[[centered_variable]] <- mod$data[[orig_variable]] - center_value
+    output_columns[i] <- centered_variable
   }
 
   # Return the updated model object and output column names

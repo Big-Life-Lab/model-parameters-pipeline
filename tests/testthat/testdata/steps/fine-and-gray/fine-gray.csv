@@ -1,0 +1,6 @@
+variable,coefficient
+baseline_cumulative_hazard,0.05
+var_a,-0.0123
+var_b,0.0145
+var_c,0.0555
+group_b,1.8
